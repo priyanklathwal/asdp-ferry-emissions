@@ -2,7 +2,7 @@
 
 # Sunda Strait Ferry Emissions
 
-**A bottom-up energy and emissions model for the Merak–Bakauheni RoPax corridor — Indonesia's busiest ferry crossing, and one of the busiest in the world.**
+**A bottom-up energy and emissions model for the Merak–Bakauheni RoPax corridor, Indonesia's busiest ferry crossing and one of the busiest in the world.**
 
 [![Live dashboard](https://img.shields.io/badge/dashboard-live-0f766e?style=flat-square)](https://priyanklathwal.github.io/asdp-ferry-emissions/)
 [![Method](https://img.shields.io/badge/method-IMO%20%2F%20ICCT%20bottom--up-1f6feb?style=flat-square)](docs/METHODOLOGY.md)
@@ -45,18 +45,18 @@ B100 removes 80% with no capital works at roughly `$180/tCO₂e`. Everything che
 | Shore electricity if electrified | 292 GWh/yr |
 | Observed crossings | 33,695 over 200 days |
 
-Black carbon is `19%` of 100-year warming here — four-stroke engines on residual fuel at part load — which is why the CO₂ and CO₂e figures diverge so sharply.
+Black carbon is `19%` of 100-year warming here: four-stroke engines on residual fuel at part load: which is why the CO₂ and CO₂e figures diverge so sharply.
 
 ## Pathways
 
 | Pathway | kt CO₂/yr | Δ | Δ cost | $/tCO₂e |
 |---|---:|---:|---:|---:|
-| Baseline | 176 | — | — | — |
+| Baseline | 176 |: |: |: |
 | B40 drop-in biodiesel | 134 | +24% | +$36M | $690 |
 | B100 / HVO drop-in | 35 | +80% | +$30M | $180 |
 | Bio-methanol (engine conversion) | 26 | +85% | +$60M | $320 |
-| Shore power at berth and anchorage | 188 | -7% | −$8M | — |
-| Battery-electric, PLN grid | 249 | -41% | −$30M | — |
+| Shore power at berth and anchorage | 188 | -7% | −$8M |: |
+| Battery-electric, PLN grid | 249 | -41% | −$30M |: |
 | Battery-electric, dedicated RE | 12 | +93% | −$30M | −$150 |
 
 ## A caveat about the input data
@@ -80,12 +80,12 @@ Fleet replacement and corridor decarbonisation are therefore two different quest
 | Records | 360 vessels, 360 unique IMO | 33,695 moves, 69 vessels |
 | Coverage | Vessels believed to be ASDP-operated; 102 distinct operators in practice | Every vessel calling Merak and Bakauheni, both directions |
 | Period | Static snapshot; build years 1959–2025 | 29 Jan – 18 Aug 2026 (200 days, ~170 moves/day) |
-| Temporal resolution | — | Hourly bins |
+| Temporal resolution |: | Hourly bins |
 | Fields used | IMO, type, GT, DWT, build year, LOA, beam, draft, design speed, engine fuel, engine type, owner, operator, status | IMO, last-seen-in-origin, first/last-seen-in-destination, size band |
 | Size range | GT 109–32,645, median 1,029 | <10,000 GT: 29,847 moves; 10,000–30,000 GT: 3,674 |
 | Field completeness | GT 100% · build year 100% · beam 99% · LOA 91% · draft 84% · design speed 59% · engine fuel 52% | Timestamps 100%; no gaps |
 | **Not present** | **Installed main engine power (kW)**, engine rpm, auxiliary rating, passenger/vehicle capacity | Speed over ground, position, draught, heading, load |
-| Used for | Displacement and installed-power estimates; age, fuel and engine class; ASDP flag | Voyage count, duration, phase split, time alongside — the model's entire activity basis |
+| Used for | Displacement and installed-power estimates; age, fuel and engine class; ASDP flag | Voyage count, duration, phase split, time alongside: the model's entire activity basis |
 
 The register's 264 ro-ro ferries and 40 passenger ro-ro cargo vessels make up 84% of the file; the remainder is passenger-only ferries, landing craft, car carriers and ro-ro cargo. In the movement data, 89% of moves are by passenger ferries under 10,000 GT.
 
@@ -106,7 +106,7 @@ Voyages are split into steaming, manoeuvring, waiting and alongside. Main engine
 
 ### Validation
 
-Nine model outputs are compared against benchmarks from outside the model — engine manufacturer data, published ferry schedules, port operating reports, and the ranges the inventory literature reports for this ship class. All pass.
+Nine model outputs are compared against benchmarks from outside the model: engine manufacturer data, published ferry schedules, port operating reports, and the ranges the inventory literature reports for this ship class. All pass.
 
 | Check | Model | Expected |
 |---|---:|---:|
@@ -177,7 +177,7 @@ This is a working draft, not an audited inventory.
 
 ## Currency
 
-All monetary figures are in US dollars. Indonesian domestic prices — Pertamina industrial fuel and the PLN tariff — are converted at the mid-market rate of Rp 17,900 per dollar on 11 September 2026. The rupiah has moved within a 16,100–18,200 band over the past year, so a ±6% swing in the domestic fuel and electricity lines is well within normal.
+All monetary figures are in US dollars. Indonesian domestic prices: Pertamina industrial fuel and the PLN tariff: are converted at the mid-market rate of Rp 17,900 per dollar on 11 September 2026. The rupiah has moved within a 16,100–18,200 band over the past year, so a ±6% swing in the domestic fuel and electricity lines is well within normal.
 
 ## Data availability
 

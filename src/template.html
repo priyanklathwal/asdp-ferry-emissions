@@ -8,6 +8,7 @@
 :root{
   --paper:#FBFAF7; --ink:#171717; --ink-2:#5F5F5F; --ink-3:#9A9A9A; --rule:#E4E2DC; --panel:#F3F1EB;
   --accent:#1B6F8C; --accent-soft:#CFE0E8; --hot:#B3261E; --good:#1E7F4F; --good-soft:#CDE7D8; --hot-soft:#F1D3CF;
+  --brand:#E3120B; --brand-ink:#8E0B07;
   --sea:var(--accent); --sea2:var(--accent-soft); --sea3:#E4EEF2; --water:#EEF3F5; --land:#EDE9DF;
   --bg:var(--paper); --mid:var(--ink-2); --faint:var(--rule);
   --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;
@@ -123,6 +124,23 @@ section[data-tab].active{display:block}
 section[data-tab].active + section[data-tab].active{padding-top:96px}
 section.active:first-of-type{padding-top:56px}
 
+/* brand chrome, Economist register */
+body::before{content:"";display:block;height:8px;background:var(--brand)}
+header.masthead{padding-top:72px}
+.masthead h1{position:relative;padding-top:22px}
+.masthead h1::before{content:"";position:absolute;top:0;left:0;width:64px;height:4px;background:var(--brand)}
+.masthead .byline{color:var(--brand-ink);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:11.5px}
+section > h2{color:var(--brand)}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--brand);color:var(--ink)}
+.tabs button:hover{color:var(--brand)}
+.flag{border-left-color:var(--brand)}
+.kpis{border-top:3px solid var(--brand)}
+.kpi .v{color:var(--brand-ink)}
+.kpi .v small{color:var(--ink-2)}
+#answer h3{font-size:42px;line-height:1.12}
+#answer > p:first-of-type{font-size:21px;line-height:1.5;color:var(--ink)}
+#pyramid li span:first-child{font-size:15px!important}
+
 @media (max-width:760px){
   body{font-size:18px}
   .masthead h1{font-size:36px}
@@ -133,6 +151,8 @@ section.active:first-of-type{padding-top:56px}
   .kpi .v{font-size:34px}
   .controls{grid-template-columns:1fr;padding:22px}
   .tabs button{font-size:13px;padding:14px 10px 12px}
+  #answer h3{font-size:30px}
+  #answer > p:first-of-type{font-size:18px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -144,7 +164,7 @@ section.active:first-of-type{padding-top:56px}
     <h1>What the Sunda Strait ferries burn</h1>
     <p class="sub">Every twelve minutes or so, a ferry leaves Merak for Bakauheni. It is fifteen
        nautical miles. Here is what that costs in energy, in carbon, and in the air over two
-       Indonesian port towns &mdash; and what would actually change it.</p>
+       Indonesian port towns, and what would actually change it.</p>
     <p class="byline" id="byline"></p>
   </div>
 </header>
@@ -893,7 +913,7 @@ function render(){
          "Every vessel calling Merak and Bakauheni, both directions"],
         ["Period","Static snapshot; build years "+R_.built.min+"–"+R_.built.max,
          M_.start+" to "+M_.end+" ("+M_.span_days+" days, ~"+fmt(M_.per_day,0)+" moves/day)"],
-        ["Temporal resolution","—", M_.timestamp_granularity],
+        ["Temporal resolution","n/a", M_.timestamp_granularity],
         ["Fields used","IMO, type, GT, DWT, build year, LOA, beam, draft, design speed, engine fuel, engine type, owner, operator, status",
          "IMO, last-seen-in-origin, first- and last-seen-in-destination, size band"],
         ["Size range","GT "+fmt(R_.gt.min)+"–"+fmt(R_.gt.max)+", median "+fmt(R_.gt.median),
@@ -966,12 +986,12 @@ function render(){
     fmtv:v=>sig(v,3)+" kt", refLine:base.g/1000, refLabel:"baseline "+sig(base.g/1000,3)+" kt"});
 
   const verdict=r=>{
-    if(r===base) return {t:"—",cls:"neu"};
+    if(r===base) return {t:"none",cls:"neu"};
     const carbon=r.saved>base.g*0.005, cash=r.delta<-5e4, worseC=r.saved<-base.g*0.005, worseCash=r.delta>5e4;
     if(carbon&&cash) return {t:"cleaner and cheaper",cls:"pos"};
     if(carbon&&worseCash) return {t:"cleaner, costs more",cls:"neu"};
     if(worseC&&cash) return {t:"cheaper, dirtier",cls:"neg"};
-    return {t:"—",cls:"neu"};
+    return {t:"none",cls:"neu"};
   };
   document.getElementById("pathway-table").innerHTML =
     `<p class="mute" style="margin:0 0 10px;display:flex;gap:18px;flex-wrap:wrap;font-size:12.5px">
@@ -982,16 +1002,16 @@ function render(){
     ["Pathway", R.label+" kt/yr","Emissions","Energy in GWh","Local air",
      "Cost $M/yr","Cost change","$/t","Verdict"],
     R.rows.map(r=>{
-      const arrow=(v,goodIfNeg=true)=>{ if(Math.abs(v)<0.05) return {t:"—",cls:"neu"};
+      const arrow=(v,goodIfNeg=true)=>{ if(Math.abs(v)<0.05) return {t:"none",cls:"neu"};
         const good = goodIfNeg ? v<0 : v>0;
         return {t:(v<0?"▼ ":"▲ ")+Math.abs(v).toFixed(1)+"%", cls:good?"pos":"neg"}; };
-      const money=(v)=>{ if(Math.abs(v)<5e4) return {t:"—",cls:"neu"};
+      const money=(v)=>{ if(Math.abs(v)<5e4) return {t:"none",cls:"neu"};
         return {t:(v<0?"▼ saves ":"▲ costs ")+usd(Math.abs(v)).slice(1), cls:v<0?"pos":"neg"}; };
       return [
       r.label, sig(r.g/1000,3),
       arrow(-r.savedPct),
       sig(r.energy/1000,3),
-      r.local ? {t:"▼ "+fmt(r.local,0)+"%", cls:"pos"} : {t:"—",cls:"neu"},
+      r.local ? {t:"▼ "+fmt(r.local,0)+"%", cls:"pos"} : {t:"none",cls:"neu"},
       fmt(r.cost/1e6,1),
       money(r.delta),
       r.abate===null ? {t:"n/a",cls:"neu"} : "$"+fmt(Math.round(r.abate/10)*10),
@@ -1114,7 +1134,7 @@ function render(){
     ["Pathways", "Bio-methanol", "85% WtW saving", "Mass scaled by LHV ratio (19.9 vs 42.7 MJ/kg)", A_],
 
     ["Prices", "MFO, high sulphur", "$"+fmt(Math.round(A.prices.mfo_hs_idr_per_litre/0.98/A.fx*1000/10)*10)+" / t",
-     "Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+"/L, Pertamina industrial, Region 1, Mar 2026 — an oil-spike fortnight", S_],
+     "Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+"/L, Pertamina industrial, Region 1, Mar 2026, an oil-spike fortnight", S_],
     ["Prices", "B40 industrial diesel", "$"+fmt(Math.round(A.prices.b40_hsd_idr_per_litre/0.86/A.fx*1000/10)*10)+" / t",
      "Rp "+fmt(A.prices.b40_hsd_idr_per_litre)+"/L, same source and caveat", S_],
     ["Prices", "B100 / HVO", "$"+fmt(A.prices.b100_usd_per_tonne)+" / t", "Rotterdam, Jul 2026", S_],
@@ -1221,7 +1241,7 @@ function macc(mount){
     ? "Once capital is counted, nothing pays for itself, and the cheapest deep cut is "+cheapest.label.toLowerCase().replace(" drop-in","")+" at about $"+fmt(Math.round(cheapest.perT/10)*10)+" a tonne"
     : "On fuel cost alone, only renewables-backed electrification sits below the line, and it needs new generation, not new ships";
   document.getElementById("macc-cap").innerHTML =
-    (neg.length? `<b>Not shown:</b> ${neg.map(o=>o.label).join(" and ")} — ${neg.length>1?"they raise":"it raises"} emissions at the current grid intensity, so ${neg.length>1?"they have":"it has"} no abatement to price. `:"")+
+    (neg.length? `<b>Not shown:</b> ${neg.map(o=>o.label).join(" and ")}: ${neg.length>1?"they raise":"it raises"} emissions at the current grid intensity, so ${neg.length>1?"they have":"it has"} no abatement to price. `:"")+
     `Green blocks pay for themselves; red blocks cost money per tonne. The B100 figure of about $${fmt(Math.round((pos.find(o=>o.k==="b100")||{perT:0}).perT/10)*10)} sits at the top of the $30–200 range Corbett, Wang and Winebrake report for speed reduction in the container fleet.`;
   document.getElementById("v-crf").textContent=S.rate+"%, asset life by option";
   document.getElementById("capex-note").innerHTML="<b>Indicative capex, $M whole corridor:</b> "+
@@ -1258,12 +1278,12 @@ function results(){
     ["Pathway", R.label+" kt", "Δ emissions", "Energy in GWh", "Cost $M", "Δ cost $M", "Verdict"],
     R.rows.map(r=>{
       const dE=-r.savedPct, dC=r.delta/1e6;
-      const v = r===base?{t:"—",cls:"neu"}:(r.saved>base.g*0.005&&r.delta<-5e4)?{t:"cleaner and cheaper",cls:"pos"}:
-                (r.saved>base.g*0.005)?{t:"cleaner, costs more",cls:"neu"}:(r.delta<-5e4)?{t:"cheaper, dirtier",cls:"neg"}:{t:"—",cls:"neu"};
+      const v = r===base?{t:"none",cls:"neu"}:(r.saved>base.g*0.005&&r.delta<-5e4)?{t:"cleaner and cheaper",cls:"pos"}:
+                (r.saved>base.g*0.005)?{t:"cleaner, costs more",cls:"neu"}:(r.delta<-5e4)?{t:"cheaper, dirtier",cls:"neg"}:{t:"none",cls:"neu"};
       return [r.label, sig(r.g/1000,3),
-        Math.abs(dE)<0.05?{t:"—",cls:"neu"}:{t:(dE<0?"−":"+")+Math.abs(dE).toFixed(1)+"%",cls:dE<0?"pos":"neg"},
+        Math.abs(dE)<0.05?{t:"none",cls:"neu"}:{t:(dE<0?"−":"+")+Math.abs(dE).toFixed(1)+"%",cls:dE<0?"pos":"neg"},
         sig(r.energy/1000,3), fmt(r.cost/1e6,1),
-        Math.abs(dC)<0.05?{t:"—",cls:"neu"}:{t:(dC<0?"−":"+")+Math.abs(dC).toFixed(1),cls:dC<0?"pos":"neg"}, v];}));
+        Math.abs(dC)<0.05?{t:"none",cls:"neu"}:{t:(dC<0?"−":"+")+Math.abs(dC).toFixed(1),cls:dC<0?"pos":"neg"}, v];}));
 
   const keys={"B40 drop-in biodiesel":"b40","B100 / HVO drop-in":"b100","Bio-methanol (conversion)":"bio_methanol",
               "Shore power at berth and anchorage":"shore_power","Battery-electric, PLN grid":"electric_grid","Battery-electric, dedicated RE":"electric_re"};
@@ -1274,7 +1294,7 @@ function results(){
       let withCap=r.delta+c.musd*1e6*crf(S.rate,c.life); if(kk==="electric_re") withCap-=r.cost;
       const cell=(cost)=> r.saved<=base.g*0.005 ? {t:"raises emissions",cls:"neg"} :
         {t:(cost/r.saved<0?"−":"")+"$"+fmt(Math.abs(Math.round(cost/r.saved/10)*10)), cls:cost/r.saved<0?"pos":"neg"};
-      return [r.label, r.saved>base.g*0.005?sig(r.saved/1000,3):{t:"—",cls:"neu"}, cell(r.delta), cell(withCap), fmt(c.musd)];}));
+      return [r.label, r.saved>base.g*0.005?sig(r.saved/1000,3):{t:"none",cls:"neu"}, cell(r.delta), cell(withCap), fmt(c.musd)];}));
 
   wide("res-vessels").innerHTML = tbl(["Vessel","GT","Crossings","Median steaming kn","Mean load","CO₂ t","CO₂ per crossing t"],
     D.per_vessel.slice(0,10).map(v=>[v.name, fmt(v.gt), fmt(v.voyages), fmt(v.v_steam,1), fmt(v.mean_load*100,0)+"%", fmt(v.co2_t), fmt(v.co2_per_voyage_t,2)]));
