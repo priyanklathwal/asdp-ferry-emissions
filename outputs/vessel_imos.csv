@@ -1,0 +1,384 @@
+IMO,name,on_corridor,in_register,crossings
+9764611,Sebuku,True,True,1337
+9765665,Legundi,True,False,1278
+9759733,Batu Mandi,True,True,939
+8604333,Port Link Iii,True,True,891
+8510350,Windu Karsa Pratama,True,True,768
+8503694,Jatra Iii,True,False,742
+9836012,Neomi,True,True,723
+8405206,Tribuana 1,True,False,717
+9016715,Trimas Kanaya,True,True,714
+9836000,Caitlyn 7,True,True,692
+9066722,Suki 2,True,True,687
+1105297,Sms Sagita 8,True,False,660
+8705747,Sms Sagita,True,True,652
+7909061,Duta Banten,True,True,632
+8822222,Rajarakata,True,True,624
+1047639,Kmp Eirene,True,False,622
+1105285,Keisha,True,False,621
+9875812,Wira Berlian,True,True,613
+1091666,Munic 3,True,False,609
+1034060,Calisha,True,True,607
+8602074,Amarisa,True,True,607
+9835991,Munic 9,True,True,599
+9807205,Royce 1,True,True,588
+9819272,Als Elisa,True,True,577
+9821251,Dorothy,True,True,570
+1071484,Kmp Nitya,True,False,567
+9807217,Als Elvina,True,True,560
+9031521,Amadea,True,True,558
+9821287,Rishel,True,True,558
+8718562,Sms Mulawarman,True,False,555
+9821275,Wira Artha,True,True,554
+9821263,Reinna,True,True,553
+7323308,Bsp-I,True,True,545
+9042881,Musthika Kencana,True,True,535
+8342519,Tranship 1,True,True,530
+8613580,Elysia,True,False,505
+8679675,Raputra Jaya 888,True,False,505
+8666147,Portlink V,True,True,500
+9821249,Trimas Fhadila,True,True,496
+7320186,Kirana Ii,True,True,495
+9713789,Adinda Windu Karsa,True,True,494
+8921755,Virgo 18,True,True,483
+8324074,Jagantara,True,True,469
+1112719,Wira Qaila,True,False,466
+7124116,Kumala,True,True,465
+9871646,Raputra Jaya 2888,True,True,460
+9032006,Seira,True,True,424
+9857652,Zoey,True,True,422
+8611568,Labitra Karina,True,True,417
+9114567,Athaya,True,True,414
+8612885,Menggala,True,True,410
+9819478,Wira Kencana,True,True,405
+7910917,Port Link,True,True,388
+7332660,Safira Nusantara,True,False,260
+1114389,Shanaya,True,False,259
+7125952,Titian Nusantara,True,False,258
+8807076,Raja Basa I,True,False,210
+8204432,Salvatore,True,False,200
+7352799,Mufidah,True,True,196
+8518039,H. M. Baruna I,True,True,135
+1146552,Katya,True,False,108
+1153361,Putra Wajo,True,False,66
+8220060,Kirana Ix,True,True,63
+1153373,New Zhima,True,False,52
+8672861,Salvino,True,True,30
+6725523,Titian Murni,True,False,29
+7818638,Jatra Ii,True,True,18
+7916040,Layar Sentosa,True,False,8
+1113335,Karya Pacific 2280,True,False,1
+1022548,Wira Harmoni,False,True,0
+1134884,Pari 01,False,True,0
+5286893,Bahari Nusantara,False,True,0
+6612908,Mabuhay Nusantara,False,True,0
+6804472,Citra Mandala Sakti,False,True,0
+6911691,Prima Nusantara,False,True,0
+7020700,Nusa Sakti,False,True,0
+7027423,Nusa Agung,False,True,0
+7041015,Nusa Mulia,False,True,0
+7116054,Farina Nusantara,False,True,0
+7118789,Mitra Nusantara,False,True,0
+7128095,Dharma Ferry 2,False,True,0
+7204655,Prathita Iv,False,True,0
+7206859,Nusa Bahagia,False,True,0
+7214650,Star Belitung,False,True,0
+7224837,Royal Nusantara,False,True,0
+7225350,Panorama Nusantara,False,True,0
+7234179,Wicitra Dharma,False,True,0
+7303308,Nusa Dharma,False,True,0
+7314199,Roditha,False,True,0
+7374539,Kirana Iii,False,True,0
+7397294,Trisna Dwitya,False,True,0
+7603344,Marisa Nusantara,False,True,0
+7640029,Salindo Mutiara 1,False,True,0
+7703716,Mulya Sentosa,False,True,0
+7808970,Elsaddai Ii,False,True,0
+7851721,Satya Dharma,False,True,0
+7853092,Satria Nusantara,False,True,0
+7908641,Dharma Kosala,False,True,0
+8017671,Kirana,False,True,0
+8103975,Dharma Kartika,False,True,0
+8131051,El Saddai,False,True,0
+8210015,Jambo Xii,False,True,0
+8210950,Munic Iii,False,True,0
+8214891,Mishima,False,True,0
+8314706,Nusa Dua,False,True,0
+8329488,Mujair,False,True,0
+8348836,Tranship Ii,False,True,0
+8349244,Jax,False,True,0
+8359005,Gerbang Samudra 5,False,True,0
+8414350,Kirana I,False,True,0
+8504703,Jemla Fajar,False,True,0
+8508802,Harmoni Mas,False,True,0
+8524272,Liputan Xii,False,True,0
+8525329,Mamberamo Foja,False,True,0
+8568137,Wira Mutiara,False,True,0
+8602048,Caitlyn,False,True,0
+8611647,Pantokrator,False,True,0
+8614261,Salvia,False,True,0
+8621733,Putri Gianyar,False,True,0
+8626628,Adhi Swadarma Iii,False,True,0
+8628602,Gerbang Samudra 2,False,True,0
+8647270,Gorango,False,True,0
+8650564,Menumbing Raya,False,True,0
+8652005,Semah,False,True,0
+8652108,Karya Maritim I,False,True,0
+8652536,Tanjung Tungkor,False,True,0
+8658762,Muyu,False,True,0
+8659364,Tanjung Api,False,True,0
+8661159,Siginjai,False,True,0
+8662268,Arar,False,True,0
+8662567,Sembilang,False,True,0
+8663092,Trimas Ellisa,False,True,0
+8668846,Gambolo,False,True,0
+8670590,Wayangan,False,True,0
+8673231,Teluk Singkil,False,True,0
+8673580,Karya Maritim Iii,False,True,0
+8676192,Tarusi,False,True,0
+8676403,Lohoraung,False,True,0
+8677055,Maming,False,True,0
+8677067,Teluk Tolo,False,True,0
+8683561,Moinit,False,True,0
+8689096,Sirung,False,True,0
+8694936,Tunu Pratama Jaya 2888,False,True,0
+8699613,Mutiara Indonesia,False,True,0
+8702501,Ferrindo 5,False,True,0
+8703309,Nusa Jaya,False,True,0
+8708751,Bintang Balikpapan,False,True,0
+8712233,Wicitra Dharma Ii,False,True,0
+8713017,Kerapu Ii,False,True,0
+8713029,Kerapu Iii,False,True,0
+8713031,Madidihang,False,True,0
+8716162,Serasi Iii,False,True,0
+8718366,Swarna Cakra,False,True,0
+8720541,Lestari Maju,False,True,0
+8731148,Bawal,False,True,0
+8731150,Teluk Sinabang,False,True,0
+8732312,Bobara,False,True,0
+8734487,Julung Julung,False,True,0
+8734499,Lobster,False,True,0
+8735364,Bukit Patung,False,True,0
+8736112,Dolosi,False,True,0
+8736124,Papua Enam,False,True,0
+8736899,Tri Sakti Adinda,False,True,0
+8736904,Egron,False,True,0
+8737958,Pulau Sabu,False,True,0
+8738419,Sangke Palangga,False,True,0
+8738495,Gunung Bintan,False,True,0
+8738512,Lokongbanua,False,True,0
+8740395,Temi,False,True,0
+8740668,Tuna Tomini,False,True,0
+8741973,Trisila Bhakti Ii,False,True,0
+8742862,Awu Awu,False,True,0
+8743103,Masirei,False,True,0
+8746478,Senangin,False,True,0
+8748098,Bnr Ii,False,True,0
+8748103,Bnr,False,True,0
+8774413,Watunapato,False,True,0
+8774554,Mutiara Alas Iii,False,True,0
+8785307,Sulthan Murhum,False,True,0
+8806307,Manggani,False,True,0
+8813556,Thalia,False,True,0
+8815346,Dharma Kencana Ix,False,True,0
+8815358,Dharma Kartika Iii,False,True,0
+8820808,Mutiara Pertiwi I,False,True,0
+8822117,Mm Sejati,False,True,0
+8824189,Nusa Bhakti,False,True,0
+8824799,Ariwangan,False,True,0
+8825327,Komodo,False,True,0
+8839316,Rhama Giri Nusa,False,True,0
+8840860,Tiga Anugrah,False,True,0
+8864012,Dharma Badra,False,True,0
+8872356,Kalebi,False,True,0
+8872382,Kambaniru,False,True,0
+8872435,Danau Rana,False,True,0
+8872679,Baronang,False,True,0
+8873556,Papuyu,False,True,0
+8873570,Poncan Moale,False,True,0
+8873582,Mutis,False,True,0
+8873661,Teluk Cenderawasih I,False,True,0
+8873673,Teluk Cendrawasih Ii,False,True,0
+8874550,Rokatenda,False,True,0
+8874744,Goropa,False,True,0
+8874768,Pelangi Nusantara,False,True,0
+8889000,Pbk Muryati,False,True,0
+8890841,Naraya,False,True,0
+8892588,Silok,False,True,0
+8892837,Dingkis,False,True,0
+8895487,Nuku,False,True,0
+8898166,Inelika,False,True,0
+8903296,Gerbang Samudra 3,False,True,0
+8904226,Dharma Kencana Iii,False,True,0
+8904563,Dharma Ferry Vi,False,True,0
+8904939,Dharma Kartika Viii,False,True,0
+8905165,Swarna Bahtera,False,True,0
+8908789,Niki Sejahtera,False,True,0
+8910990,Dharma Ferry Ix,False,True,0
+8920048,Marina Segunda,False,True,0
+8920165,Hai Da,False,True,0
+8921767,Dharma Rucitra I,False,True,0
+8925153,Dharma Ferry 3,False,True,0
+8943064,Ile Mandiri,False,True,0
+8957986,Kormo Molin,False,True,0
+8976449,Saluang,False,True,0
+8980488,Mutiara Ferindo Iii,False,True,0
+8981573,Sms Swakarya,False,True,0
+8991152,Belida,False,True,0
+8992821,Tuna,False,True,0
+8994506,Gutila,False,True,0
+8994518,Gunung Palong,False,True,0
+8994520,Gorare,False,True,0
+8994544,Barau,False,True,0
+8994726,Benua Raya,False,True,0
+8996542,Lemuru,False,True,0
+8997479,Nusa Makmur,False,True,0
+8997493,Trisila Bhakti I,False,True,0
+8998772,Muria,False,True,0
+8998851,Namparnos,False,True,0
+8999142,Pulau Rubiah,False,True,0
+8999817,Ocean Star Ii,False,True,0
+9000900,Kmp Mutiara Barat,False,True,0
+9003782,Trima Jaya 9,False,True,0
+9004023,Jembatan Kapuas,False,True,0
+9004592,Mutiara Persada Iii,False,True,0
+9023419,Primas I,False,True,0
+9027386,Tande Mand,False,True,0
+9027398,Tanjung Burang,False,True,0
+9027439,Terubuk I,False,True,0
+9028419,Kie Raha I,False,True,0
+9029152,Tasik Gemilang,False,True,0
+9029865,Papua Lima,False,True,0
+9032719,Egon,False,True,0
+9034664,Marina Tertiera,False,True,0
+9034676,Marina Quinta,False,True,0
+9035113,Dharma Ferry Vii,False,True,0
+9035125,Dharma Kencana Vii,False,True,0
+9037575,Putri Yasmin,False,True,0
+9037941,Dharma Ferry Viii,False,True,0
+9037965,Harmoni Mas 3,False,True,0
+9039573,Serasi V,False,True,0
+9040467,Dharma Kencana Ii,False,True,0
+9044516,Dharma Rucitra 9,False,True,0
+9045883,Niki Mila Utama,False,True,0
+9049255,Porodisa,False,True,0
+9049384,Simeulue,False,True,0
+9049401,Manusela,False,True,0
+9049413,Ambu Ambu,False,True,0
+9049566,Kasuari Pasifik I,False,True,0
+9066784,Mutiara Ferindo Vii,False,True,0
+9068213,Belanak,False,True,0
+9068952,Semumu,False,True,0
+9072575,Raja Dilaut,False,True,0
+9078775,Swarna Putri,False,True,0
+9079767,Sakura Express,False,True,0
+9080223,Inerie,False,True,0
+9080261,Ulin Ferry,False,True,0
+9083627,Dharma Rucitra Vii,False,True,0
+9085754,Bontang Ekspress Ii,False,True,0
+9097939,Pulo Tello,False,True,0
+9100358,Harmoni Mas 8,False,True,0
+9105176,Mutiara Persada Ii,False,True,0
+9107473,Mahardika Kirana,False,True,0
+9115066,Jambo Xiv,False,True,0
+9125437,Dharma Kartika I,False,True,0
+9130315,Permata Lestari I,False,True,0
+9140023,Dharma Kartika Ix,False,True,0
+9145865,Dharma Ferry V,False,True,0
+9152155,Sindu Dwitama,False,True,0
+9154074,Mutiara Ferindo 1,False,True,0
+9157571,Sewindu,False,True,0
+9161223,Sri Gemilang,False,True,0
+9162124,Dharma Kencana V,False,True,0
+9162162,Dharma Kartika Ii,False,True,0
+9162851,Mutiara Pertiwi Iii,False,True,0
+9172791,Portlink Vii,False,True,0
+9174749,Swarna Bengawan,False,True,0
+9174751,Dharma Kartika Vii,False,True,0
+9197612,Simfoni Sejati,False,True,0
+9208083,Mega 3,False,True,0
+9210581,Madani,False,True,0
+9210593,Bontoharu,False,True,0
+9210608,Pulau Sagori,False,True,0
+9220366,Shiloh Sejati,False,True,0
+9276925,Harmoni Mas 89,False,True,0
+9287015,Sindu Tritama,False,True,0
+9291054,Mulya Sentosa Ii,False,True,0
+9311232,Roro Sawitri,False,True,0
+9333735,Dharma Rucitra Viii,False,True,0
+9364241,Samandar,False,True,0
+9403736,Trans Jawa 9,False,True,0
+9408061,Nusa Jaya Abadi,False,True,0
+9482328,Tri Sakti Elfina,False,True,0
+9549475,Brr,False,True,0
+9607849,Kalibodri,False,True,0
+9612301,Berkat Porosida,False,True,0
+9613537,Cakalang Ii,False,True,0
+9613719,Bahteramas,False,True,0
+9614646,Manta,False,True,0
+9618472,Tanjung Madlahar,False,True,0
+9627447,Lome,False,True,0
+9639139,Port Link Ii,False,True,0
+9640190,Quicksilver Ix,False,True,0
+9641039,Napan Wainami,False,True,0
+9641766,Labuhan Haji,False,True,0
+9664201,Badaleon,False,True,0
+9664287,Marsela,False,True,0
+9664495,Samudera Indonesia,False,True,0
+9672868,Kundur,False,True,0
+9686041,Manta Ii,False,True,0
+9690406,Sardinela,False,True,0
+9707302,Wira Prime,False,True,0
+9725031,Ranaka,False,True,0
+9739616,Samudera Utama,False,True,0
+9740196,Inerie Ii,False,True,0
+9742285,Kalabia,False,True,0
+9767285,Erana,False,True,0
+9768966,Ilelabalekan,False,True,0
+9772424,Agung Samudra Xviii,False,True,0
+9792412,Ngafi,False,True,0
+9792565,Tanjung Sole,False,True,0
+9804291,Wira Victoria,False,True,0
+9812391,Bamega Jaya,False,True,0
+9816983,Lompa,False,True,0
+9817602,Lelemuku,False,True,0
+9820099,Portlink Viii,False,True,0
+9821067,Kokonao,False,True,0
+9828833,Munic V,False,True,0
+9828845,Lakaan,False,True,0
+9829851,Dalente Woba,False,True,0
+9837028,Garda Maritim Ii,False,True,0
+9837054,Garda Maritim I,False,True,0
+9838979,Jambo X,False,True,0
+9842413,Ihan Batak,False,True,0
+9843613,Sumber Berkat Ii,False,True,0
+9848431,Drajat Paciran,False,True,0
+9854686,Jws,False,True,0
+9855939,Munic Xi,False,True,0
+9856335,Munggiyango Hulalo,False,True,0
+9869069,Satria 99,False,True,0
+9869502,Dln Oasis,False,True,0
+9872729,Pora Pora,False,True,0
+9873503,Surya 777,False,True,0
+9879985,Bahtera Nusantara 02,False,True,0
+9880207,Lorry Amar,False,True,0
+9881811,Parama Kalyani,False,True,0
+9884382,Wira Ono Niha,False,True,0
+9891165,Bahtera Nusantara 01,False,True,0
+9891842,Roswin,False,True,0
+9895056,Dln Batu Layar,False,True,0
+9901104,New Rose,False,True,0
+9901257,Cantika Lestari 99B,False,True,0
+9908736,Kaldera Toba,False,True,0
+9921051,Wira Nauli,False,True,0
+9921520,Aceh Hebat 2,False,True,0
+9925318,Takabonerate,False,True,0
+9926817,Aceh Hebat 3,False,True,0
+9929077,Pangkilang,False,True,0
+9929089,Opudi,False,True,0
+9931898,Surya Kayangan,False,True,0
+9939711,Surya Ayla,False,True,0
+9950662,Kirana Vii,False,True,0
+9972062,Bakkat Menuang,False,True,0
+9979400,Dln Mandalika,False,True,0
+9979541,Dln Nusantara,False,True,0

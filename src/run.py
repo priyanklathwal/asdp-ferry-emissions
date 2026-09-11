@@ -695,6 +695,10 @@ def main():
                         "pathway_source": C.PATHWAY_SOURCE,
                         "terminology": C.TERMINOLOGY_NOTE, "route_distance": C.ROUTE,
                         "method_sources": C.METHOD_SOURCES}}
+    _vp = voy.groupby("IMO").agg(name=("name", "first"), crossings=("IMO", "size")) \
+        .reset_index().sort_values("crossings", ascending=False)
+    payload["vessel_picker"] = [{"imo": int(r["IMO"]), "name": str(r["name"]),
+                                 "crossings": int(r["crossings"])} for _, r in _vp.iterrows()]
     _dp = os.path.join(OUT, "dataset_profile.json")
     if os.path.exists(_dp):
         payload["dataset"] = json.load(open(_dp))

@@ -334,6 +334,45 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
      entirely.</p>
 </section>
 
+<section id="live">
+  <h2>LIVE</h2>
+  <h3>The corridor right now</h3>
+  <p>Everything above is reconstructed from seven months of port-call records. This is the same
+     strait as it is at this moment, from public AIS. Ferries show as passenger-vessel markers;
+     the ones queueing off Merak or Bakauheni are usually visible as a cluster just outside each
+     port.</p>
+  <figure class="chart">
+    <div id="live-map" style="width:100%;height:520px;background:var(--water);position:relative">
+      <div id="vf-area" style="position:absolute;inset:0"></div>
+    </div>
+    <figcaption><b>Live AIS, Sunda Strait.</b> Map and vessel positions from VesselFinder's public
+      embed. Terrestrial AIS coverage; positions can lag a few minutes and vessels with their
+      transponders off will not appear. This view shows all traffic in the area, not only the
+      vessels in this study.</figcaption>
+  </figure>
+
+  <p>To follow one of the corridor vessels from the analysis, pick it here. The
+     <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/vessel_imos.csv">full
+     list of 383 IMO numbers</a>, flagged by whether each vessel appears on the corridor, in the
+     register, or both, is in the repository.</p>
+  <div class="controls" style="grid-template-columns:2fr 1fr;align-items:end">
+    <div class="ctl">
+      <label>Corridor vessel <b id="v-pick-meta"></b></label>
+      <select id="s-pick"></select>
+    </div>
+    <div class="ctl">
+      <label>&nbsp;</label>
+      <a id="v-pick-link" class="reset" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener">Open on VesselFinder</a>
+    </div>
+  </div>
+  <figure class="chart" style="margin-top:20px">
+    <div id="live-one" style="width:100%;height:380px;background:var(--water);position:relative">
+      <div id="vf-one" style="position:absolute;inset:0"></div>
+    </div>
+    <figcaption id="one-cap"></figcaption>
+  </figure>
+</section>
+
 <section id="checks">
   <h2>VALIDATION</h2>
   <h3>Nine outputs check out against benchmarks from outside the model</h3>
@@ -1020,6 +1059,37 @@ function render(){
        machine-readable values in <code>src/config.py</code> and <code>src/factors.py</code>.</p>`;
 }
 
+
+/* ---------- live AIS embeds (VesselFinder public embed, no key) ---------- */
+function vfEmbed(hostId, opts){
+  const host=document.getElementById(hostId); if(!host) return;
+  host.innerHTML="";
+  const f=document.createElement("iframe");
+  f.style.cssText="width:100%;height:100%;border:0";
+  f.setAttribute("loading","lazy");
+  f.setAttribute("title", opts.title||"Live AIS map");
+  const vars=Object.entries(opts.vars).map(([k,v])=>`var ${k}=${JSON.stringify(v)};`).join("");
+  f.srcdoc=`<!doctype html><html><body style="margin:0"><script>${vars}<\/script>`+
+           `<script src="https://www.vesselfinder.com/aismap.js"><\/script></body></html>`;
+  host.appendChild(f);
+}
+function liveMaps(){
+  vfEmbed("vf-area",{title:"Live AIS, Sunda Strait",vars:{
+    width:"100%",height:"520",latitude:"-5.90",longitude:"105.87",zoom:"11",names:true}});
+  const sel=document.getElementById("s-pick");
+  const L=D.vessel_picker||[];
+  sel.innerHTML=L.map(v=>`<option value="${v.imo}">${v.name} · IMO ${v.imo}</option>`).join("");
+  const show=()=>{
+    const v=L.find(x=>String(x.imo)===sel.value)||L[0]; if(!v) return;
+    document.getElementById("v-pick-meta").textContent=fmt(v.crossings)+" crossings in the study window";
+    document.getElementById("v-pick-link").href="https://www.vesselfinder.com/vessels/details/"+v.imo;
+    document.getElementById("one-cap").innerHTML=`<b>${v.name}.</b> Latest reported position and last 24 hours of track, from public AIS via VesselFinder.`;
+    vfEmbed("vf-one",{title:"Live position of "+v.name,vars:{
+      width:"100%",height:"380",zoom:"10",names:true,imo:String(v.imo),show_track:true}});
+  };
+  sel.addEventListener("change",show); show();
+}
+
 /* ---------- controls ---------- */
 function bind(){
   const wsel=document.getElementById("s-wait");
@@ -1049,6 +1119,7 @@ function bind(){
   sync();
 }
 bind();
+liveMaps();
 </script>
 </body>
 </html>
