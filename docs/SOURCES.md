@@ -67,7 +67,7 @@
   https://en.antaranews.com/amp/news/379725/asdp-turns-merak-and-bakauheni-ports-into-green-energy-hubs
 
 ## Not sourced
-The following are analyst assumptions and carry no citation. They are flagged `[ASSUM]` in
+The following are analyst assumptions and carry no citation. They are flagged `[ASSUMPTION]` in
 `src/config.py` and in the dashboard's assumptions register.
 
 - Specific fuel consumption values. Structure follows the Fourth IMO GHG Study; the numbers are

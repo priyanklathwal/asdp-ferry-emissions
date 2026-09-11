@@ -151,7 +151,7 @@ docs/
 outputs/                  results as CSV
 ```
 
-Assumptions live in `config.py` and are tagged `[ASSUM]`, `[LIT]`, `[MKT]` or `[GOV]`. Anything in `factors.py` is transcribed from a published table and is never analyst judgement.
+Assumptions live in `config.py` and are tagged `[ASSUMPTION]`, `[LIT]`, `[MKT]` or `[GOV]`. Anything in `factors.py` is transcribed from a published table and is never analyst judgement.
 
 ## Limitations
 

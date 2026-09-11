@@ -102,7 +102,7 @@ select{width:100%;padding:7px;font-family:var(--sans);font-size:13px;border:1px 
 .reset:hover{background:var(--ink);color:var(--paper)}
 .controls > p.mute{grid-column:1/-1;margin:4px 0 0}
 
-.tagline{display:inline-block;font-family:var(--sans);font-size:9.5px;font-weight:600;
+.tagline{display:inline-block;font-family:var(--sans);font-size:9px;font-weight:600;
          letter-spacing:.08em;padding:2px 6px;margin-left:7px;vertical-align:2px;border:1px solid currentColor}
 .t-assum{color:var(--hot)} .t-src{color:var(--accent)}
 
@@ -146,7 +146,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   Emission factors, auxiliary power demand, low-load penalties, hull fouling and the phase structure
   are transcribed from the published inventory literature and carry a
   <span class="tagline t-src">SOURCED</span> tag. What remains analyst judgement carries
-  <span class="tagline t-assum">ASSUM</span>, and the largest of those is installed engine power:
+  <span class="tagline t-assum">ASSUMPTION</span>, and the largest of those is installed engine power:
   the register supplied has no kW field, so power is estimated from hull dimensions. Nine sanity
   checks against independent benchmarks are reported below and all currently pass.
 </div>
@@ -411,7 +411,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
 
 <section id="assumptions">
   <h2>ASSUMPTIONS AND METHODOLOGY</h2>
-  <h3>Thirty-seven parameters: 22 sourced, 15 assumed</h3>
+  <h3>Thirty-seven parameters: 22 sourced, 15 assumptions</h3>
   <div id="assump"></div>
 </section>
 
@@ -993,7 +993,7 @@ function render(){
 
   const A=D.assumptions;
   const S_ = "<span class='tagline t-src'>SOURCED</span>";
-  const A_ = "<span class='tagline t-assum'>ASSUM</span>";
+  const A_ = "<span class='tagline t-assum'>ASSUMPTION</span>";
   const rows = [
     ["Method", "Model structure", "Activity-based, phase-resolved bottom-up",
      "Third and Fourth IMO GHG Studies; Olmer et al. (2017), ICCT", S_],
@@ -1171,7 +1171,7 @@ function macc(mount){
   document.getElementById("v-crf").textContent=S.rate+"%, asset life by option";
   document.getElementById("capex-note").innerHTML="<b>Indicative capex, $M whole corridor:</b> "+
     Object.entries(CAPEX).filter(([k])=>k!=="b40").map(([k,c])=>`${k.replace("_"," ")} ${c.musd} (${c.note})`).join("; ")+
-    ". <span class='tagline t-assum'>ASSUM</span> Order-of-magnitude figures for screening, not estimates.";
+    ". <span class='tagline t-assum'>ASSUMPTION</span> Order-of-magnitude figures for screening, not estimates.";
 }
 
 /* ---------- live AIS embeds (VesselFinder public embed, no key) ---------- */
