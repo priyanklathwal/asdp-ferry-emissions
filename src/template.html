@@ -174,6 +174,8 @@ footer{border-top:1px solid var(--faint);padding:32px 0 72px;font-family:var(--s
       <p>The corridor is served by a larger and partly different set of ships. That matters for
          framing: a fleet-replacement question asked of the register is a different question from a
          decarbonisation question asked of the corridor.</p>
+      <div id="dataset-table"></div>
+      <p class="mute" style="margin-top:26px">How the two sources relate:</p>
       <div id="coverage-table"></div>
     </div>
     <div>
@@ -735,6 +737,36 @@ function render(){
     `${fmt(D.sanity_checks.find(c=>c.check.indexOf("Black carbon")===0).value,0)}% of 100-year `+
     `warming here and which electrification removes entirely.`;
 
+  const DS=D.dataset;
+  if(DS){
+    const R_=DS.register, M_=DS.ais;
+    const gaps=(o,keys)=>keys.map(([k,l])=>l+" "+o[k]).join(", ");
+    document.getElementById("dataset-table").innerHTML =
+      "<p class='mute' style='margin:0 0 10px'><b>Table 1.</b> Input data.</p>"+
+      tbl(["","Vessel register","Port-to-port movements"],[
+        ["Source","Commercial ship register, pulled by the client","AIS port-call events, same provider"],
+        ["Unit of record","One vessel","One port-to-port move"],
+        ["Records", fmt(R_.rows)+" vessels, "+fmt(R_.unique_imo)+" unique IMO",
+         fmt(M_.rows)+" moves, "+M_.unique_imo+" vessels"],
+        ["Coverage","Vessels the client believed to be ASDP-operated; 102 distinct operators in practice",
+         "Every vessel calling Merak and Bakauheni, both directions"],
+        ["Period","Static snapshot; build years "+R_.built.min+"–"+R_.built.max,
+         M_.start+" to "+M_.end+" ("+M_.span_days+" days, ~"+fmt(M_.per_day,0)+" moves/day)"],
+        ["Temporal resolution","—", M_.timestamp_granularity],
+        ["Fields used","IMO, type, GT, DWT, build year, LOA, beam, draft, design speed, engine fuel, engine type, owner, operator, status",
+         "IMO, last-seen-in-origin, first- and last-seen-in-destination, size band"],
+        ["Size range","GT "+fmt(R_.gt.min)+"–"+fmt(R_.gt.max)+", median "+fmt(R_.gt.median),
+         Object.entries(M_.size_bands).slice(0,2).map(([k,v])=>k.replace("Passenger Ferry ","")+": "+fmt(v)).join("; ")],
+        ["Field completeness","GT "+R_.gt.cov+" · build year "+R_.built.cov+" · beam "+R_.beam_cov+
+         " · LOA "+R_.loa_cov+" · draft "+R_.draft_cov+" · design speed "+R_.speed_cov+
+         " · engine fuel "+R_.fuel_type_cov, "Timestamps 100%; no gaps in the series"],
+        [{t:"Not present", cls:"neg"},
+         "Installed main engine power (kW), engine rpm, auxiliary rating, passenger and vehicle capacity",
+         "Speed over ground, position, draught, heading, cargo or passenger load"],
+        ["Used for","Displacement and installed power estimates; age, fuel and engine class; ASDP flag",
+         "Voyage count, duration, phase split, time alongside; the whole activity basis of the model"]
+      ]);
+  }
   const c=D.coverage;
   document.getElementById("coverage-table").innerHTML = tbl(
     ["","Vessels","Comment"],[

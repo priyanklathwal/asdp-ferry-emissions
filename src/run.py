@@ -695,6 +695,9 @@ def main():
                         "pathway_source": C.PATHWAY_SOURCE,
                         "terminology": C.TERMINOLOGY_NOTE, "route_distance": C.ROUTE,
                         "method_sources": C.METHOD_SOURCES}}
+    _dp = os.path.join(OUT, "dataset_profile.json")
+    if os.path.exists(_dp):
+        payload["dataset"] = json.load(open(_dp))
     for path in (os.path.join(DOCS, "data.json"), os.path.join(OUT, "dashboard_data.json")):
         with open(path, "w") as f:
             json.dump(payload, f, indent=1, default=float)

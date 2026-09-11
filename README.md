@@ -69,6 +69,26 @@ The vessel register supplied is not the fleet on this route, and it is not an AS
 
 Fleet replacement and corridor decarbonisation are therefore two different questions. On replacement, age decides it: 160 of 360 hulls are past thirty years old.
 
+## Data
+
+**Table 1 · Input data.**
+
+| | Vessel register | Port-to-port movements |
+|---|---|---|
+| Source | Commercial ship register, pulled by the client | AIS port-call events, same provider |
+| Unit of record | One vessel | One port-to-port move |
+| Records | 360 vessels, 360 unique IMO | 33,695 moves, 69 vessels |
+| Coverage | Vessels believed to be ASDP-operated; 102 distinct operators in practice | Every vessel calling Merak and Bakauheni, both directions |
+| Period | Static snapshot; build years 1959–2025 | 29 Jan – 18 Aug 2026 (200 days, ~170 moves/day) |
+| Temporal resolution | — | Hourly bins |
+| Fields used | IMO, type, GT, DWT, build year, LOA, beam, draft, design speed, engine fuel, engine type, owner, operator, status | IMO, last-seen-in-origin, first/last-seen-in-destination, size band |
+| Size range | GT 109–32,645, median 1,029 | <10,000 GT: 29,847 moves; 10,000–30,000 GT: 3,674 |
+| Field completeness | GT 100% · build year 100% · beam 99% · LOA 91% · draft 84% · design speed 59% · engine fuel 52% | Timestamps 100%; no gaps |
+| **Not present** | **Installed main engine power (kW)**, engine rpm, auxiliary rating, passenger/vehicle capacity | Speed over ground, position, draught, heading, load |
+| Used for | Displacement and installed-power estimates; age, fuel and engine class; ASDP flag | Voyage count, duration, phase split, time alongside — the model's entire activity basis |
+
+The register's 264 ro-ro ferries and 40 passenger ro-ro cargo vessels make up 84% of the file; the remainder is passenger-only ferries, landing craft, car carriers and ro-ro cargo. In the movement data, 89% of moves are by passenger ferries under 10,000 GT.
+
 ## Method
 
 Activity-based, phase-resolved bottom-up model following the Third and Fourth IMO GHG Studies, using the parameter tables published by [Olmer et al. (2017)](https://theicct.org/publication/greenhouse-gas-emissions-from-global-shipping-2013-2015/) for the ICCT.
