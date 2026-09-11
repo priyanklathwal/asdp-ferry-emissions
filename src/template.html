@@ -675,6 +675,29 @@ function drawDay(){
 
 function render(){
   const R = compute();
+  const _eg = D.scenarios.find(s=>s.pathway==="electric_grid");
+  const _b1 = D.scenarios.find(s=>s.pathway==="b100");
+  document.getElementById("pyramid").innerHTML = [
+    ["Hotel load dominates",
+     fmt(D.energy_split.auxiliary_share_pct,0)+"% of shaft energy is auxiliary generators, not "+
+     "propulsion, because a crossing takes "+fmt(D.phase_geometry.steam_h,1)+" hours and the "+
+     "queueing and turnaround around it take "+
+     fmt(D.phase_geometry.berth_h+D.phase_geometry.wait_h,1)+". Shore power alone addresses "+
+     fmt(D.totals_annual.stationary_share_pct,0)+"% of the corridor's energy."],
+    ["The grid is the constraint",
+     "Electrifying saves "+usd(Math.abs(_eg.cost_delta_usd))+" a year and raises CO2 by "+
+     fmt(-_eg.co2_saved_pct,0)+"%, because Indonesia's grid is dirtier per unit of useful "+
+     "energy than the ships' own engines. Break-even sits at "+
+     fmt(D.breakeven_grid_ef_tco2_per_mwh,2)+" tCO2/MWh against a grid running 0.75 to 0.90."],
+    ["Only biofuel works today",
+     "B100 cuts "+fmt(_b1.co2_saved_pct,0)+"% with no capital works, at roughly $"+
+     fmt(Math.round(_b1.abatement_cost_usd_per_tco2e/10)*10)+" a tonne. Everything cheaper "+
+     "raises emissions; everything cleaner needs either new vessels or a cleaner grid."]
+  ].map((r,i)=>`<li style="display:grid;grid-template-columns:28px 1fr;gap:14px;margin-bottom:18px">
+      <span style="font-family:var(--sans);font-size:13px;font-weight:600;color:var(--hot);
+                   border-top:2px solid var(--hot);padding-top:6px">${i+1}</span>
+      <span><b style="font-family:var(--sans);font-size:15px">${r[0]}.</b> ${r[1]}</span>
+    </li>`).join("");
 
   document.getElementById("byline").innerHTML =
     `${fmt(D.coverage.voyages_observed)} crossings by ${D.coverage.route_vessels} vessels, `+
