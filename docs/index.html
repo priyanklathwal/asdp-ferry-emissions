@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merak-Bakauheni ferry energy and emissions</title>
+<style>
+/*
+  Editorial layout after the explanatory-graphics tradition: one column of prose at a
+  comfortable measure, graphics allowed to break wider than the text, the takeaway stated
+  in the caption rather than left for the reader to decode, and series labelled in place
+  instead of through a legend.
+
+  Colour does one job only. Muted blue is observed reality. Warm red marks the thing the
+  reader is meant to notice, which on this page is usually an intervention going the wrong
+  way. Green marks money or emissions saved. Nothing else is coloured.
+*/
+:root{
+  --bg:#FAF9F5; --panel:#F1EFE8; --ink:#23282B; --mid:#6B7478; --faint:#DAD7CE;
+  --sea:#2F5F73; --sea2:#8FB0BF; --sea3:#C3D5DD;
+  --hot:#D4552C; --good:#3F7D5C;
+  --water:#E9F0F2; --land:#E5E1D5;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);
+     font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 32px}
+.col{max-width:660px}
+a{color:var(--sea)}
+
+header.masthead{padding:72px 0 8px}
+.masthead h1{margin:0 0 18px;font-family:var(--sans);font-size:44px;line-height:1.05;
+             font-weight:750;letter-spacing:-.03em;max-width:16ch}
+.masthead .sub{font-size:19px;line-height:1.55;color:var(--mid);max-width:56ch;margin:0}
+.byline{font-family:var(--sans);font-size:12.5px;color:var(--mid);margin-top:26px;
+        padding-top:14px;border-top:1px solid var(--faint);max-width:660px}
+
+.flag{background:var(--panel);padding:22px 26px;margin:36px 0 0;font-size:15.5px;
+      max-width:760px;line-height:1.6}
+
+section{padding:56px 0 8px;border-top:1px solid var(--faint);margin-top:52px}
+section > h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+h3{font-family:var(--sans);font-size:31px;font-weight:700;letter-spacing:-.025em;
+   line-height:1.15;margin:0 0 22px;max-width:20ch}
+p{max-width:66ch;margin:0 0 18px}
+.mute{color:var(--mid);font-size:15px}
+strong,b{font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:30px 0 12px;
+      border-top:2px solid var(--ink)}
+.kpi{padding:18px 24px 20px 0}
+.kpi .v{font-family:var(--sans);font-size:34px;font-weight:750;line-height:1;
+        letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:600;color:var(--mid);letter-spacing:0}
+.kpi .l{font-size:13.5px;color:var(--mid);margin-top:10px;line-height:1.45;
+        font-family:var(--sans);max-width:24ch}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.grid-side{display:grid;grid-template-columns:minmax(0,1fr) 262px;gap:44px;align-items:start}
+.wide{margin:8px 0}
+
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:13.5px}
+th,td{text-align:right;padding:9px 12px 9px 0;border-bottom:1px solid var(--faint);
+      font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:11px;letter-spacing:.04em;color:var(--mid);font-weight:600;
+         border-bottom:1.5px solid var(--ink);text-transform:none}
+tbody tr:hover{background:var(--panel)}
+td.neg{color:var(--hot);font-weight:700}
+td.pos{color:var(--good);font-weight:700}
+
+.controls{background:var(--panel);padding:24px}
+.controls h4{margin:0 0 18px;font-family:var(--sans);font-size:13px;font-weight:700}
+.ctl{margin-bottom:19px}
+.ctl label{display:flex;justify-content:space-between;font-family:var(--sans);font-size:12.5px;
+           color:var(--mid);margin-bottom:6px;gap:10px}
+.ctl label b{color:var(--ink);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--sea)}
+select{width:100%;padding:6px;font-family:var(--sans);font-size:13px;
+       border:1px solid var(--faint);background:#fff;color:var(--ink)}
+.reset{font-family:var(--sans);font-size:12px;background:none;border:1px solid var(--ink);
+       padding:7px 12px;cursor:pointer;color:var(--ink)}
+.reset:hover{background:var(--ink);color:var(--bg)}
+
+svg text{font-family:var(--sans)}
+.chart{margin:10px 0 6px}
+figcaption{font-size:14px;color:var(--mid);margin-top:12px;max-width:68ch;line-height:1.55}
+figcaption b{color:var(--ink);font-weight:600}
+
+details.assump{border-bottom:1px solid var(--faint)}
+details.assump summary{padding:14px 0;cursor:pointer;font-family:var(--sans);font-size:14.5px;
+                       font-weight:600;list-style:none}
+details.assump summary::-webkit-details-marker{display:none}
+details.assump summary::before{content:"+ ";color:var(--mid)}
+details.assump[open] summary::before{content:"\2212 "}
+details.assump summary:hover{color:var(--sea)}
+details.assump > div{padding:2px 0 22px;font-size:14.5px}
+
+.tagline{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:700;
+         padding:2px 6px;margin-left:8px;vertical-align:2px;border-radius:2px}
+.t-assum{background:#F6DFD5;color:#8E3416} .t-src{background:#DCE7EB;color:#25505F}
+
+footer{border-top:1px solid var(--faint);padding:32px 0 72px;font-family:var(--sans);
+       font-size:12.5px;color:var(--mid);margin-top:56px}
+
+@media (max-width:900px){
+  .wrap{padding:0 22px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid2,.grid-side{grid-template-columns:1fr}
+  .masthead h1{font-size:31px} .masthead .sub{font-size:17px}
+  h3{font-size:25px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <h1>What the Sunda Strait ferries burn</h1>
+    <p class="sub">Every twelve minutes or so, a ferry leaves Merak for Bakauheni. It is fifteen
+       nautical miles. Here is what that costs in energy, in carbon, and in the air over two
+       Indonesian port towns &mdash; and what would actually change it.</p>
+    <p class="byline" id="byline"></p>
+  </div>
+</header>
+
+<div class="wrap"><figure class="chart wide">
+  <div id="chart-map"></div>
+  <figcaption id="map-cap"></figcaption>
+</figure></div>
+
+<div class="wrap">
+
+<div class="flag">
+  <b>Read this before using any number on this page.</b>
+  Emission factors, auxiliary power demand, low-load penalties, hull fouling and the phase structure
+  are transcribed from the published inventory literature and carry a
+  <span class="tagline t-src">SOURCED</span> tag. What remains analyst judgement carries
+  <span class="tagline t-assum">ASSUM</span>, and the largest of those is installed engine power:
+  the register supplied has no kW field, so power is estimated from hull dimensions. Nine sanity
+  checks against independent benchmarks are reported below and all currently pass.
+</div>
+
+<section id="headline">
+  <h2>WHERE THIS LANDS</h2>
+  <h3>One crossing, roughly the annual emissions of a small coal unit</h3>
+  <div class="kpis" id="kpis"></div>
+  <p class="mute" id="kpi-note"></p>
+</section>
+
+<section id="data">
+  <h2>WHAT THE DATA ACTUALLY CONTAINS</h2>
+  <h3>The inventory and the corridor barely overlap</h3>
+  <div class="grid2">
+    <div>
+      <p>The covering note describes the worktab as a sub-set of vessels operated or owned by ASDP.
+         It is broader than that. Of the vessels in the register, only a minority carry an ASDP
+         corporate owner or operator, and only a handful of them appear on the Merak&ndash;Bakauheni
+         crossing at all in the six-and-a-half months of movement data.</p>
+      <p>The corridor is served by a larger and partly different set of ships. That matters for
+         framing: a fleet-replacement question asked of the register is a different question from a
+         decarbonisation question asked of the corridor.</p>
+      <div id="coverage-table"></div>
+    </div>
+    <div>
+      <figure class="chart">
+        <div id="chart-age"></div>
+        <figcaption>Age profile of the register. A replacement programme is decided by this chart
+          more than by any emissions number: the tonnage sits disproportionately in hulls past
+          thirty years old.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="baseline">
+  <h2>BASELINE</h2>
+  <h3>Slow, short, and constantly repeated</h3>
+  <div class="grid2">
+    <div>
+      <p id="baseline-text"></p>
+      <p>The crossing is about 15 nautical miles. Observed port-to-port times cluster around three
+         hours, which implies an average speed well below the design speed of these hulls. Part of
+         that is genuine slow steaming; part is queueing offshore for a berth, which the movement
+         data cannot separate from sailing. The model treats it as low-load steaming with a floor on
+         propulsion power, and the size of that floor is the largest single uncertainty here.</p>
+      <figure class="chart">
+        <div id="chart-day"></div>
+        <figcaption id="day-cap"></figcaption>
+      </figure>
+      <figure class="chart">
+        <div id="chart-monthly"></div>
+        <figcaption>Monthly crossings and modelled CO<sub>2</sub>. The March peak is the Idul Fitri
+          <em>mudik</em> surge.</figcaption>
+      </figure>
+    </div>
+    <div>
+      <figure class="chart">
+        <div id="chart-vessels"></div>
+        <figcaption>Ten largest emitters on the corridor over the observed window.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="pathways">
+  <h2>FUEL SWITCHING</h2>
+  <h3>On Indonesia's grid, electrifying these ferries would raise emissions and cut costs</h3>
+  <div class="grid-side">
+    <div>
+      <p id="pathway-lede"></p>
+      <figure class="chart">
+        <div id="chart-energy"></div>
+        <figcaption id="energy-cap"></figcaption>
+      </figure>
+      <figure class="chart">
+        <div id="chart-pathways"></div>
+        <figcaption>Annual CO<sub>2</sub> by pathway against the baseline. Bars to the right of the
+          baseline line are worse than doing nothing.</figcaption>
+      </figure>
+      <div id="pathway-table"></div>
+      <p class="mute" style="margin-top:14px">A note on terminology: SAF is an aviation fuel and has
+        no shipping equivalent by that name. The marine analogues are FAME biodiesel, which
+        Indonesia already blends to B40 on land, HVO renewable diesel, and bio- or e-methanol.</p>
+    </div>
+    <aside class="controls">
+      <h4>Scenario controls</h4>
+      <div class="ctl">
+        <label>Grid carbon intensity <b><span id="v-ef"></span> tCO<sub>2</sub>/MWh</b></label>
+        <input type="range" id="s-ef" min="0" max="1.0" step="0.01">
+      </div>
+      <div class="ctl">
+        <label>PLN tariff <b>Rp <span id="v-tariff"></span>/kWh</b></label>
+        <input type="range" id="s-tariff" min="600" max="1800" step="10">
+      </div>
+      <div class="ctl">
+        <label>MFO price <b>Rp <span id="v-mfo"></span>/L</b></label>
+        <input type="range" id="s-mfo" min="6000" max="22000" step="100">
+      </div>
+      <div class="ctl">
+        <label>B40 diesel price <b>Rp <span id="v-b40"></span>/L</b></label>
+        <input type="range" id="s-b40" min="10000" max="30000" step="100">
+      </div>
+      <div class="ctl">
+        <label>B100 / HVO <b>$<span id="v-b100"></span>/t</b></label>
+        <input type="range" id="s-b100" min="700" max="2000" step="10">
+      </div>
+      <div class="ctl">
+        <label>Main engines while queueing offshore</label>
+        <select id="s-wait"></select>
+      </div>
+      <div class="ctl">
+        <label>Climate metric</label>
+        <select id="s-gwp">
+          <option value="co2">CO2 only</option>
+          <option value="100" selected>CO2e, 100-year</option>
+          <option value="20">CO2e, 20-year</option>
+        </select>
+      </div>
+      <button class="reset" id="reset">Reset to defaults</button>
+      <p class="mute" style="font-size:11.5px;margin-top:14px;margin-bottom:0">
+        The climate metric changes which pathway wins. Black carbon is a fifth of 100-year warming
+        here and much more on a 20-year view, and burning nothing eliminates it entirely.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<section id="breakeven">
+  <h2>THE DECIDING NUMBER</h2>
+  <h3 id="be-head"></h3>
+  <div class="grid2">
+    <div>
+      <p id="be-text"></p>
+      <p>This is the argument for treating ferry electrification as a power-sector project rather
+         than a shipping project. The vessels are a captive, highly predictable load at two fixed
+         points, which is close to ideal for a dedicated solar-plus-storage build at the terminals.
+         ASDP is already installing large solar arrays at both ports for terminal load. The question
+         worth putting to them is whether that programme can be sized against a charging load
+         instead.</p>
+      <div id="battery-table"></div>
+    </div>
+    <div>
+      <figure class="chart">
+        <div id="chart-grid"></div>
+        <figcaption>CO<sub>2</sub> from a fully electrified corridor as a function of the carbon
+          intensity of the power supplying it, against the diesel baseline.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="sensitivity">
+  <h2>HOW MUCH TO TRUST THIS</h2>
+  <h3>The structural uncertainty is now small; the data gap is not</h3>
+  <div class="grid2">
+    <figure class="chart">
+      <div id="chart-wait"></div>
+      <figcaption>Whether main engines run while a vessel queues offshore. The IMO convention is
+        that they are off at anchor; the alternative bounds the error at under 7%.</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="chart-dist"></div>
+      <figcaption>Sailed distance. The port-to-port line is 15 nm; real tracks are longer, and
+        traffic separation in the strait adds more.</figcaption>
+    </figure>
+  </div>
+  <p class="mute">Resolving the phase structure against the vessels' own fastest crossings, rather
+     than imposing an arbitrary floor on engine load, has cut the structural spread from about
+     &plusmn;15% to under 7%. What remains is a data gap, not a modelling choice: installed engine
+     power is absent from the register, and positional AIS would replace the phase inference
+     entirely.</p>
+</section>
+
+<section id="checks">
+  <h2>SANITY CHECKS</h2>
+  <h3>Nine tests against things known independently of this model</h3>
+  <p>A bottom-up model of this kind can be internally consistent and still wrong by a factor of
+     three. Each check below compares a model output against a figure that comes from somewhere
+     else: engine manufacturer data, published ferry schedules, port operating reports, or the
+     ranges the inventory literature reports for this ship class.</p>
+  <div id="sanity"></div>
+</section>
+
+<section id="assumptions">
+  <h2>ASSUMPTIONS REGISTER</h2>
+  <h3>Every number that did not come out of the workbook</h3>
+  <div id="assump"></div>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div>Prepared for discussion. Model code and inputs are in the accompanying repository;
+        all figures regenerate from <code>src/run.py</code>.</div>
+    <div style="margin-top:8px" id="foot-meta"></div>
+  </div>
+</footer>
+
+<script>
+const D = {"generated_utc":"2026-09-11T17:21:51+00:00","route":"Merak (Java) - Bakauheni (Sumatra)","method_version":"v2, ICCT/IMO phase-resolved","window":{"start":"2026-01-29","end":"2026-08-18","span_days":200.3,"annualisation_factor":1.822},"coverage":{"inventory_vessels":360,"inventory_asdp_flagged":108,"route_vessels":69,"route_vessels_in_inventory":46,"voyages_observed":33695,"voyages_by_asdp_flagged":4073},"power_model":{"n_from_dimensions":278,"n_from_gt_regression":105,"n_draft_capped":22,"n_mcr_bounded":31,"displacement_form":"displacement (t) = 2.8949 * GT^0.866","displacement_r2":0.9311364765396571,"median_kw_per_gt":0.6760401510215005},"totals_annual":{"fuel_t":56461.75246974747,"co2_t":175888.54303765748,"co2e20_t":317247.2782494794,"co2e100_t":217593.33708195682,"fuel_energy_mwh":630992.632703121,"shaft_energy_mwh":242652.41638581312,"propulsion_mwh":92607.98935826519,"nox_t":3423.962392459875,"sox_t":563.1257804429927,"pm_t":358.739500822072,"co_t":144.69193996795687,"ch4_t":2.7480925317490246,"n2o_t":8.926760266237233,"bc_t":43.306574635185456,"residual_share":0.9871698743438222,"stationary_mwh":62787.99767775124,"berth_mwh":29054.349777696127,"stationary_share_pct":25.875694383327065,"aux_fuel_fraction_of_co2":0.9751105395116022},"energy_split":{"propulsion_mwh":92607.98935826519,"auxiliary_mwh":150044.42702754794,"auxiliary_share_pct":61.835125840650974},"voyage_stats":{"median_hours":2.966666666666667,"median_wait_hours":0.9500000000000002,"median_steam_speed_kn":10.714285714285715,"median_load":0.3162063095138879,"median_co2_per_voyage_t":2.484088724969903,"berth_hours_median":4.816666666666666,"wait_share_pct":27.98772343003439},"scenarios":[{"pathway":"baseline","label":"Baseline (as operated)","co2_t":175888.54303765748,"co2_saved_t":0.0,"co2_saved_pct":0.0,"co2e100_t":217593.33708195682,"co2e100_saved_t":0.0,"co2e100_saved_pct":0.0,"energy_in_mwh":630992.632703121,"energy_saved_pct":0.0,"annual_cost_usd":50991234.91559144,"cost_delta_usd":0.0,"local_pollutant_removed_pct":0.0,"note":"Fuel burn as observed, priced at Indonesian domestic industrial rates.","abatement_cost_usd_per_tco2":null,"abatement_cost_usd_per_tco2e":null,"baseline_cost_usd":50991234.91559144,"blended_fuel_price_usd_per_t":903.1110917592017},{"pathway":"b40","label":"B40 drop-in biodiesel","co2_t":133675.29270861967,"co2_saved_t":42213.25032903781,"co2_saved_pct":24.000000000000007,"co2e100_t":165370.9361822872,"co2e100_saved_t":52222.40089966962,"co2e100_saved_pct":23.999999999999993,"energy_in_mwh":630992.632703121,"energy_saved_pct":0.0,"annual_cost_usd":89018016.034725,"cost_delta_usd":38026781.119133554,"local_pollutant_removed_pct":0.0,"note":"Drop-in, no vessel modification. Already the mandated blend on land.","abatement_cost_usd_per_tco2":900.8257081065267,"abatement_cost_usd_per_tco2e":728.1699129879363,"baseline_cost_usd":50991234.91559144,"blended_fuel_price_usd_per_t":903.1110917592017},{"pathway":"b100","label":"B100 / HVO drop-in","co2_t":35177.708607531495,"co2_saved_t":140710.83443012598,"co2_saved_pct":80.0,"co2e100_t":47870.5341580305,"co2e100_saved_t":169722.80292392633,"co2e100_saved_pct":78.0,"energy_in_mwh":630992.632703121,"energy_saved_pct":0.0,"annual_cost_usd":78481835.93294899,"cost_delta_usd":27490601.01735755,"local_pollutant_removed_pct":40.0,"note":"Drop-in after fuel-system checks. Near-zero sulphur and lower black carbon.","abatement_cost_usd_per_tco2":195.36946908668074,"abatement_cost_usd_per_tco2e":161.97352709099124,"baseline_cost_usd":50991234.91559144,"blended_fuel_price_usd_per_t":903.1110917592017},{"pathway":"bio_methanol","label":"Bio-methanol (engine conversion)","co2_t":26383.281455648623,"co2_saved_t":149505.26158200885,"co2_saved_pct":85.0,"co2e100_t":28287.133820654388,"co2e100_saved_t":189306.20326130243,"co2e100_saved_pct":87.0,"energy_in_mwh":630992.632703121,"energy_saved_pct":0.0,"annual_cost_usd":108441949.94194344,"cost_delta_usd":57450715.026351996,"local_pollutant_removed_pct":95.0,"note":"Engine conversion or newbuild plus bunkering at both terminals.","abatement_cost_usd_per_tco2":384.27219496110024,"abatement_cost_usd_per_tco2e":303.48036163955936,"baseline_cost_usd":50991234.91559144,"blended_fuel_price_usd_per_t":903.1110917592017},{"pathway":"shore_power","label":"Shore power at berth and anchorage","co2_t":187687.6745800813,"co2_saved_t":-11799.131542423827,"co2_saved_pct":-6.708300233004745,"co2e100_t":218869.6558238905,"co2e100_saved_t":-1276.3187419336755,"co2e100_saved_pct":-0.5865615000209994,"energy_in_mwh":537875.331550673,"energy_saved_pct":14.757272324011314,"annual_cost_usd":42459186.79623851,"cost_delta_usd":-8532048.11935293,"local_pollutant_removed_pct":25.875694383327065,"note":"Cold ironing at both terminals plus a connection for vessels queueing offshore. Displaces only the stationary hotel load, but that is the single largest block of energy on this corridor and it needs no change to the ships' propulsion.","abatement_cost_usd_per_tco2":null,"abatement_cost_usd_per_tco2e":null,"baseline_cost_usd":50991234.91559144,"blended_fuel_price_usd_per_t":903.1110917592017},{"pathway":"electric_grid","label":"Battery-electric, PLN grid","co2_t":248519.8232240005,"co2_saved_t":-72631.280186343,"co2_saved_pct":-41.29392337441374,"co2e100_t":248519.8232240005,"co2e100_saved_t":-30926.486142043665,"co2e100_saved_pct":-14.212974789019006,"energy_in_mwh":292376.26261647115,"energy_saved_pct":53.664076652693225,"annual_cost_usd":19171971.46994618,"cost_delta_usd":-31819263.44564526,"local_pollutant_removed_pct":100.0,"note":"Shore energy at the industrial tariff. Ship-side CO2 follows the grid; all ship-side NOx, SOx, PM and black carbon go to zero at the two terminals.","abatement_cost_usd_per_tco2":null,"abatement_cost_usd_per_tco2e":null,"baseline_cost_usd":50991234.91559144,"blended_fuel_price_usd_per_t":903.1110917592017},{"pathway":"electric_re","label":"Battery-electric, dedicated RE","co2_t":12425.991161200025,"co2_saved_t":163462.55187645747,"co2_saved_pct":92.93530383127931,"co2e100_t":12425.991161200025,"co2e100_saved_t":205167.3459207568,"co2e100_saved_pct":94.28935126054905,"energy_in_mwh":292376.26261647115,"energy_saved_pct":53.664076652693225,"annual_cost_usd":19171971.46994618,"cost_delta_usd":-31819263.44564526,"local_pollutant_removed_pct":100.0,"note":"Same energy from dedicated renewables plus storage at the terminals.","abatement_cost_usd_per_tco2":-194.65781660923648,"abatement_cost_usd_per_tco2e":-155.08931649354685,"baseline_cost_usd":50991234.91559144,"blended_fuel_price_usd_per_t":903.1110917592017}],"per_vessel":[{"IMO":8604333,"name":"Port Link Iii","is_asdp":true,"voyages":891,"hours":1955.7333333333333,"wait_h":229.38333333333335,"fuel_t":1059.062369186182,"co2_t":3297.92021764577,"co2e100_t":4649.30649199468,"shaft_mwh":4265.186899913819,"propulsion_mwh":2868.735233247152,"mean_load":0.12964368817042912,"v_steam":11.11111111111111,"gt":9023.0,"built":1986.0,"p_mcr_kw":14436.800000000001,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.7013694923072618},{"IMO":9764611,"name":"Sebuku","is_asdp":true,"voyages":1337,"hours":3047.116666666667,"wait_h":428.5833333333334,"fuel_t":884.2702271427783,"co2_t":2753.6174873226114,"co2e100_t":3271.9309747142447,"shaft_mwh":3883.4917039894835,"propulsion_mwh":1712.2998706561498,"mean_load":0.46002060611922285,"v_steam":10.97560975609756,"gt":5553.0,"built":2014.0,"p_mcr_kw":1892.5857212820347,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.059549354766351},{"IMO":9765665,"name":"Legundi","is_asdp":false,"voyages":1278,"hours":2929.75,"wait_h":431.2833333333334,"fuel_t":796.7584529247487,"co2_t":2481.1058224076673,"co2e100_t":2943.3036420181643,"shaft_mwh":3505.1245196595455,"propulsion_mwh":1414.3993529928787,"mean_load":0.47316540400042423,"v_steam":10.97560975609756,"gt":3500.0,"built":2000.0,"p_mcr_kw":1593.1962935561216,"power_method":"gt_regression","fuel":"residual","in_inventory":false,"co2_per_voyage_t":1.9413973571265002},{"IMO":1105297,"name":"Sms Sagita 8","is_asdp":false,"voyages":660,"hours":1940.95,"wait_h":622.85,"fuel_t":686.1078796291799,"co2_t":2136.539937165266,"co2e100_t":2548.7855094567867,"shaft_mwh":2999.026287135993,"propulsion_mwh":1619.6027871359927,"mean_load":0.433132117499565,"v_steam":10.714285714285715,"gt":15000.0,"built":2000.0,"p_mcr_kw":3750.0,"power_method":"gt_regression","fuel":"residual","in_inventory":false,"co2_per_voyage_t":3.237181722977676},{"IMO":9759733,"name":"Batu Mandi","is_asdp":true,"voyages":939,"hours":2157.7833333333333,"wait_h":321.5833333333334,"fuel_t":654.9315847613386,"co2_t":2039.4569549468085,"co2e100_t":2425.3451361197026,"shaft_mwh":2875.844497989262,"propulsion_mwh":1336.3633313225953,"mean_load":0.4600206061192228,"v_steam":10.97560975609756,"gt":5381.0,"built":2015.0,"p_mcr_kw":2103.129914708725,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.171945638920989},{"IMO":8705747,"name":"Sms Sagita","is_asdp":false,"voyages":652,"hours":1638.85,"wait_h":348.71666666666664,"fuel_t":641.2371090351598,"co2_t":1996.8123575354878,"co2e100_t":2728.768887332477,"shaft_mwh":2637.622907210043,"propulsion_mwh":1471.9094072100434,"mean_load":0.15513337820793854,"v_steam":10.843373493975903,"gt":5373.0,"built":1988.0,"p_mcr_kw":8596.800000000001,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.0625956403918524},{"IMO":8822222,"name":"Rajarakata","is_asdp":false,"voyages":624,"hours":1816.5166666666667,"wait_h":570.7666666666667,"fuel_t":629.6483996247097,"co2_t":1960.725116431346,"co2e100_t":2542.182226540664,"shaft_mwh":2623.877846254852,"propulsion_mwh":1332.5535129215189,"mean_load":0.18569511211457534,"v_steam":10.714285714285715,"gt":8886.0,"built":1989.0,"p_mcr_kw":6934.053752055627,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.1421876865886955},{"IMO":7909061,"name":"Duta Banten","is_asdp":false,"voyages":632,"hours":1891.9,"wait_h":629.5666666666666,"fuel_t":617.4269582993538,"co2_t":1922.6675481441875,"co2e100_t":2577.642818546619,"shaft_mwh":2556.862420474134,"propulsion_mwh":1212.4300871408009,"mean_load":0.13993445133129262,"v_steam":10.714285714285715,"gt":8011.0,"built":1979.0,"p_mcr_kw":7865.261545114083,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.042195487569917},{"IMO":9031521,"name":"Amadea","is_asdp":false,"voyages":558,"hours":1617.7666666666667,"wait_h":504.6166666666667,"fuel_t":609.2409413054821,"co2_t":1897.1762912252714,"co2e100_t":2585.465776409507,"shaft_mwh":2502.1528621674356,"propulsion_mwh":1351.5150288341024,"mean_load":0.13993445133129262,"v_steam":10.714285714285715,"gt":6687.0,"built":1991.0,"p_mcr_kw":9930.250921172441,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.3999575111564004},{"IMO":8602074,"name":"Amarisa","is_asdp":false,"voyages":607,"hours":1749.6333333333334,"wait_h":539.4333333333333,"fuel_t":607.2884908875516,"co2_t":1891.0963606238356,"co2e100_t":2454.0251239456243,"shaft_mwh":2525.7713673596895,"propulsion_mwh":1280.8337006930228,"mean_load":0.17680699830617594,"v_steam":10.714285714285715,"gt":10624.0,"built":1986.0,"p_mcr_kw":7140.075080119621,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.115480001027736},{"IMO":9836012,"name":"Neomi","is_asdp":false,"voyages":723,"hours":2097.9666666666667,"wait_h":655.6,"fuel_t":584.0119449338553,"co2_t":1818.6131965240252,"co2e100_t":2220.174527618226,"shaft_mwh":2516.015460327858,"propulsion_mwh":1023.8794603278578,"mean_load":0.3162063095138879,"v_steam":10.714285714285715,"gt":8274.0,"built":2018.0,"p_mcr_kw":2886.053375378916,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.5153709495491356},{"IMO":9016715,"name":"Trimas Kanaya","is_asdp":false,"voyages":714,"hours":1713.3333333333333,"wait_h":316.66666666666674,"fuel_t":583.0805083455126,"co2_t":1815.712702987926,"co2e100_t":2350.5784847240398,"shaft_mwh":2432.9147569395354,"propulsion_mwh":1211.0994236062022,"mean_load":0.1870131324571618,"v_steam":10.97560975609756,"gt":6547.0,"built":1990.0,"p_mcr_kw":5587.297906078343,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.543014990179168},{"IMO":9875812,"name":"Wira Berlian","is_asdp":false,"voyages":613,"hours":1851.6666666666667,"wait_h":626.7666666666667,"fuel_t":560.2287071584855,"co2_t":1744.5521940915235,"co2e100_t":2140.857404299726,"shaft_mwh":2402.4545278660325,"propulsion_mwh":1086.9901945326992,"mean_load":0.30388799575870085,"v_steam":10.714285714285715,"gt":8800.0,"built":2019.0,"p_mcr_kw":3745.3919623262564,"power_method":"gt_regression","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.8459252758426157},{"IMO":8921755,"name":"Virgo 18","is_asdp":false,"voyages":483,"hours":1179.0166666666667,"wait_h":250.14999999999998,"fuel_t":550.545372093322,"co2_t":1714.398288698605,"co2e100_t":2380.6753263873966,"shaft_mwh":2250.3532780869646,"propulsion_mwh":1409.7487780869646,"mean_load":0.1619916192223875,"v_steam":11.249999999999998,"gt":9989.0,"built":1990.0,"p_mcr_kw":11056.280595350794,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.5494788585892443},{"IMO":9836000,"name":"Caitlyn 7","is_asdp":false,"voyages":692,"hours":2012.35,"wait_h":630.8333333333334,"fuel_t":543.6380771782786,"co2_t":1692.88897233316,"co2e100_t":2020.9628210092064,"shaft_mwh":2377.1121864889637,"propulsion_mwh":946.5805198222969,"mean_load":0.419610507190282,"v_steam":10.714285714285715,"gt":8274.0,"built":2018.0,"p_mcr_kw":2152.617492528732,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.446371347302254},{"IMO":8510350,"name":"Windu Karsa Pratama","is_asdp":false,"voyages":768,"hours":1844.05,"wait_h":337.5166666666667,"fuel_t":539.1265221398692,"co2_t":1678.8399899435524,"co2e100_t":2142.0926678483393,"shaft_mwh":2269.0740140810967,"propulsion_mwh":957.0531807477632,"mean_load":0.1900622000625057,"v_steam":10.97560975609756,"gt":3123.0,"built":1985.0,"p_mcr_kw":4049.248479860132,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.1859895702390006},{"IMO":8405206,"name":"Tribuana 1","is_asdp":false,"voyages":717,"hours":2033.3333333333333,"wait_h":602.0333333333333,"fuel_t":502.55259496661256,"co2_t":1564.9487807260314,"co2e100_t":1853.6119123361493,"shaft_mwh":2204.35108578888,"propulsion_mwh":758.7674191222134,"mean_load":0.44016619167899323,"v_steam":10.714285714285715,"gt":3500.0,"built":2000.0,"p_mcr_kw":1593.1962935561216,"power_method":"gt_regression","fuel":"residual","in_inventory":false,"co2_per_voyage_t":2.182634282742024},{"IMO":9066722,"name":"Suki 2","is_asdp":false,"voyages":687,"hours":1599.8833333333332,"wait_h":254.06666666666672,"fuel_t":501.26873417300345,"co2_t":1560.9508382147326,"co2e100_t":2078.361124860565,"shaft_mwh":2090.4386392408846,"propulsion_mwh":950.770305907551,"mean_load":0.16229573357214555,"v_steam":10.97560975609756,"gt":5008.0,"built":1993.0,"p_mcr_kw":5129.443093302273,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.2721264020592904},{"IMO":9835991,"name":"Munic 9","is_asdp":false,"voyages":599,"hours":1768.3666666666666,"wait_h":572.75,"fuel_t":488.61935949919257,"co2_t":1521.5606854804857,"co2e100_t":1856.7758660933782,"shaft_mwh":2105.50884403373,"propulsion_mwh":848.2763440337301,"mean_load":0.3162063095138879,"v_steam":10.714285714285715,"gt":7288.0,"built":2018.0,"p_mcr_kw":2886.053375378916,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.5401680892829477},{"IMO":1112719,"name":"Wira Qaila","is_asdp":false,"voyages":466,"hours":1354.35,"wait_h":424.21666666666664,"fuel_t":481.92660636811956,"co2_t":1500.7194522303244,"co2e100_t":1790.4628024883223,"shaft_mwh":2106.451558796019,"propulsion_mwh":1143.5377254626858,"mean_load":0.433132117499565,"v_steam":10.714285714285715,"gt":15000.0,"built":2000.0,"p_mcr_kw":3750.0,"power_method":"gt_regression","fuel":"residual","in_inventory":false,"co2_per_voyage_t":3.220428009077949},{"IMO":9807205,"name":"Royce I","is_asdp":false,"voyages":588,"hours":1770.2166666666667,"wait_h":595.2,"fuel_t":478.6620499287381,"co2_t":1490.5536234780905,"co2e100_t":1797.3962996402624,"shaft_mwh":2073.943230080816,"propulsion_mwh":816.3912300808165,"mean_load":0.3500582376019916,"v_steam":10.714285714285715,"gt":7288.0,"built":2016.0,"p_mcr_kw":2580.3161325791784,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.5349551419695415},{"IMO":8503694,"name":"Jatra Iii","is_asdp":false,"voyages":742,"hours":1814.9833333333333,"wait_h":349.29999999999995,"fuel_t":477.18802279414217,"co2_t":1485.9635029809588,"co2e100_t":1762.014141013835,"shaft_mwh":2095.7459030376795,"propulsion_mwh":802.883236371013,"mean_load":0.4562682650583275,"v_steam":10.843373493975903,"gt":3500.0,"built":2000.0,"p_mcr_kw":1593.1962935561216,"power_method":"gt_regression","fuel":"residual","in_inventory":false,"co2_per_voyage_t":2.002646230432559},{"IMO":1034060,"name":"Calisha","is_asdp":false,"voyages":607,"hours":1694.55,"wait_h":485.09999999999997,"fuel_t":476.2277250338921,"co2_t":1482.9731357555402,"co2e100_t":1789.7899295817658,"shaft_mwh":2067.8948192929797,"propulsion_mwh":861.5338192929801,"mean_load":0.3712373825808331,"v_steam":10.714285714285715,"gt":10000.0,"built":2024.0,"p_mcr_kw":2500.0,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.443118839794959},{"IMO":9819272,"name":"Als Elisa","is_asdp":false,"voyages":577,"hours":1722.5666666666666,"wait_h":570.4666666666667,"fuel_t":471.6959066740295,"co2_t":1468.861053382928,"co2e100_t":1791.5516046354628,"shaft_mwh":2033.1406678450837,"propulsion_mwh":808.7693345117505,"mean_load":0.3162063095138879,"v_steam":10.714285714285715,"gt":7331.0,"built":2017.0,"p_mcr_kw":2856.5556431029486,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.5456864010102738},{"IMO":8324074,"name":"Jagantara","is_asdp":false,"voyages":469,"hours":1345.4,"wait_h":410.68333333333334,"fuel_t":468.1542695053846,"co2_t":1457.8323952397677,"co2e100_t":1892.1528892940423,"shaft_mwh":1946.8748075288174,"propulsion_mwh":989.3096408621508,"mean_load":0.17680699830617586,"v_steam":10.714285714285715,"gt":5110.0,"built":1984.0,"p_mcr_kw":7137.697234756998,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.1083846380378843},{"IMO":9821251,"name":"Dorothy","is_asdp":false,"voyages":570,"hours":1702.6833333333334,"wait_h":564.8333333333334,"fuel_t":466.1809530596447,"co2_t":1451.6874878277335,"co2e100_t":1770.573091422063,"shaft_mwh":2009.3892414876334,"propulsion_mwh":798.9575748209667,"mean_load":0.3162063095138879,"v_steam":10.714285714285715,"gt":7331.0,"built":2017.0,"p_mcr_kw":2856.5556431029486,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.546820154083743},{"IMO":9821275,"name":"Wira Artha","is_asdp":false,"voyages":554,"hours":1695.6166666666666,"wait_h":590.2666666666667,"fuel_t":459.75075638029597,"co2_t":1431.6638553682417,"co2e100_t":1745.1210311319116,"shaft_mwh":1982.30002886108,"propulsion_mwh":776.5306955277466,"mean_load":0.3162063095138879,"v_steam":10.714285714285715,"gt":7331.0,"built":2017.0,"p_mcr_kw":2856.5556431029486,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.584230785863252},{"IMO":9821263,"name":"Reinna","is_asdp":false,"voyages":553,"hours":1670.0833333333333,"wait_h":565.1333333333333,"fuel_t":455.04119327564445,"co2_t":1416.9982758603567,"co2e100_t":1727.836156928569,"shaft_mwh":1961.633682238587,"propulsion_mwh":775.1290155719204,"mean_load":0.3162063095138879,"v_steam":10.714285714285715,"gt":7152.0,"built":2017.0,"p_mcr_kw":2856.5556431029486,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.562383862315292},{"IMO":9114567,"name":"Athaya","is_asdp":false,"voyages":414,"hours":1042.1666666666667,"wait_h":239.86666666666667,"fuel_t":443.50582651001395,"co2_t":1381.0771437521835,"co2e100_t":1902.732966573225,"shaft_mwh":1817.4985896427108,"propulsion_mwh":1074.0102563093774,"mean_load":0.1560656950477333,"v_steam":11.11111111111111,"gt":13413.0,"built":1995.0,"p_mcr_kw":10028.376923429872,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":3.335935129836192},{"IMO":9713789,"name":"Adinda Windu Karsa","is_asdp":false,"voyages":494,"hours":1523.7333333333333,"wait_h":530.0166666666667,"fuel_t":443.24391437386487,"co2_t":1380.2615493602152,"co2e100_t":1716.720318213577,"shaft_mwh":1889.7483105415408,"propulsion_mwh":806.1108105415408,"mean_load":0.26131759167416535,"v_steam":10.588235294117649,"gt":9269.0,"built":2015.0,"p_mcr_kw":3901.9693121958394,"power_method":"dimensions","fuel":"residual","in_inventory":true,"co2_per_voyage_t":2.7940517193526624}],"monthly":[{"month":"2026-01","voyages":19,"co2_t":50.21721982719717,"fuel_t":16.106591207985275},{"month":"2026-02","voyages":5147,"co2_t":13030.619310984686,"fuel_t":4182.654357442384},{"month":"2026-03","voyages":5341,"co2_t":14075.271171013013,"fuel_t":4518.63217405745},{"month":"2026-04","voyages":5591,"co2_t":14115.433267799557,"fuel_t":4531.164169238607},{"month":"2026-05","voyages":5847,"co2_t":14672.20509366581,"fuel_t":4709.955519986034},{"month":"2026-06","voyages":5525,"co2_t":13757.091366865336,"fuel_t":4415.9808704624365},{"month":"2026-07","voyages":3591,"co2_t":8968.44411238373,"fuel_t":2878.9755735430035},{"month":"2026-08","voyages":2634,"co2_t":6596.871614725032,"fuel_t":2118.0100999791985}],"grid_sensitivity":[{"ef":0.0,"co2_t":0.0,"saving_pct":100.0},{"ef":0.2,"co2_t":58475.252523294235,"saving_pct":66.75437097072617},{"ef":0.4,"co2_t":116950.50504658847,"saving_pct":33.50874194145236},{"ef":0.5,"co2_t":146188.13130823558,"saving_pct":16.88592742681545},{"ef":0.6,"co2_t":175425.7575698827,"saving_pct":0.26311291217853805},{"ef":0.7,"co2_t":204663.3838315298,"saving_pct":-16.359701602458358},{"ef":0.8,"co2_t":233901.01009317694,"saving_pct":-32.98251611709529},{"ef":0.85,"co2_t":248519.8232240005,"saving_pct":-41.29392337441374},{"ef":0.9,"co2_t":263138.63635482406,"saving_pct":-49.6053306317322},{"ef":1.0,"co2_t":292376.26261647115,"saving_pct":-66.2281451463691}],"breakeven_grid_ef_tco2_per_mwh":0.6015828421351082,"breakeven_grid_ef_co2e100":0.7442236764869933,"breakeven_grid_ef_co2e20":1.0850650986863226,"shore_energy_mwh_annual":292376.26261647115,"distance_sensitivity":[{"distance_nm":15.0,"co2_t_annual":175888.54303765745},{"distance_nm":16.0,"co2_t_annual":187274.52469998476},{"distance_nm":17.0,"co2_t_annual":199962.12893555063},{"distance_nm":18.0,"co2_t_annual":214230.8042399637},{"distance_nm":19.0,"co2_t_annual":230551.97903354507}],"waiting_sensitivity":[{"case":"Main engines off while waiting (IMO anchor convention)","co2_t_annual":175888.54303765748},{"case":"Main engines idling at manoeuvring load while waiting","co2_t_annual":187237.06976550719}],"battery_sizing":[{"name":"Port Link Iii","gt":9023.0,"p_mcr_kw":14436.800000000001,"voyages_period":891,"energy_per_voyage_mwh":4.78696621763616,"battery_pack_mwh_2_crossings":13.410371519599284,"capex_newbuild_musd":6.705185759799643,"capex_retrofit_musd":12.069334367639355},{"name":"Sebuku","gt":5553.0,"p_mcr_kw":1892.5857212820347,"voyages_period":1337,"energy_per_voyage_mwh":2.904631042624894,"battery_pack_mwh_2_crossings":8.137133131513037,"capex_newbuild_musd":4.068566565756519,"capex_retrofit_musd":7.323419818361734},{"name":"Legundi","gt":3500.0,"p_mcr_kw":1593.1962935561216,"voyages_period":1278,"energy_per_voyage_mwh":2.7426639433955757,"battery_pack_mwh_2_crossings":7.683392938692222,"capex_newbuild_musd":3.8416964693461106,"capex_retrofit_musd":6.915053644823},{"name":"Sms Sagita 8","gt":15000.0,"p_mcr_kw":3750.0,"voyages_period":660,"energy_per_voyage_mwh":4.543979222933323,"battery_pack_mwh_2_crossings":12.729659409831138,"capex_newbuild_musd":6.364829704915569,"capex_retrofit_musd":11.456693468848023},{"name":"Batu Mandi","gt":5381.0,"p_mcr_kw":2103.129914708725,"voyages_period":939,"energy_per_voyage_mwh":3.0626671970066686,"battery_pack_mwh_2_crossings":8.579861040471393,"capex_newbuild_musd":4.289930520235697,"capex_retrofit_musd":7.721874936424253},{"name":"Sms Sagita","gt":5373.0,"p_mcr_kw":8596.800000000001,"voyages_period":652,"energy_per_voyage_mwh":4.04543390676387,"battery_pack_mwh_2_crossings":11.333017443870098,"capex_newbuild_musd":5.666508721935049,"capex_retrofit_musd":10.199715699483088},{"name":"Rajarakata","gt":8886.0,"p_mcr_kw":6934.053752055627,"voyages_period":624,"energy_per_voyage_mwh":4.204932445921237,"battery_pack_mwh_2_crossings":11.779842127748871,"capex_newbuild_musd":5.889921063874436,"capex_retrofit_musd":10.601857914973984},{"name":"Duta Banten","gt":8011.0,"p_mcr_kw":7865.261545114083,"voyages_period":632,"energy_per_voyage_mwh":4.045668386826161,"battery_pack_mwh_2_crossings":11.333674324367328,"capex_newbuild_musd":5.666837162183664,"capex_retrofit_musd":10.200306891930595},{"name":"Amadea","gt":6687.0,"p_mcr_kw":9930.250921172441,"voyages_period":558,"energy_per_voyage_mwh":4.484144914278558,"battery_pack_mwh_2_crossings":12.562037523191837,"capex_newbuild_musd":6.281018761595919,"capex_retrofit_musd":11.305833770872653},{"name":"Amarisa","gt":10624.0,"p_mcr_kw":7140.075080119621,"voyages_period":607,"energy_per_voyage_mwh":4.161073092849571,"battery_pack_mwh_2_crossings":11.656973030170246,"capex_newbuild_musd":5.828486515085123,"capex_retrofit_musd":10.491275727153221},{"name":"Neomi","gt":8274.0,"p_mcr_kw":2886.053375378916,"voyages_period":723,"energy_per_voyage_mwh":3.479966058544755,"battery_pack_mwh_2_crossings":9.748896398881541,"capex_newbuild_musd":4.874448199440771,"capex_retrofit_musd":8.774006758993387},{"name":"Trimas Kanaya","gt":6547.0,"p_mcr_kw":5587.297906078343,"voyages_period":714,"energy_per_voyage_mwh":3.4074436371702177,"battery_pack_mwh_2_crossings":9.545729597630595,"capex_newbuild_musd":4.772864798815298,"capex_retrofit_musd":8.591156637867536}],"fleet_indicative":{"n_vessels_in_service":348,"n_asdp_flagged":108,"installed_mcr_mw":769.9594977079366,"fuel_t_yr":321279.9319574552,"co2_t_yr":1007193.2182718236,"assumptions":{"operating_days_per_year":300,"steaming_hours_per_day":8.0,"mean_sea_load":0.35,"note":"[ASSUM] Activity is assumed, not observed. Obtaining AIS for the other ASDP routes is the single highest-value next data step."}},"activity_week":{"vessel":"Sebuku","imo":9764611,"day0":"2026-01-31","days":7,"voyages":[{"start_h":23.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.06666666666666665,"dir":"Bakau","load":0.4600206061192228},{"start_h":26.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.0,"dir":"Merak","load":0.4600206061192228},{"start_h":28.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0333333333333334,"dir":"Bakau","load":0.4600206061192228},{"start_h":31.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.06666666666666665,"dir":"Merak","load":0.4600206061192228},{"start_h":33.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":36.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0333333333333334,"dir":"Merak","load":0.4600206061192228},{"start_h":39.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.050000000000000044,"dir":"Bakau","load":0.4600206061192228},{"start_h":41.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0333333333333334,"dir":"Merak","load":0.4600206061192228},{"start_h":44.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":47.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Merak","load":0.4600206061192228},{"start_h":49.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":52.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Merak","load":0.4600206061192228},{"start_h":54.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.01666666666666683,"dir":"Bakau","load":0.4600206061192228},{"start_h":57.93333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0833333333333333,"dir":"Merak","load":0.4600206061192228},{"start_h":60.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":62.983333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.0,"dir":"Merak","load":0.4600206061192228},{"start_h":65.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.0,"dir":"Bakau","load":0.4600206061192228},{"start_h":67.91666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":2.0999999999999996,"dir":"Merak","load":0.4600206061192228},{"start_h":71.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.0,"dir":"Bakau","load":0.4600206061192228},{"start_h":73.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Merak","load":0.4600206061192228},{"start_h":75.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.9833333333333336,"dir":"Bakau","load":0.4600206061192228},{"start_h":78.93333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0833333333333333,"dir":"Merak","load":0.4600206061192228},{"start_h":81.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.0,"dir":"Bakau","load":0.4600206061192228},{"start_h":83.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.05,"dir":"Merak","load":0.4600206061192228},{"start_h":86.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0166666666666668,"dir":"Bakau","load":0.4600206061192228},{"start_h":89.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.06666666666666665,"dir":"Merak","load":0.4600206061192228},{"start_h":91.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.01666666666666683,"dir":"Bakau","load":0.4600206061192228},{"start_h":93.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0333333333333334,"dir":"Merak","load":0.4600206061192228},{"start_h":96.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":99.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.050000000000000044,"dir":"Merak","load":0.4600206061192228},{"start_h":101.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":109.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Merak","load":0.4600206061192228},{"start_h":112.98333333333333,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.01666666666666683,"dir":"Bakau","load":0.4600206061192228},{"start_h":114.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0000000000000002,"dir":"Merak","load":0.4600206061192228},{"start_h":117.93333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.06666666666666665,"dir":"Bakau","load":0.4600206061192228},{"start_h":120.93333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Merak","load":0.4600206061192228},{"start_h":122.93333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":125.93333333333334,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.050000000000000044,"dir":"Merak","load":0.4600206061192228},{"start_h":127.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0333333333333334,"dir":"Bakau","load":0.4600206061192228},{"start_h":130.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.050000000000000044,"dir":"Merak","load":0.4600206061192228},{"start_h":132.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.05,"dir":"Bakau","load":0.4600206061192228},{"start_h":136.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.06666666666666665,"dir":"Merak","load":0.4600206061192228},{"start_h":138.98333333333332,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":141.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.050000000000000044,"dir":"Merak","load":0.4600206061192228},{"start_h":143.98333333333332,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.01666666666666683,"dir":"Bakau","load":0.4600206061192228},{"start_h":146.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Merak","load":0.4600206061192228},{"start_h":148.96666666666667,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.05,"dir":"Bakau","load":0.4600206061192228},{"start_h":151.98333333333332,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0333333333333334,"dir":"Merak","load":0.4600206061192228},{"start_h":154.98333333333332,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Bakau","load":0.4600206061192228},{"start_h":156.98333333333332,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.03333333333333344,"dir":"Merak","load":0.4600206061192228},{"start_h":159.98333333333332,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.0,"dir":"Bakau","load":0.4600206061192228},{"start_h":161.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":1.0333333333333334,"dir":"Merak","load":0.4600206061192228},{"start_h":164.95,"manoeuvre":0.6,"steam":1.3666666666666667,"wait":0.0,"dir":"Bakau","load":0.4600206061192228}],"note":"Every crossing this vessel made in one week, drawn to scale on a 168-hour axis. The gaps are time alongside."},"fleet_marks":[{"gt":1186.0,"age":6.0,"kw":853.1457585190009,"asdp":false},{"gt":1089.0,"age":6.0,"kw":812.1500592048915,"asdp":false},{"gt":511.0,"age":41.0,"kw":300.1272949499329,"asdp":false},{"gt":9269.0,"age":11.0,"kw":3901.9693121958394,"asdp":false},{"gt":2319.0,"age":12.0,"kw":1121.9773415369991,"asdp":false},{"gt":7331.0,"age":9.0,"kw":2856.5556431029486,"asdp":false},{"gt":7331.0,"age":9.0,"kw":2856.5556431029486,"asdp":false},{"gt":6687.0,"age":35.0,"kw":9930.250921172441,"asdp":false},{"gt":10624.0,"age":40.0,"kw":7140.075080119621,"asdp":false},{"gt":574.0,"age":21.0,"kw":549.4337532403478,"asdp":true},{"gt":617.0,"age":15.0,"kw":585.1015708140131,"asdp":false},{"gt":157.0,"age":40.0,"kw":251.20000000000002,"asdp":true},{"gt":13413.0,"age":31.0,"kw":10028.376923429872,"asdp":false},{"gt":682.0,"age":17.0,"kw":649.2565630751859,"asdp":true},{"gt":616.0,"age":15.0,"kw":549.4337532403478,"asdp":true},{"gt":846.0,"age":67.0,"kw":214.15701702067884,"asdp":false},{"gt":1585.0,"age":6.0,"kw":1008.5811598269981,"asdp":false},{"gt":1851.0,"age":7.0,"kw":1103.0542710261282,"asdp":true},{"gt":628.0,"age":16.0,"kw":547.72875927531,"asdp":true},{"gt":1875.0,"age":4.0,"kw":1111.2861263167051,"asdp":false},{"gt":380.0,"age":10.0,"kw":492.52175999328927,"asdp":false},{"gt":542.0,"age":32.0,"kw":237.71824627475402,"asdp":true},{"gt":526.0,"age":34.0,"kw":237.5783811545955,"asdp":true},{"gt":5381.0,"age":11.0,"kw":2103.129914708725,"asdp":true},{"gt":560.0,"age":18.0,"kw":358.2481222827671,"asdp":true},{"gt":1163.0,"age":23.0,"kw":502.81202185952964,"asdp":true},{"gt":844.0,"age":23.0,"kw":275.64960139986846,"asdp":true},{"gt":237.0,"age":26.0,"kw":336.8282203735821,"asdp":false},{"gt":355.0,"age":16.0,"kw":439.5559111059582,"asdp":false},{"gt":627.0,"age":39.0,"kw":695.1186179180702,"asdp":false},{"gt":1685.0,"age":16.0,"kw":1044.8304517057616,"asdp":false},{"gt":910.0,"age":17.0,"kw":732.1957143414502,"asdp":false},{"gt":475.0,"age":19.0,"kw":439.5559111059582,"asdp":true},{"gt":2257.0,"age":33.0,"kw":1010.6133443197515,"asdp":false},{"gt":1124.0,"age":23.0,"kw":513.053484109303,"asdp":true},{"gt":1181.0,"age":17.0,"kw":735.7354150700596,"asdp":false},{"gt":5057.0,"age":53.0,"kw":4651.4509590895395,"asdp":false},{"gt":644.0,"age":18.0,"kw":360.13904664733946,"asdp":false},{"gt":2905.0,"age":40.0,"kw":1483.327077120777,"asdp":false},{"gt":8274.0,"age":8.0,"kw":2152.617492528732,"asdp":false},{"gt":693.0,"age":16.0,"kw":374.1471273916802,"asdp":true},{"gt":10000.0,"age":2.0,"kw":2500.0,"asdp":false},{"gt":1310.0,"age":7.0,"kw":903.5411596317167,"asdp":false},{"gt":499.0,"age":59.0,"kw":576.0217778968703,"asdp":false},{"gt":1120.0,"age":9.0,"kw":820.7505326054492,"asdp":true},{"gt":290.0,"age":33.0,"kw":316.46881932682714,"asdp":true},{"gt":239.0,"age":51.0,"kw":382.40000000000003,"asdp":false},{"gt":2673.0,"age":55.0,"kw":687.384856949749,"asdp":false},{"gt":499.0,"age":30.0,"kw":500.761823992942,"asdp":false},{"gt":2916.0,"age":37.0,"kw":1119.2723073088955,"asdp":false},{"gt":11931.0,"age":30.0,"kw":19089.600000000002,"asdp":false},{"gt":2825.0,"age":37.0,"kw":1821.953125719247,"asdp":false},{"gt":12415.0,"age":33.0,"kw":19864.0,"asdp":false},{"gt":2877.0,"age":35.0,"kw":865.3061905070612,"asdp":false},{"gt":259.0,"age":45.0,"kw":258.34673634458744,"asdp":false},{"gt":1305.0,"age":31.0,"kw":740.0919493740969,"asdp":false},{"gt":9245.0,"age":29.0,"kw":14792.0,"asdp":false},{"gt":699.0,"age":37.0,"kw":543.1749437766675,"asdp":false},{"gt":6801.0,"age":30.0,"kw":10881.6,"asdp":false},{"gt":9950.0,"age":27.0,"kw":4020.5192091251174,"asdp":false},{"gt":699.0,"age":37.0,"kw":662.182191474457,"asdp":false},{"gt":4144.0,"age":34.0,"kw":1623.3932815289043,"asdp":false},{"gt":2510.0,"age":37.0,"kw":1252.4643451260122,"asdp":false},{"gt":2624.0,"age":38.0,"kw":940.6034090381042,"asdp":false},{"gt":11933.0,"age":29.0,"kw":19092.8,"asdp":false},{"gt":12418.0,"age":33.0,"kw":19868.800000000003,"asdp":false},{"gt":625.0,"age":47.0,"kw":740.2361527465877,"asdp":false},{"gt":3270.0,"age":34.0,"kw":3469.8428394148195,"asdp":false},{"gt":6698.0,"age":36.0,"kw":9901.781202347393,"asdp":false},{"gt":7751.0,"age":20.0,"kw":12401.6,"asdp":false},{"gt":404.0,"age":33.0,"kw":401.3893933333649,"asdp":false},{"gt":9187.0,"age":6.0,"kw":3340.285805163186,"asdp":false},{"gt":12611.0,"age":3.0,"kw":3152.75,"asdp":false},{"gt":3067.0,"age":3.0,"kw":3071.0371969792395,"asdp":false},{"gt":9170.0,"age":7.0,"kw":2777.7142577381924,"asdp":false},{"gt":560.0,"age":18.0,"kw":287.53812548436525,"asdp":true},{"gt":7331.0,"age":9.0,"kw":2856.5556431029486,"asdp":false},{"gt":2966.0,"age":9.0,"kw":1172.176294760723,"asdp":true},{"gt":8011.0,"age":47.0,"kw":7865.261545114083,"asdp":false},{"gt":4851.0,"age":35.0,"kw":4897.981623422385,"asdp":false},{"gt":470.0,"age":18.0,"kw":446.5620775820023,"asdp":true},{"gt":697.0,"age":44.0,"kw":980.3417330275352,"asdp":false},{"gt":2625.0,"age":48.0,"kw":1229.6522260385907,"asdp":false},{"gt":1029.0,"age":12.0,"kw":814.1752014497107,"asdp":true},{"gt":4824.0,"age":55.0,"kw":3207.756643560898,"asdp":false},{"gt":3587.0,"age":39.0,"kw":1239.4474875664953,"asdp":true},{"gt":560.0,"age":14.0,"kw":287.53812548436525,"asdp":true},{"gt":695.0,"age":9.0,"kw":606.242134728706,"asdp":false},{"gt":695.0,"age":9.0,"kw":626.7136862147028,"asdp":false},{"gt":1545.0,"age":31.0,"kw":836.4378235045401,"asdp":false},{"gt":1380.0,"age":37.0,"kw":1166.9819878119715,"asdp":false},{"gt":1375.0,"age":24.0,"kw":818.1667344267476,"asdp":false},{"gt":617.0,"age":16.0,"kw":286.64584180907633,"asdp":true},{"gt":188.0,"age":35.0,"kw":274.8552755995938,"asdp":true},{"gt":547.0,"age":33.0,"kw":237.78816340664125,"asdp":true},{"gt":990.0,"age":18.0,"kw":754.0043180308336,"asdp":false},{"gt":188.0,"age":35.0,"kw":150.0,"asdp":true},{"gt":495.0,"age":25.0,"kw":431.82963041869596,"asdp":true},{"gt":9353.0,"age":36.0,"kw":6082.380286910676,"asdp":false},{"gt":7410.0,"age":32.0,"kw":2978.4228598549125,"asdp":false},{"gt":2053.0,"age":23.0,"kw":2368.180417859744,"asdp":false},{"gt":4432.0,"age":40.0,"kw":1627.1982992502337,"asdp":false},{"gt":546.0,"age":8.0,"kw":545.2422011374148,"asdp":false},{"gt":500.0,"age":34.0,"kw":205.5009349627381,"asdp":true},{"gt":895.0,"age":11.0,"kw":814.1752014497107,"asdp":true},{"gt":634.0,"age":31.0,"kw":237.75320612575,"asdp":true},{"gt":175.0,"age":33.0,"kw":280.0,"asdp":true},{"gt":1031.0,"age":13.0,"kw":814.1752014497107,"asdp":true},{"gt":5110.0,"age":42.0,"kw":7137.697234756998,"asdp":false},{"gt":1346.0,"age":9.0,"kw":958.0583592551034,"asdp":false},{"gt":3869.0,"age":43.0,"kw":3684.9708291583247,"asdp":false},{"gt":3664.0,"age":31.0,"kw":1801.395366888419,"asdp":false},{"gt":3902.0,"age":46.0,"kw":1758.8097990764652,"asdp":true},{"gt":1136.0,"age":24.0,"kw":832.1987409342814,"asdp":false},{"gt":404.0,"age":36.0,"kw":351.8936052371481,"asdp":false},{"gt":736.0,"age":41.0,"kw":541.590353393593,"asdp":false},{"gt":600.0,"age":18.0,"kw":575.7425152967274,"asdp":true},{"gt":6311.0,"age":8.0,"kw":1956.4306596760903,"asdp":false},{"gt":1167.0,"age":12.0,"kw":813.9814078867819,"asdp":true},{"gt":291.0,"age":5.0,"kw":379.19044299114535,"asdp":false},{"gt":577.0,"age":60.0,"kw":262.5285856319798,"asdp":false},{"gt":2129.0,"age":16.0,"kw":923.4335646553684,"asdp":true},{"gt":549.0,"age":34.0,"kw":273.36099112698264,"asdp":true},{"gt":687.0,"age":16.0,"kw":809.2956491294228,"asdp":false},{"gt":1100.0,"age":15.0,"kw":816.8745821501822,"asdp":false},{"gt":745.0,"age":21.0,"kw":404.0581151555182,"asdp":false},{"gt":335.0,"age":38.0,"kw":226.75665001880313,"asdp":true},{"gt":327.0,"age":38.0,"kw":226.71788654161026,"asdp":true},{"gt":745.0,"age":22.0,"kw":404.0581151555182,"asdp":false},{"gt":5299.0,"age":46.0,"kw":2362.0453185535243,"asdp":false},{"gt":2326.0,"age":42.0,"kw":3721.6000000000004,"asdp":false},{"gt":6292.0,"age":53.0,"kw":5879.899106671332,"asdp":false},{"gt":2635.0,"age":52.0,"kw":2462.261390110421,"asdp":false},{"gt":9168.0,"age":43.0,"kw":8169.820832131515,"asdp":false},{"gt":1933.0,"age":5.0,"kw":1130.9978688145475,"asdp":false},{"gt":19232.0,"age":35.0,"kw":16724.79621170366,"asdp":false},{"gt":263.0,"age":10.0,"kw":357.68395360228084,"asdp":true},{"gt":194.0,"age":44.0,"kw":150.0,"asdp":true},{"gt":884.0,"age":27.0,"kw":289.76670964594786,"asdp":true},{"gt":5764.0,"age":55.0,"kw":5401.012338123453,"asdp":false},{"gt":338.0,"age":14.0,"kw":324.8636378555668,"asdp":true},{"gt":5012.0,"age":37.0,"kw":1593.3833189441282,"asdp":false},{"gt":753.0,"age":14.0,"kw":509.05823371918984,"asdp":true},{"gt":1689.0,"age":10.0,"kw":553.1764135592424,"asdp":false},{"gt":591.0,"age":9.0,"kw":222.62866688434863,"asdp":false},{"gt":227.0,"age":35.0,"kw":150.0,"asdp":true},{"gt":1221.0,"age":21.0,"kw":867.5870742023037,"asdp":false},{"gt":627.0,"age":18.0,"kw":216.03164949989878,"asdp":true},{"gt":458.0,"age":14.0,"kw":439.5559111059582,"asdp":true},{"gt":560.0,"age":17.0,"kw":287.6645019842087,"asdp":false},{"gt":534.0,"age":15.0,"kw":538.2936597776016,"asdp":true},{"gt":581.0,"age":9.0,"kw":373.3026903358251,"asdp":true},{"gt":1036.0,"age":8.0,"kw":789.0976419355138,"asdp":true},{"gt":5035.0,"age":60.0,"kw":1622.78888620062,"asdp":false},{"gt":1106.0,"age":23.0,"kw":480.0801906508532,"asdp":true},{"gt":223.0,"age":38.0,"kw":276.70533519738314,"asdp":true},{"gt":25718.0,"age":31.0,"kw":17124.6325455309,"asdp":false},{"gt":212.0,"age":9.0,"kw":315.840416523764,"asdp":false},{"gt":598.0,"age":15.0,"kw":547.72875927531,"asdp":true},{"gt":512.0,"age":38.0,"kw":623.999221912451,"asdp":false},{"gt":627.0,"age":16.0,"kw":215.36126356805133,"asdp":true},{"gt":611.0,"age":13.0,"kw":478.1402664891745,"asdp":true},{"gt":745.0,"age":22.0,"kw":404.0581151555182,"asdp":false},{"gt":871.0,"age":34.0,"kw":808.9136607213271,"asdp":false},{"gt":824.0,"age":36.0,"kw":809.2506729806099,"asdp":false},{"gt":824.0,"age":34.0,"kw":808.9136607213271,"asdp":false},{"gt":3898.0,"age":50.0,"kw":3544.9987052171855,"asdp":false},{"gt":616.0,"age":15.0,"kw":549.4337532403478,"asdp":false},{"gt":560.0,"age":17.0,"kw":373.68546678411974,"asdp":true},{"gt":2688.0,"age":39.0,"kw":1648.2717837755467,"asdp":false},{"gt":652.0,"age":16.0,"kw":286.64584180907633,"asdp":true},{"gt":1172.0,"age":44.0,"kw":846.6503059537627,"asdp":false},{"gt":5813.0,"age":55.0,"kw":6277.504161604327,"asdp":false},{"gt":1068.0,"age":12.0,"kw":814.1752014497107,"asdp":true},{"gt":5584.0,"age":53.0,"kw":4793.339169732277,"asdp":false},{"gt":141.0,"age":45.0,"kw":150.0,"asdp":true},{"gt":1633.0,"age":7.0,"kw":1026.0979103468992,"asdp":false},{"gt":7288.0,"age":8.0,"kw":2886.053375378916,"asdp":false},{"gt":1823.0,"age":43.0,"kw":1036.8531604212467,"asdp":false},{"gt":936.0,"age":10.0,"kw":789.4312860847115,"asdp":false},{"gt":1681.0,"age":8.0,"kw":1043.3982472406049,"asdp":false},{"gt":419.0,"age":30.0,"kw":467.98371060798485,"asdp":true},{"gt":18460.0,"age":30.0,"kw":17085.45600095524,"asdp":false},{"gt":994.0,"age":24.0,"kw":412.33933456391117,"asdp":false},{"gt":32645.0,"age":32.0,"kw":25187.632644297813,"asdp":false},{"gt":818.0,"age":18.0,"kw":688.5135459774924,"asdp":false},{"gt":3965.0,"age":31.0,"kw":3760.902522393598,"asdp":false},{"gt":15380.0,"age":35.0,"kw":14242.330899147331,"asdp":false},{"gt":498.0,"age":37.0,"kw":796.8000000000001,"asdp":false},{"gt":303.0,"age":29.0,"kw":408.39546784581114,"asdp":false},{"gt":445.0,"age":34.0,"kw":247.16446806792626,"asdp":true},{"gt":370.0,"age":15.0,"kw":439.5559111059582,"asdp":false},{"gt":167.0,"age":33.0,"kw":267.2,"asdp":true},{"gt":560.0,"age":15.0,"kw":553.2677235395487,"asdp":true},{"gt":1199.0,"age":31.0,"kw":1106.3190602643895,"asdp":false},{"gt":8274.0,"age":8.0,"kw":2886.053375378916,"asdp":false},{"gt":1395.0,"age":7.0,"kw":936.9265274120309,"asdp":false},{"gt":380.0,"age":11.0,"kw":492.52175999328927,"asdp":true},{"gt":4915.0,"age":34.0,"kw":7864.0,"asdp":false},{"gt":9365.0,"age":36.0,"kw":8967.574396648173,"asdp":false},{"gt":352.0,"age":31.0,"kw":182.69885905023438,"asdp":true},{"gt":5730.0,"age":56.0,"kw":4600.15745766955,"asdp":false},{"gt":3555.0,"age":54.0,"kw":1932.3414205038637,"asdp":false},{"gt":673.0,"age":43.0,"kw":398.7812682847148,"asdp":false},{"gt":3282.0,"age":53.0,"kw":2078.337971165039,"asdp":false},{"gt":536.0,"age":44.0,"kw":164.22008936956198,"asdp":false},{"gt":2799.0,"age":37.0,"kw":1965.5139698715504,"asdp":false},{"gt":629.0,"age":20.0,"kw":591.6424345350656,"asdp":false},{"gt":497.0,"age":35.0,"kw":238.0614261766326,"asdp":false},{"gt":5837.0,"age":55.0,"kw":3187.8784433682463,"asdp":false},{"gt":676.0,"age":57.0,"kw":495.17624449699355,"asdp":false},{"gt":109.0,"age":31.0,"kw":174.4,"asdp":false},{"gt":354.0,"age":6.0,"kw":424.59795700348906,"asdp":false},{"gt":354.0,"age":6.0,"kw":424.59795700348906,"asdp":false},{"gt":8915.0,"age":54.0,"kw":5849.3233538331815,"asdp":false},{"gt":4459.0,"age":37.0,"kw":1741.0189577544036,"asdp":false},{"gt":644.0,"age":18.0,"kw":530.0592607833638,"asdp":false},{"gt":745.0,"age":20.0,"kw":404.0581151555182,"asdp":false},{"gt":290.0,"age":33.0,"kw":316.21715424517146,"asdp":true},{"gt":1751.0,"age":7.0,"kw":1068.2579011875068,"asdp":false},{"gt":693.0,"age":31.0,"kw":336.59512078641353,"asdp":false},{"gt":909.0,"age":33.0,"kw":609.0993493633223,"asdp":false},{"gt":445.0,"age":34.0,"kw":247.16446806792626,"asdp":true},{"gt":462.0,"age":6.0,"kw":495.1281202448945,"asdp":false},{"gt":961.0,"age":21.0,"kw":426.08669354592115,"asdp":true},{"gt":12619.0,"age":45.0,"kw":8286.741706951432,"asdp":true},{"gt":9023.0,"age":40.0,"kw":14436.800000000001,"asdp":true},{"gt":3575.0,"age":14.0,"kw":1420.3599831382203,"asdp":true},{"gt":1998.0,"age":29.0,"kw":1642.5829120728013,"asdp":true},{"gt":2125.0,"age":10.0,"kw":888.5915684276281,"asdp":false},{"gt":507.0,"age":58.0,"kw":715.955145645319,"asdp":true},{"gt":2773.0,"age":57.0,"kw":1237.8917775495636,"asdp":false},{"gt":147.0,"age":30.0,"kw":235.20000000000002,"asdp":true},{"gt":485.0,"age":29.0,"kw":183.37866973694668,"asdp":true},{"gt":1604.0,"age":22.0,"kw":484.5192214648665,"asdp":false},{"gt":380.0,"age":25.0,"kw":189.30435719581118,"asdp":true},{"gt":750.0,"age":19.0,"kw":187.5,"asdp":true},{"gt":819.0,"age":42.0,"kw":851.705556327072,"asdp":false},{"gt":1790.0,"age":34.0,"kw":793.9574552629066,"asdp":false},{"gt":2983.0,"age":34.0,"kw":4617.483010006472,"asdp":false},{"gt":193.0,"age":12.0,"kw":308.8,"asdp":false},{"gt":937.0,"age":33.0,"kw":1416.024901805913,"asdp":false},{"gt":8886.0,"age":37.0,"kw":6934.053752055627,"asdp":false},{"gt":1029.0,"age":13.0,"kw":814.1752014497107,"asdp":true},{"gt":5578.0,"age":8.0,"kw":1883.6917320069763,"asdp":false},{"gt":7152.0,"age":9.0,"kw":2856.5556431029486,"asdp":false},{"gt":1494.0,"age":37.0,"kw":849.8310853989905,"asdp":false},{"gt":7331.0,"age":9.0,"kw":2152.617492528732,"asdp":false},{"gt":908.0,"age":53.0,"kw":1452.8000000000002,"asdp":true},{"gt":526.0,"age":34.0,"kw":237.61335129357485,"asdp":true},{"gt":1454.0,"age":7.0,"kw":377.3031571276812,"asdp":false},{"gt":6034.0,"age":53.0,"kw":4015.252781688999,"asdp":false},{"gt":7288.0,"age":10.0,"kw":2580.3161325791784,"asdp":false},{"gt":3610.0,"age":32.0,"kw":2951.1107244093528,"asdp":false},{"gt":1002.0,"age":49.0,"kw":1127.559755511305,"asdp":false},{"gt":114.0,"age":26.0,"kw":182.4,"asdp":true},{"gt":2439.0,"age":39.0,"kw":3434.611279237677,"asdp":false},{"gt":2593.0,"age":32.0,"kw":1785.9700355114785,"asdp":false},{"gt":672.0,"age":21.0,"kw":241.67738958851533,"asdp":true},{"gt":556.0,"age":19.0,"kw":286.64584180907633,"asdp":true},{"gt":1789.0,"age":13.0,"kw":814.1752014497107,"asdp":false},{"gt":468.0,"age":8.0,"kw":466.6057087778768,"asdp":false},{"gt":656.0,"age":52.0,"kw":377.69701392769554,"asdp":false},{"gt":481.0,"age":57.0,"kw":176.75288006693413,"asdp":false},{"gt":5553.0,"age":12.0,"kw":1892.5857212820347,"asdp":true},{"gt":11607.0,"age":32.0,"kw":5156.888784274781,"asdp":false},{"gt":227.0,"age":16.0,"kw":315.95798259927767,"asdp":true},{"gt":560.0,"age":15.0,"kw":549.4337532403478,"asdp":true},{"gt":408.0,"age":30.0,"kw":183.37866973694668,"asdp":true},{"gt":560.0,"age":17.0,"kw":549.4337532403478,"asdp":true},{"gt":9500.0,"age":38.0,"kw":5134.600279778729,"asdp":false},{"gt":2533.0,"age":29.0,"kw":4052.8,"asdp":false},{"gt":9832.0,"age":27.0,"kw":15731.2,"asdp":false},{"gt":616.0,"age":14.0,"kw":567.2424110234292,"asdp":true},{"gt":132.0,"age":31.0,"kw":150.0,"asdp":true},{"gt":330.0,"age":22.0,"kw":150.0,"asdp":true},{"gt":8132.0,"age":28.0,"kw":3276.1554739662856,"asdp":false},{"gt":818.0,"age":29.0,"kw":1183.8529416900785,"asdp":false},{"gt":538.0,"age":21.0,"kw":760.885573641819,"asdp":false},{"gt":1029.0,"age":13.0,"kw":814.1752014497107,"asdp":false},{"gt":5373.0,"age":38.0,"kw":8596.800000000001,"asdp":false},{"gt":158.0,"age":30.0,"kw":150.0,"asdp":false},{"gt":2534.0,"age":54.0,"kw":1386.2789339827455,"asdp":false},{"gt":5008.0,"age":33.0,"kw":5129.443093302273,"asdp":false},{"gt":378.0,"age":19.0,"kw":297.0525480013348,"asdp":true},{"gt":1329.0,"age":9.0,"kw":873.484793595315,"asdp":false},{"gt":1196.0,"age":8.0,"kw":857.2900249250115,"asdp":false},{"gt":2419.0,"age":5.0,"kw":1287.293303059568,"asdp":false},{"gt":2387.0,"age":6.0,"kw":1277.4374726351816,"asdp":false},{"gt":213.0,"age":29.0,"kw":156.16637769958805,"asdp":false},{"gt":699.0,"age":38.0,"kw":941.5431792754284,"asdp":false},{"gt":516.0,"age":32.0,"kw":610.6904275309664,"asdp":false},{"gt":793.0,"age":6.0,"kw":676.2893974584883,"asdp":true},{"gt":646.0,"age":35.0,"kw":325.5538184648047,"asdp":true},{"gt":616.0,"age":15.0,"kw":584.5540811079838,"asdp":false},{"gt":507.0,"age":33.0,"kw":237.61335129357485,"asdp":true},{"gt":512.0,"age":15.0,"kw":426.90571285217476,"asdp":false},{"gt":591.0,"age":10.0,"kw":566.211961572881,"asdp":true},{"gt":1220.0,"age":18.0,"kw":772.0974304584616,"asdp":false},{"gt":596.0,"age":14.0,"kw":215.36126356805133,"asdp":true},{"gt":776.0,"age":21.0,"kw":315.6310566524894,"asdp":false},{"gt":478.0,"age":33.0,"kw":396.50292763304134,"asdp":true},{"gt":478.0,"age":33.0,"kw":396.50292763304134,"asdp":true},{"gt":750.0,"age":19.0,"kw":545.212564048916,"asdp":true},{"gt":595.0,"age":22.0,"kw":572.9685849337363,"asdp":false},{"gt":514.0,"age":14.0,"kw":357.7644196849404,"asdp":true},{"gt":1148.0,"age":18.0,"kw":547.9694927201158,"asdp":true},{"gt":399.0,"age":25.0,"kw":150.0,"asdp":true},{"gt":2987.0,"age":37.0,"kw":4705.822507492981,"asdp":false},{"gt":299.0,"age":38.0,"kw":474.9520133212255,"asdp":false},{"gt":8410.0,"age":10.0,"kw":2642.4239805602388,"asdp":false},{"gt":996.0,"age":18.0,"kw":575.3349302082821,"asdp":false},{"gt":721.0,"age":19.0,"kw":325.32477000662254,"asdp":false},{"gt":455.0,"age":36.0,"kw":548.1621913557836,"asdp":false},{"gt":1392.0,"age":28.0,"kw":831.8643500356624,"asdp":false},{"gt":7331.0,"age":9.0,"kw":2856.5556431029486,"asdp":false},{"gt":6547.0,"age":36.0,"kw":5587.297906078343,"asdp":false},{"gt":585.0,"age":30.0,"kw":567.3909808446285,"asdp":false},{"gt":525.0,"age":17.0,"kw":319.9810962820022,"asdp":false},{"gt":718.0,"age":33.0,"kw":334.20260260927904,"asdp":true},{"gt":546.0,"age":21.0,"kw":179.15867881617376,"asdp":true},{"gt":707.0,"age":13.0,"kw":697.0420376655014,"asdp":false},{"gt":244.0,"age":35.0,"kw":390.40000000000003,"asdp":false},{"gt":9989.0,"age":36.0,"kw":11056.280595350794,"asdp":false},{"gt":988.0,"age":13.0,"kw":713.1242856220721,"asdp":true},{"gt":1029.0,"age":13.0,"kw":814.1752014497107,"asdp":true},{"gt":589.0,"age":54.0,"kw":595.0005414393676,"asdp":false},{"gt":929.0,"age":39.0,"kw":1004.1085080947591,"asdp":false},{"gt":3123.0,"age":41.0,"kw":4049.248479860132,"asdp":false},{"gt":7331.0,"age":9.0,"kw":2856.5556431029486,"asdp":false},{"gt":8800.0,"age":7.0,"kw":3745.3919623262564,"asdp":false},{"gt":1546.0,"age":3.0,"kw":1104.9727475608724,"asdp":false},{"gt":5648.0,"age":10.0,"kw":1622.8457645310725,"asdp":false},{"gt":1239.0,"age":12.0,"kw":635.3000449084269,"asdp":false},{"gt":5750.0,"age":5.0,"kw":2121.7806813760812,"asdp":false},{"gt":1654.0,"age":7.0,"kw":974.935443659981,"asdp":false},{"gt":3792.0,"age":10.0,"kw":1493.140510456227,"asdp":false},{"gt":6886.0,"age":8.0,"kw":2354.4531456584205,"asdp":false},{"gt":16164.0,"age":32.0,"kw":6204.824860575978,"asdp":false},{"gt":3545.0,"age":41.0,"kw":1604.986453012874,"asdp":false},{"gt":4361.0,"age":34.0,"kw":4650.754413664499,"asdp":false},{"gt":749.0,"age":38.0,"kw":342.4558556492922,"asdp":false},{"gt":29637.0,"age":25.0,"kw":40000.0,"asdp":false},{"gt":9759.0,"age":37.0,"kw":8394.541619098763,"asdp":false},{"gt":1665.0,"age":48.0,"kw":855.6278695689941,"asdp":false},{"gt":3491.0,"age":23.0,"kw":1080.8606754764064,"asdp":false},{"gt":376.0,"age":20.0,"kw":439.63277545243955,"asdp":false},{"gt":271.0,"age":1.0,"kw":363.9234904259162,"asdp":false},{"gt":357.0,"age":31.0,"kw":150.0,"asdp":false},{"gt":649.0,"age":15.0,"kw":649.9667422359637,"asdp":false},{"gt":8652.0,"age":22.0,"kw":4245.282340627887,"asdp":false},{"gt":562.0,"age":14.0,"kw":554.4072666055212,"asdp":false},{"gt":1146.0,"age":13.0,"kw":836.4188529589549,"asdp":false},{"gt":10226.0,"age":35.0,"kw":6783.079000381041,"asdp":false},{"gt":785.0,"age":29.0,"kw":264.358435121856,"asdp":false},{"gt":2003.0,"age":37.0,"kw":1116.8154776318738,"asdp":false},{"gt":834.0,"age":20.0,"kw":696.2541861333098,"asdp":false},{"gt":1108.0,"age":20.0,"kw":322.5326840412385,"asdp":false},{"gt":876.0,"age":51.0,"kw":281.6338837107289,"asdp":false},{"gt":1568.0,"age":13.0,"kw":1002.3236690013565,"asdp":false}],"phase_geometry":{"manoeuvre_h":0.6,"steam_h":1.4,"wait_h":0.9500000000000002,"berth_h":4.816666666666666,"wait_p75_h":1.0166666666666666,"wait_p95_h":2.0,"aux_kw_median":710.0,"steam_kw_median":903.2609178266541},"age_profile":[{"age_band":"0-10","vessels":65,"total_gt":225511},{"age_band":"11-20","vessels":83,"total_gt":92368},{"age_band":"21-30","vessels":52,"total_gt":161163},{"age_band":"31-40","vessels":106,"total_gt":404176},{"age_band":"40+","vessels":54,"total_gt":163539}],"sanity_checks":[{"check":"Implied main engine SFC","value":242.1028920219215,"expected_low":190,"expected_high":260,"unit":"g fuel/kWh","pass":true,"basis":"IMO baseline SFC for medium-speed engines is 205-215 g/kWh, rising about 18% at the low loads seen on this crossing."},{"check":"Implied fuel-to-shaft efficiency","value":38.455665535477,"expected_low":33,"expected_high":45,"unit":"%","pass":true,"basis":"Marine four-stroke diesels convert 40-45% of fuel energy to shaft work at design load, less at part load."},{"check":"Median installed power","value":0.6760401510215005,"expected_low":0.35,"expected_high":1.1,"unit":"kW/GT","pass":true,"basis":"Ro-pax ferries typically carry 0.4-1.0 kW per GT depending on service speed."},{"check":"Median steaming speed","value":10.714285714285715,"expected_low":7.0,"expected_high":14.0,"unit":"knots","pass":true,"basis":"Published Merak-Bakauheni schedules give 15 nm in 90-120 minutes: 7.5-10 knots on the regular berths, up to 15 knots on the executive service."},{"check":"Fuel per crossing","value":0.1286219435249743,"expected_low":0.03,"expected_high":0.2,"unit":"t fuel per 1,000 GT","pass":true,"basis":"A 5,000 GT ferry on a 2-3 hour crossing would be expected to burn roughly 0.2-1.0 t, i.e. 0.04-0.20 t per 1,000 GT."},{"check":"CO2 intensity of transport supply","value":25.950849016284497,"expected_low":3.0,"expected_high":30.0,"unit":"g CO2 / GT-nm","pass":true,"basis":"Ro-pax is among the least efficient classes per GT-nm: it carries volume rather than mass on short high-frequency services. A 15 nm crossing sits high in the range ICCT reports for this class."},{"check":"Auxiliary share of shaft energy","value":61.835125840650974,"expected_low":20,"expected_high":70,"unit":"%","pass":true,"basis":"For ro-pax on very short crossings with long turnarounds, hotel and vehicle-deck ventilation load is a large share of total energy; the Fourth IMO GHG Study finds auxiliary demand comparable to propulsion for some passenger classes."},{"check":"Black carbon share of CO2e-100","value":18.525342578850967,"expected_low":2,"expected_high":30,"unit":"%","pass":true,"basis":"Black carbon is a meaningful but not dominant share of 100-year warming from residual-fuel four-stroke engines at low load. It is larger on a 20-year horizon."},{"check":"Share of port-to-port time spent waiting","value":27.98772343003439,"expected_low":5,"expected_high":55,"unit":"%","pass":true,"basis":"The corridor has roughly 28 berth slots against about 70 available ships, and vessels are reported queueing at anchor for hours at peak."}],"assumptions":{"me_ef":{"SSD":{"CO2":{"residual":607,"distillate":593,"eca":593},"PM":{"residual":1.42,"distillate":0.2,"eca":0.19},"CO":{"residual":0.54,"distillate":0.54,"eca":0.54},"CH4":{"residual":0.01,"distillate":0.01,"eca":0.01},"N2O":{"residual":0.03,"distillate":0.03,"eca":0.03},"SOx_at_2p5S":{"residual":10.29,"distillate":10.29,"eca":10.29}},"MSD":{"CO2":{"residual":670,"distillate":658,"eca":658},"PM":{"residual":1.43,"distillate":0.2,"eca":0.19},"CO":{"residual":0.54,"distillate":0.54,"eca":0.54},"CH4":{"residual":0.01,"distillate":0.01,"eca":0.01},"N2O":{"residual":0.03,"distillate":0.03,"eca":0.03},"SOx_at_2p5S":{"residual":11.35,"distillate":11.35,"eca":11.35}}},"ae_ef":{"CO2":{"residual":707,"distillate":696,"eca":696},"PM":{"residual":1.44,"distillate":0.2,"eca":0.19},"CO":{"residual":0.54,"distillate":0.54,"eca":0.54},"CH4":{"residual":0.01,"distillate":0.01,"eca":0.01},"N2O":{"residual":0.04,"distillate":0.03,"eca":0.03},"SOx_at_2p5S":{"residual":11.98,"distillate":11.98,"eca":11.98},"BC":{"residual":0.12,"distillate":0.06,"eca":0.06}},"aux_kw_ropax":{"under_2000_GT":105,"over_2000_GT":710},"gwp":{"20":{"CO2":1,"CH4":72,"N2O":289,"BC":3200},"100":{"CO2":1,"CH4":25,"N2O":298,"BC":900}},"cf":{"residual":3.114,"distillate":3.206},"lhv":{"residual":40.2,"distillate":42.7},"sulphur_pct":{"residual":0.5,"distillate":0.1},"weather_factor":1.1,"daf":0.9459,"hull_fouling_range":[1.02,1.093445316051068],"ops":{"free_running_percentile":"0.1","t_free_clip":"(1.0, 4.0)","manoeuvre_hours_per_voyage":"0.6","manoeuvre_speed_kn":"5.0","manoeuvre_load_floor":"0.08","max_load":"0.98","voyage_hours_clip":"(0.5, 8.0)","berth_hours_cap":"6.0"},"power":{"block_coefficient":"0.6","admiralty_coefficient":"450.0","seawater_density":"1.025","lpp_over_loa":"0.95","service_power_fraction_of_mcr":"0.8","kw_per_gt_floor":"0.25","kw_per_gt_ceiling":"1.6","draft_over_beam_cap":"0.32","note":"Displacement from LOA x beam x draft x Cb where reported, else from a log-log fit of displacement on GT. Propulsion power at sea uses the Admiralty relation at the OBSERVED steaming speed with the ICCT correction factors (hull fouling, weather, draught) applied multiplicatively, so the register's unreliable design-speed field does not propagate into the fuel estimate. Installed MCR is estimated at design speed and used only for the load factor, the manoeuvring floor and battery sizing."},"prices":{"b40_hsd_idr_per_litre":23050.0,"mfo_hs_idr_per_litre":14900.0,"mfo_ls_idr_per_litre":16850.0,"domestic_fuel_source":"[MKT] Pertamina non-subsidised industrial 'harga keekonomian', 15-31 March 2026 period, as reported by fuel distributors. This was an oil-price spike fortnight (Brent above USD 100) and is NOT a good annual planning number. Verify against ASDP's own bunker invoices before use.","vlsfo_usd_per_tonne":800.0,"mgo_usd_per_tonne":1150.0,"intl_fuel_source":"[MKT] Singapore VLSFO ranged roughly USD 780-850/t and MGO USD 1,100-1,220/t through August 2026; VLSFO briefly exceeded USD 1,000/t in March 2026.","b30_vlsfo_premium_usd_per_tonne":231.0,"b100_usd_per_tonne":1390.0,"biofuel_source":"[MKT] Singapore B30-VLSFO premium over conventional VLSFO reported at USD 231/t (late Aug 2026). Rotterdam B100 around USD 1,387/t (late Jul 2026).","pln_i3_idr_per_kwh":1114.74,"pln_i4_idr_per_kwh":996.74,"pln_source":"[GOV] PLN non-subsidised tariff schedule; rates frozen through Q3 2026.","bio_methanol_usd_per_tonne":950.0,"methanol_source":"[ASSUM] indicative; bio-methanol is thinly traded and site-specific."},"fx":17000.0,"fx_source":"[MKT] Rp 16,959/USD was the Q3-2026 tariff-setting parameter published by MEMR; spot was around Rp 17,700 in late Aug 2026. 17,000 used as a round planning rate.","grid":{"ef_tco2_per_mwh":0.85,"ef_low":0.7,"ef_high":0.9,"source":"[ASSUM] Indonesian grid emission factors for the JAMALI and Sumatra systems are commonly quoted in the 0.75-0.90 tCO2/MWh range. NOT VERIFIED against a current MEMR/ESDM decree. Must be replaced with the official grid emission factor for the relevant system year before publication."},"electric":{"motor_drive_efficiency":0.92,"onboard_distribution":0.97,"charging_efficiency":0.93,"battery_usable_dod":0.8,"shore_connection_efficiency":0.95,"battery_cost_usd_per_kwh_newbuild":500.0,"battery_cost_usd_per_kwh_retrofit":900.0,"battery_cost_source":"[LIT] Marine battery systems reported at USD 800-1,000/kWh for retrofits and around USD 500/kWh for newbuilds (DNV, via sustainable-ships.org, 2025). Cell prices have fallen further since; treat as an upper bound.","shore_charger_usd_per_mw":900000.0},"pathway_source":"[LIT/ASSUM] B40: 40% FAME by volume, biogenic CO2 counted zero tank-to-wake, and the bio fraction assigned a 60% well-to-wake saving, giving about 24% overall. B100/HVO: 80% well-to-wake saving, typical of waste-oil feedstocks under RED II style accounting. Bio-methanol: 85%. Electric-on-grid is computed from the grid emission factor, not assumed. Feedstock availability and certification are NOT modelled and are the binding constraint in practice.","terminology":"SAF (sustainable aviation fuel) is an aviation product and is not used in shipping. The marine equivalents modelled here are FAME biodiesel (B40, which Indonesia already mandates on land), HVO/B100 renewable diesel, and bio- or e-methanol.","route_distance":{"name":"Merak (Java) - Bakauheni (Sumatra)","distance_nm":15.0,"distance_nm_source":"[LIT] Indonesian ferry-operations literature consistently states the Bakauheni-Merak crossing as 15 miles (nautical), with scheduled sailing times of 90-120 minutes depending on berth. Great-circle distance between the two port coordinates is 15.1 nm, which corroborates this.","distance_nm_low":15.0,"distance_nm_high":19.0},"method_sources":{"primary":"Olmer, N., Comer, B., Roy, B., Mao, X., & Rutherford, D. (2017). Greenhouse gas emissions from global shipping, 2013-2015: Detailed methodology. ICCT. Auxiliary power by class and phase (App. C), boiler power (App. D), main and auxiliary engine emission factors (App. E, G), black carbon factors (App. F), low-load adjustment factors (App. I), draught adjustment factors (Table 13), hull fouling after Townsin (2000, 2003), weather factor.","imo":"Third IMO GHG Study 2014 (Smith et al.) and Fourth IMO GHG Study 2020 (Faber et al.): activity-based bottom-up structure, SFOC load curve, low-load factors.","cf":"IMO Resolution MEPC.281(70) Table 1: carbon conversion factors and heating values.","gwp":"IPCC AR4 for CH4 and N2O; Bond et al. (2013) for black carbon.","corbett":"Corbett, Wang & Winebrake (2009), Transp. Res. D 14(8): speed reduction abatement costs, USD 30-200 per tonne CO2 for the container fleet, used here as a reference point for judging the abatement costs reported below. Winebrake, Corbett, Wang, Farrell & Woods (2005), JAWMA 55(4): fleetwide emissions reduction optimisation for passenger ferries, the closest published analogue to this task.","wb":"World Bank Pacific Observatory, Greenhouse Gas Emissions from Maritime Traffic: the Bank's own implementation of the same IMO method on AIS data."}}};
+
+/* ---------- formatting ---------- */
+const fmt = (n,d=0)=> n===null||n===undefined||isNaN(n) ? "n/a"
+  : n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const usd = n => (n<0?"-$":"$") + fmt(Math.abs(n)/1e6,1) + "M";
+const pct = n => (n>0?"+":"") + fmt(n,1) + "%";
+
+/* ---------- state ---------- */
+const DEF = {
+  ef: D.assumptions.grid.ef_tco2_per_mwh,
+  tariff: D.assumptions.prices.pln_i3_idr_per_kwh,
+  mfo: D.assumptions.prices.mfo_hs_idr_per_litre,
+  b40: D.assumptions.prices.b40_hsd_idr_per_litre,
+  b100: D.assumptions.prices.b100_usd_per_tonne,
+  wait: 0, gwp: "100"
+};
+let S = Object.assign({}, DEF);
+const FX = D.assumptions.fx;
+const T = D.totals_annual;
+
+/* ---------- recompute ---------- */
+function compute(){
+  const ws = D.waiting_sensitivity;
+  const k = ws[S.wait].co2_t_annual / ws[0].co2_t_annual;
+
+  const fuel_t  = T.fuel_t * k;
+  const fuelMWh = T.fuel_energy_mwh * k;
+  const shaftMWh= T.shaft_energy_mwh * k;
+  const shoreMWh= D.shore_energy_mwh_annual * k;
+  const statMWh = T.stationary_mwh;              // unchanged by the waiting-engine choice
+  const metric  = S.gwp === "co2" ? "co2" : (S.gwp === "20" ? "e20" : "e100");
+  const base    = metric === "co2" ? T.co2_t*k : (metric === "e20" ? T.co2e20_t*k : T.co2e100_t*k);
+  const label   = metric === "co2" ? "CO2" : (metric === "e20" ? "CO2e-20" : "CO2e-100");
+
+  const pRes = S.mfo / 0.98 / FX * 1000;
+  const pDis = S.b40 / 0.86 / FX * 1000;
+  const pBlend = T.residual_share*pRes + (1-T.residual_share)*pDis;
+  const baseCost = fuel_t * pBlend;
+  const pKwh = S.tariff / FX;
+  const elecCost = shoreMWh*1000*pKwh;
+  const meohT = fuelMWh*3600/19.9/1000;
+
+  // shore power: displaces only the stationary hotel load
+  const spMWh = statMWh / D.assumptions.electric.shore_connection_efficiency;
+  const spShare = statMWh / shaftMWh * T.aux_fuel_fraction_of_co2;
+  const spCost = baseCost*(1-spShare) + spMWh*1000*pKwh;
+
+  // biofuel and methanol savings differ slightly by metric because black carbon falls too
+  const bioAdj = metric === "co2" ? 1 : 1.05;
+
+  const rows = [
+    {label:"Baseline (as operated)", g:base, energy:fuelMWh, cost:baseCost, local:0,
+     note:"Fuel burn as observed, priced at Indonesian domestic industrial rates."},
+    {label:"B40 drop-in biodiesel", g:base*0.76, energy:fuelMWh, cost:fuel_t*pDis, local:0,
+     note:"No vessel modification. Already the blend Indonesia mandates on land."},
+    {label:"B100 / HVO drop-in", g:base*Math.max(0.10, 0.20/bioAdj), energy:fuelMWh,
+     cost:fuel_t*S.b100, local:40,
+     note:"Drop-in after fuel-system checks. Near-zero sulphur, lower black carbon."},
+    {label:"Bio-methanol (conversion)", g:base*Math.max(0.08, 0.15/bioAdj), energy:fuelMWh,
+     cost:meohT*D.assumptions.prices.bio_methanol_usd_per_tonne, local:95,
+     note:"Engine conversion or newbuild, plus bunkering at both terminals."},
+    {label:"Shore power at berth and anchorage", g:base*(1-spShare)+spMWh*S.ef,
+     energy:fuelMWh*(1-spShare)+spMWh, cost:spCost, local:Math.round(spShare*100),
+     note:"Cold ironing plus a connection for vessels queueing offshore. Touches no propulsion."},
+    {label:"Battery-electric, PLN grid", g:shoreMWh*S.ef, energy:shoreMWh, cost:elecCost, local:100,
+     note:"Shore energy at the industrial tariff. Ship-side emissions follow the grid."},
+    {label:"Battery-electric, dedicated RE", g:shoreMWh*S.ef*0.05, energy:shoreMWh,
+     cost:elecCost, local:100,
+     note:"Same energy from solar plus storage at the two terminals."}
+  ];
+  rows.forEach(r=>{
+    r.saved = base - r.g;
+    r.savedPct = base ? r.saved/base*100 : 0;
+    r.delta = r.cost - baseCost;
+    r.abate = r.saved>0 ? r.delta/r.saved : null;
+  });
+  return {fuel_t, fuelMWh, shaftMWh, shoreMWh, statMWh, base, label, baseCost, rows, k,
+          breakeven: base/shoreMWh, spMWh};
+}
+
+/* ---------- palette ---------- */
+const P = {ink:"#23282B", mute:"#6B7478", rule:"#DAD7CE", faint:"#EFEDE6",
+           sea:"#2F5F73", sea2:"#8FB0BF", sea3:"#C3D5DD",
+           hot:"#D4552C", good:"#3F7D5C", water:"#E9F0F2", land:"#E5E1D5"};
+const MAP = {"paths": ["M693.1 350.9 L702.0 353.2 L719.7 344.9 L731.4 328.2 L744.6 314.7 L767.0 316.5 L799.9 342.3 L812.6 345.9 L825.5 348.1 L857.7 364.1 L871.1 364.3 L879.9 359.0 L888.2 352.4 L899.6 349.3 L959.8 350.1 L971.7 352.4 L982.5 356.5 L990.5 362.3 L994.8 371.1 L995.8 377.1 L996.6 381.2 L999.4 390.4 L1006.9 396.8 L1028.8 401.2 L1052.3 400.4 L1132.0 388.0 L1134.8 387.6 L1141.0 384.3 L1142.8 374.1 L1145.6 367.3 L1146.2 361.2 L1141.0 353.2 L1137.7 347.7 L1140.7 339.5 L1151.8 323.8 L1149.5 305.4 L1161.8 300.2 L1180.8 304.1 L1198.8 312.9 L1204.8 318.6 L1210.5 325.4 Z", "M828.5 977.6 L837.9 973.0 L847.1 973.1 L856.2 971.7 L859.2 966.4 L850.5 954.8 L860.0 946.0 L880.9 920.1 L895.0 906.9 L895.8 886.7 L893.2 868.7 L879.2 858.5 L863.7 860.3 L848.0 853.9 L833.2 858.2 L823.0 873.2 L821.4 874.1 L809.4 877.7 L796.5 879.2 L785.1 878.2 L778.1 875.8 L773.5 873.3 L768.9 871.4 L761.6 870.6 L758.8 868.9 L753.5 861.5 L750.6 859.8 L743.4 858.8 L741.4 856.3 L740.8 852.7 L738.1 848.8 L734.6 846.2 L715.3 831.9 L698.0 833.0 L674.8 822.6 L636.9 791.0 L613.2 783.1 L597.6 780.8 L587.4 780.8 L576.9 782.6 L565.9 784.2 L556.7 787.1 L554.9 794.4 L547.6 796.8 L542.0 789.9 L531.8 791.7 L515.2 792.2 L498.9 795.7 L489.6 798.1 L479.4 795.2 L462.3 791.9 L451.5 790.4 L395.2 797.5 L373.3 801.0 L362.7 809.9 L343.3 803.7 L336.8 807.3 L328.7 799.8 L323.2 795.5 L313.5 794.0 L311.7 795.9 L306.9 799.4 L301.8 801.7 L299.4 799.5 L298.4 795.8 L295.9 791.7 L292.8 788.5 L290.1 787.1 L267.9 778.2 L243.9 776.9 L238.8 778.9 L236.3 789.1 L233.6 793.2 L229.6 796.4 L224.8 797.7 L215.0 793.9 L210.2 784.9 L204.4 764.9 L197.0 760.0 L194.2 756.5 L195.7 752.4 L199.6 751.5 L217.5 754.0 L224.8 751.0 L233.9 743.9 L248.5 728.7 L253.5 719.7 L257.4 710.1 L262.8 702.6 L272.0 699.6 L278.6 702.2 L285.8 708.3 L291.9 715.5 L295.5 721.4 L296.9 728.0 L296.7 733.5 L297.3 738.9 L309.9 759.8 L312.7 768.3 L319.6 776.1 L328.9 779.8 L338.9 776.2 L345.5 766.7 L353.3 741.7 L359.2 730.6 L401.0 692.4 L408.8 681.8 L411.9 673.5 L407.1 629.1 L420.3 602.4 L426.8 597.6 L438.2 598.5 L440.6 617.9 L449.5 622.9 L456.0 630.2 L470.7 627.8 L493.5 618.2 L507.5 599.7 L515.7 577.0 L514.2 559.2 L520.1 467.5 L523.9 448.0 L538.5 404.4 L549.5 383.3 L586.1 345.1 L591.3 342.0 L596.8 337.0 L607.4 302.0 L619.4 289.0 L636.7 282.5 L653.9 284.9 L665.5 298.4 L667.9 332.6 L671.3 338.4 L676.9 340.7 L693.1 350.9 Z", "M539.3 -302.7 L538.6 -279.5 L541.3 -266.8 L560.4 -233.9 L561.0 -216.5 L554.2 -199.4 L545.1 -182.2 L538.6 -164.2 L535.7 -118.9 L538.6 -73.8 L537.1 -50.2 L523.9 -6.8 L520.6 17.7 L523.9 63.3 L522.1 75.4 L515.7 96.0 L520.3 129.0 L520.6 150.9 L518.6 162.1 L508.9 184.5 L505.8 196.0 L499.6 237.1 L493.7 254.6 L484.1 269.3 L467.8 287.4 L465.7 290.8 L460.5 285.8 L460.3 265.3 L456.8 256.5 L439.9 249.5 L398.2 244.6 L389.7 234.5 L386.9 193.2 L380.4 175.7 L368.1 163.7 L365.2 166.4 L360.2 173.2 L357.6 174.9 L352.1 174.4 L348.0 171.7 L344.5 168.7 L340.9 167.3 L335.4 164.4 L317.5 145.5 L290.2 123.1 L278.5 110.5 L243.9 61.7 L227.5 50.2 L212.0 58.0 L209.8 68.5 L215.5 89.0 L210.2 99.8 L210.7 101.8 L205.8 116.5 L204.4 118.1 L201.6 120.4 L195.4 119.6 L186.4 116.5 L174.7 122.6 L174.8 131.4 L179.9 142.2 L183.1 154.4 L183.1 169.1 L184.9 175.0 L188.8 179.3 L192.6 182.5 L193.9 185.1 L186.3 189.8 L172.3 194.5 L161.4 200.5 L163.1 209.0 L173.6 213.0 L186.4 214.7 L193.4 217.6 L186.4 225.4 L176.6 229.9 L165.8 232.0 L148.6 232.7 L142.1 229.9 L118.1 210.9 L27.0 170.9 L-6.0 145.5 L-31.4 138.0 L-42.7 128.7 L-74.3 93.5 L-80.3 88.1 L-89.3 83.5 L-110.0 78.6 L-120.3 74.8 L-125.4 68.6 L-129.1 68.6 L-128.0 70.9 L-125.4 79.4 L-139.2 79.4 L-149.5 80.5 L-158.1 84.3 L-167.2 92.5 L-170.2 101.3 L-167.7 111.6 L-85.4 243.6 L-80.6 263.5 L-78.1 285.7 L-72.1 298.0 L-70.9 303.8 L-73.6 307.4 L-79.9 308.8 L-152.8 307.7 L-157.0 302.8 L-154.4 283.9 L-156.9 271.3 L-163.2 261.7 L-191.2 237.8 L-196.5 234.2 L-204.8 230.3 L-208.2 224.5 L-212.2 214.2 L-246.7 182.2 L-255.3 178.6 L-292.4 156.0 L-296.1 146.5 L-283.5 135.7 L-290.4 125.4 L-313.4 101.0 Z", "M219.3 626.7 L220.0 640.2 L219.1 660.9 L215.0 680.0 L206.4 688.4 L197.2 691.3 L187.3 704.0 L181.1 706.9 L176.3 703.1 L177.4 694.3 L181.9 684.5 L186.4 677.5 L180.0 674.5 L176.3 669.1 L172.3 656.0 L149.3 679.3 L143.0 681.5 L141.7 671.6 L152.4 658.3 L179.2 637.1 L183.1 641.1 L187.5 635.8 L193.5 632.5 L198.8 631.2 L201.2 632.1 L203.1 628.7 L207.5 626.9 L213.5 626.3 L219.3 626.7 Z"], "canvas": [900, 665], "merak": [607.0, 309.3], "bakauheni": [478.2, 276.3], "java": [741.2, 478.8], "sumatra": [158.8, 212.8], "source": "Natural Earth 1:10m physical land, clipped to 104.85-106.55E / 6.60-5.35S, equirectangular with local cos-latitude scaling"};
+
+/* ---------- tiny svg chart kit ---------- */
+const NS="http://www.w3.org/2000/svg";
+function el(t,a={}){const e=document.createElementNS(NS,t);
+  for(const k in a) e.setAttribute(k,a[k]); return e;}
+function txt(x,y,s,a={}){const t=el("text",Object.assign(
+  {x,y,"font-size":11,fill:P.mute},a)); t.textContent=s; return t;}
+
+function hbar(mount,{data,w=520,rowH=32,pad=190,max=null,fmtv=v=>fmt(v),
+                     refLine=null,refLabel=""}){
+  const host=document.getElementById(mount); host.innerHTML="";
+  const h=data.length*rowH+42;
+  const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
+  const m=max!==null?max:Math.max(...data.map(d=>d.v))*1.12;
+  const x0=pad, x1=w-16, sc=v=>x0+(v/m)*(x1-x0);
+  data.forEach((d,i)=>{
+    const y=i*rowH+14;
+    svg.appendChild(txt(x0-8,y+13,d.label,{"text-anchor":"end",fill:P.ink,"font-size":12}));
+    svg.appendChild(el("rect",{x:x0,y:y,width:Math.max(1,sc(d.v)-x0),height:rowH-13,
+      fill:d.color||P.sea}));
+    svg.appendChild(txt(sc(d.v)+6,y+13,fmtv(d.v),{fill:P.ink,"font-size":11.5,
+      "font-weight":"bold"}));
+  });
+  if(refLine!==null){
+    const rx=sc(refLine);
+    svg.appendChild(el("line",{x1:rx,y1:6,x2:rx,y2:h-30,stroke:P.ink,
+      "stroke-width":1.5,"stroke-dasharray":"4 3"}));
+    svg.appendChild(txt(rx+5,h-18,refLabel,{fill:P.ink,"font-size":11}));
+  }
+  host.appendChild(svg);
+}
+
+function vbars(mount,{data,w=520,h=210,color=P.sea,line=null,lineColor=P.hot,
+                      fmtv=v=>fmt(v),yLabel=""}){
+  const host=document.getElementById(mount); host.innerHTML="";
+  const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
+  const L=52,R=line?52:14,T=14,B=34;
+  const max=Math.max(...data.map(d=>d.v))*1.15;
+  const bw=(w-L-R)/data.length;
+  svg.appendChild(el("line",{x1:L,y1:h-B,x2:w-R,y2:h-B,stroke:P.rule}));
+  [0,.5,1].forEach(f=>{const y=T+(1-f)*(h-T-B);
+    svg.appendChild(el("line",{x1:L,y1:y,x2:w-R,y2:y,stroke:P.faint}));
+    svg.appendChild(txt(L-6,y+4,fmt(max*f, max<20?1:0),{"text-anchor":"end","font-size":10}));});
+  data.forEach((d,i)=>{
+    const bh=(d.v/max)*(h-T-B);
+    svg.appendChild(el("rect",{x:L+i*bw+bw*0.17,y:h-B-bh,width:bw*0.66,height:Math.max(1,bh),
+      fill:color}));
+    if(data.length<=14)
+      svg.appendChild(txt(L+i*bw+bw/2,h-B+14,d.label,{"text-anchor":"middle","font-size":10}));
+  });
+  if(line){
+    const lmax=Math.max(...line.map(d=>d.v))*1.15;
+    let path="";
+    line.forEach((d,i)=>{const x=L+i*bw+bw/2,y=T+(1-d.v/lmax)*(h-T-B);
+      path+=(i?"L":"M")+x+" "+y;});
+    svg.appendChild(el("path",{d:path,fill:"none",stroke:lineColor,"stroke-width":2}));
+    line.forEach((d,i)=>{const x=L+i*bw+bw/2,y=T+(1-d.v/lmax)*(h-T-B);
+      svg.appendChild(el("circle",{cx:x,cy:y,r:2.6,fill:lineColor}));});
+    svg.appendChild(txt(w-R+6,T+8,"",{}));
+  }
+  if(yLabel) svg.appendChild(txt(L-6,T-2,yLabel,{"text-anchor":"end","font-size":10}));
+  host.appendChild(svg);
+}
+
+function lineChart(mount,{pts,w=460,h=230,xlab="",ylab="",refY=null,refLabel="",
+                          markX=null,markLabel=""}){
+  const host=document.getElementById(mount); host.innerHTML="";
+  const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
+  const L=56,R=16,T=16,B=42;
+  const xs=pts.map(p=>p.x), ys=pts.map(p=>p.y);
+  const xmin=Math.min(...xs), xmax=Math.max(...xs);
+  const ymax=Math.max(Math.max(...ys), refY||0)*1.12;
+  const X=v=>L+((v-xmin)/(xmax-xmin))*(w-L-R);
+  const Y=v=>T+(1-v/ymax)*(h-T-B);
+  [0,.25,.5,.75,1].forEach(f=>{const y=T+(1-f)*(h-T-B);
+    svg.appendChild(el("line",{x1:L,y1:y,x2:w-R,y2:y,stroke:P.faint}));
+    svg.appendChild(txt(L-6,y+4,fmt(ymax*f),{"text-anchor":"end","font-size":10}));});
+  if(refY!==null){
+    svg.appendChild(el("line",{x1:L,y1:Y(refY),x2:w-R,y2:Y(refY),stroke:P.hot,
+      "stroke-width":1.5,"stroke-dasharray":"5 3"}));
+    svg.appendChild(txt(L+6,Y(refY)-6,refLabel,{fill:P.hot,"font-size":11,
+      "font-weight":"bold"}));
+  }
+  let d=""; pts.forEach((p,i)=>{d+=(i?"L":"M")+X(p.x)+" "+Y(p.y);});
+  svg.appendChild(el("path",{d,fill:"none",stroke:P.sea,"stroke-width":2.5}));
+  if(markX!==null && markX>=xmin && markX<=xmax){
+    svg.appendChild(el("line",{x1:X(markX),y1:T,x2:X(markX),y2:h-B,stroke:P.ink,
+      "stroke-width":1.5,"stroke-dasharray":"3 3"}));
+    svg.appendChild(txt(X(markX)+5,T+12,markLabel,{fill:P.ink,"font-size":11,
+      "font-weight":"bold"}));
+  }
+  [xmin,(xmin+xmax)/2,xmax].forEach(v=>
+    svg.appendChild(txt(X(v),h-B+16,fmt(v,2),{"text-anchor":"middle","font-size":10})));
+  svg.appendChild(txt((L+w-R)/2,h-8,xlab,{"text-anchor":"middle","font-size":11}));
+  svg.appendChild(txt(L-6,T-3,ylab,{"text-anchor":"end","font-size":10}));
+  host.appendChild(svg);
+}
+
+/* ---------- render ---------- */
+function tbl(cols, rows){
+  let h="<table><thead><tr>"+cols.map(c=>`<th>${c}</th>`).join("")+"</tr></thead><tbody>";
+  rows.forEach(r=>{h+="<tr>"+r.map(c=>typeof c==="object"
+    ? `<td class="${c.cls||""}">${c.t}</td>` : `<td>${c}</td>`).join("")+"</tr>";});
+  return h+"</tbody></table>";
+}
+
+
+/* ---------- the crossing ---------- */
+function drawMap(){
+  const [W,H]=MAP.canvas, host=document.getElementById("chart-map");
+  host.innerHTML="";
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img",
+    "aria-label":"Map of the Sunda Strait showing the Merak to Bakauheni ferry crossing"});
+  svg.appendChild(el("rect",{x:0,y:0,width:W,height:H,fill:P.water}));
+  MAP.paths.forEach(d=>svg.appendChild(el("path",{d,fill:P.land,stroke:"#CFCABA",
+    "stroke-width":1})));
+  const [mx,my]=MAP.merak,[bx,by]=MAP.bakauheni;
+  svg.appendChild(el("line",{x1:mx,y1:my,x2:bx,y2:by,stroke:P.sea,"stroke-width":2.5,
+    "stroke-dasharray":"7 5"}));
+  [[mx,my,"Merak","start"],[bx,by,"Bakauheni","end"]].forEach(([x,y,n,anch])=>{
+    svg.appendChild(el("circle",{cx:x,cy:y,r:6,fill:P.sea,stroke:P.water,"stroke-width":2.5}));
+    svg.appendChild(txt(x+(anch==="start"?13:-13),y+5,n,
+      {"text-anchor":anch==="start"?"start":"end","font-size":17,"font-weight":"700",fill:P.ink}));
+  });
+  svg.appendChild(txt(MAP.java[0],MAP.java[1],"JAVA",
+    {"font-size":15,fill:"#A79E88","letter-spacing":"3",  "text-anchor":"middle"}));
+  svg.appendChild(txt(MAP.sumatra[0],MAP.sumatra[1],"SUMATRA",
+    {"font-size":15,fill:"#A79E88","letter-spacing":"3","text-anchor":"middle"}));
+  // the sentence that makes the map worth looking at
+  const midx=(mx+bx)/2, midy=(my+by)/2;
+  svg.appendChild(el("line",{x1:midx-4,y1:midy-10,x2:midx-40,y2:midy-64,
+    stroke:P.mute,"stroke-width":1}));
+  svg.appendChild(txt(midx-44,midy-72,"15 nautical miles,",
+    {"text-anchor":"end","font-size":15,"font-weight":"700",fill:P.ink}));
+  svg.appendChild(txt(midx-44,midy-54,"about three hours end to end",
+    {"text-anchor":"end","font-size":14,fill:P.mute}));
+  // scale bar: 10 nm
+  const pxPerNm=Math.hypot(mx-bx,my-by)/15, sb=pxPerNm*10;
+  svg.appendChild(el("line",{x1:40,y1:H-38,x2:40+sb,y2:H-38,stroke:P.ink,"stroke-width":2}));
+  ["",""].forEach((_,i)=>svg.appendChild(el("line",{x1:40+i*sb,y1:H-43,x2:40+i*sb,y2:H-33,
+    stroke:P.ink,"stroke-width":2})));
+  svg.appendChild(txt(40,H-48,"10 nautical miles",{"font-size":12,fill:P.mute}));
+  host.appendChild(svg);
+}
+
+/* ---------- where the energy actually goes ---------- */
+function drawEnergy(R){
+  const host=document.getElementById("chart-energy"); host.innerHTML="";
+  const W=640,H=250, L=0, barH=44;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img"});
+  const fuel=R.fuelMWh/1000, shaft=R.shaftMWh/1000, shore=R.shoreMWh/1000;
+  const prop=D.energy_split.propulsion_mwh/1000*R.k, hotel=shaft-prop;
+  const sc=v=>v/fuel*W;
+  function row(y,label,segs){
+    svg.appendChild(txt(0,y-9,label,{"font-size":12.5,"font-weight":"700",fill:P.ink}));
+    let x=0;
+    segs.forEach(s=>{
+      const w=sc(s.v);
+      svg.appendChild(el("rect",{x,y,width:Math.max(1,w),height:barH,fill:s.c}));
+      if(w>78){
+        svg.appendChild(txt(x+9,y+20,s.n,{"font-size":12,"font-weight":"600",
+          fill:s.dark?"#fff":P.ink}));
+        svg.appendChild(txt(x+9,y+36,fmt(s.v)+" GWh",{"font-size":12,
+          fill:s.dark?"rgba(255,255,255,.85)":P.mute}));
+      }
+      x+=w;
+    });
+  }
+  row(24,"Fuel energy burned",[
+    {v:prop,n:"Propulsion",c:P.sea,dark:true},
+    {v:hotel,n:"Hotel and ventilation",c:P.sea2},
+    {v:fuel-shaft,n:"Lost as heat",c:P.faint}]);
+  row(128,"The same service, electrified",[
+    {v:shore,n:"Electricity from shore",c:P.good,dark:true},
+    {v:fuel-shore,n:"Not needed",c:P.faint}]);
+  svg.appendChild(el("line",{x1:sc(shaft),y1:14,x2:sc(shaft),y2:206,stroke:P.hot,
+    "stroke-width":1.5,"stroke-dasharray":"4 3"}));
+  svg.appendChild(txt(sc(shaft)+7,220,"useful work at the shaft: "+fmt(shaft)+" GWh",
+    {"font-size":12,"font-weight":"600",fill:P.hot}));
+  host.appendChild(svg);
+  document.getElementById("energy-cap").innerHTML =
+    `<b>Most of the fuel never reaches the propeller, and most of what does is not moving the `+
+    `ship.</b> Only ${fmt(shaft/fuel*100,0)}% of fuel energy becomes shaft work, and `+
+    `${fmt(hotel/shaft*100,0)}% of that goes to hotel and vehicle-deck ventilation rather than `+
+    `propulsion. An electric drivetrain wastes far less, which is why the same service needs `+
+    `${fmt((1-shore/fuel)*100,0)}% less energy delivered.`;
+}
+
+/* ---------- one vessel, one day ---------- */
+function drawDay(){
+  const host=document.getElementById("chart-day"); host.innerHTML="";
+  const W=640,H=132, y=34, barH=40;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img"});
+  const vs=D.voyage_stats;
+  const wait=vs.median_hours*vs.wait_share_pct/100;
+  const steam=vs.median_hours-wait, berth=vs.berth_hours_median;
+  const cycle=steam+wait+berth, sc=h=>h/24*W;
+  let x=0, n=0;
+  while(x < W-2 && n<12){
+    [[steam,P.sea],[wait,P.sea2],[berth,P.faint]].forEach(([h,c])=>{
+      if(x>=W) return;
+      const w=Math.min(sc(h), W-x);
+      if(w>0) svg.appendChild(el("rect",{x,y,width:w,height:barH,fill:c}));
+      x+=w;
+    });
+    n++;
+  }
+  for(let hh=0; hh<=24; hh+=6){
+    svg.appendChild(el("line",{x1:sc(hh),y1:y+barH,x2:sc(hh),y2:y+barH+5,stroke:P.mute}));
+    svg.appendChild(txt(sc(hh),y+barH+19,hh+":00",{"text-anchor":hh===0?"start":
+      (hh===24?"end":"middle"),"font-size":11,fill:P.mute}));
+  }
+  [["Crossing",P.sea,0],["Queueing offshore",P.sea2,132],["Alongside",P.faint,290]]
+    .forEach(([n2,c,px])=>{
+      svg.appendChild(el("rect",{x:px,y:8,width:11,height:11,fill:c}));
+      svg.appendChild(txt(px+16,18,n2,{"font-size":12,fill:P.ink}));
+    });
+  host.appendChild(svg);
+  document.getElementById("day-cap").innerHTML =
+    `<b>A typical vessel spends most of the day not crossing anything.</b> Median crossing is `+
+    `${fmt(vs.median_hours,1)} hours, of which ${fmt(vs.wait_share_pct,0)}% is queueing for a `+
+    `berth rather than steaming, followed by ${fmt(vs.berth_hours_median,1)} hours alongside. `+
+    `Main engines are off for the grey and pale blue, but the hotel load runs throughout. That is `+
+    `the whole reason auxiliary machinery, not propulsion, dominates this corridor's energy use.`;
+}
+
+function render(){
+  const R = compute();
+
+  document.getElementById("byline").innerHTML =
+    `${fmt(D.coverage.voyages_observed)} crossings by ${D.coverage.route_vessels} vessels, `+
+    `${D.window.start} to ${D.window.end}. Bottom-up model following the IMO and ICCT method. `+
+    `Compiled ${D.generated_utc.slice(0,10)}.`;
+  drawMap(); drawDay();
+  document.getElementById("map-cap").innerHTML =
+    `The Merak&ndash;Bakauheni crossing, the sea link between Java and Sumatra and one of the `+
+    `busiest ferry routes anywhere. Coastline from Natural Earth 1:10m; the dashed line is the `+
+    `port-to-port distance used throughout, not an actual track.`;
+  document.getElementById("foot-meta").textContent =
+    "Model run " + D.generated_utc + ". Route distance " +
+    D.assumptions.route_distance.distance_nm + " nm.";
+
+  document.getElementById("kpis").innerHTML = [
+    [fmt(R.base/1000,0)+' <small>kt</small>',
+     R.label+' a year from this crossing alone'],
+    [fmt(R.fuelMWh/1000,0)+' <small>GWh</small>',
+     'of fuel energy burned a year, of which '+fmt(D.energy_split.auxiliary_share_pct,0)+
+     '% of shaft energy is hotel load, not propulsion'],
+    [fmt(R.shoreMWh/1000,0)+' <small>GWh</small>',
+     'of shore electricity if fully electrified, a '+
+     fmt((1-R.shoreMWh/R.fuelMWh)*100,0)+'% cut in primary energy'],
+    [fmt(R.breakeven,2)+' <small>t/MWh</small>',
+     'grid intensity at which electrifying breaks even on '+R.label]
+  ].map(k=>`<div class="kpi"><div class="v">${k[0]}</div><div class="l">${k[1]}</div></div>`).join("");
+
+  document.getElementById("kpi-note").innerHTML =
+    `Indonesia's grid runs at roughly <b>0.75&ndash;0.90 tCO<sub>2</sub>/MWh</b>. Against a `+
+    `CO<sub>2</sub>-only break-even of `+
+    `<b>${fmt(D.breakeven_grid_ef_tco2_per_mwh,2)}</b> that is clearly worse than diesel; against `+
+    `<b>${fmt(D.breakeven_grid_ef_co2e100,2)}</b> on a 100-year CO<sub>2</sub>e basis it is close `+
+    `to neutral; against <b>${fmt(D.breakeven_grid_ef_co2e20,2)}</b> on a 20-year basis it is `+
+    `clearly better. The difference is black carbon, which is `+
+    `${fmt(D.sanity_checks.find(c=>c.check.indexOf("Black carbon")===0).value,0)}% of 100-year `+
+    `warming here and which electrification removes entirely.`;
+
+  const c=D.coverage;
+  document.getElementById("coverage-table").innerHTML = tbl(
+    ["","Vessels","Comment"],[
+    ["In the supplied register", fmt(c.inventory_vessels), "unique IMO numbers, register-matched"],
+    ["Carrying an ASDP owner or operator", fmt(c.inventory_asdp_flagged),
+     fmt(c.inventory_asdp_flagged/c.inventory_vessels*100,0)+"% of the register"],
+    ["Seen on Merak-Bakauheni", fmt(c.route_vessels), "in the movement data"],
+    ["Both on the corridor and in the register", fmt(c.route_vessels_in_inventory),
+     fmt(c.route_vessels_in_inventory/c.route_vessels*100,0)+"% of corridor vessels"],
+    ["Crossings by ASDP-flagged vessels", fmt(c.voyages_by_asdp_flagged),
+     fmt(c.voyages_by_asdp_flagged/c.voyages_observed*100,0)+"% of all crossings"]
+  ]);
+
+  hbar("chart-age",{data:D.age_profile.map(a=>({label:a.age_band+" years",
+    v:a.total_gt/1000, color:(a.age_band==="31-40"||a.age_band==="40+")?P.hot:P.sea2})),
+    w:440,pad:110,fmtv:v=>fmt(v)+"k GT"});
+
+  document.getElementById("baseline-text").innerHTML =
+    `Across ${fmt(D.coverage.voyages_observed)} observed crossings the model puts the corridor at `+
+    `<b>${fmt(R.fuel_t)} t of fuel</b> and <b>${fmt(R.base)} t of ${R.label}</b> a year. Median `+
+    `port-to-port time is ${fmt(D.voyage_stats.median_hours,1)} hours, of which `+
+    `<b>${fmt(D.voyage_stats.wait_share_pct,0)}%</b> across the fleet is queueing rather than `+
+    `steaming; median time alongside between crossings is `+
+    `${fmt(D.voyage_stats.berth_hours_median,1)} hours. Implied steaming speed is `+
+    `${fmt(D.voyage_stats.median_steam_speed_kn,1)} knots at a median engine load of `+
+    `${fmt(D.voyage_stats.median_load*100,0)}% of rated power.`;
+
+  drawEnergy(R);
+  vbars("chart-monthly",{data:D.monthly.map(m=>({label:m.month.slice(5),v:m.voyages})),
+    line:D.monthly.map(m=>({v:m.co2_t})), w:520,h:200});
+  hbar("chart-vessels",{data:D.per_vessel.slice(0,10).map(v=>({label:v.name,v:v.co2_t})),
+    w:440,pad:130,fmtv:v=>fmt(v)+" t"});
+
+  const base=R.rows[0];
+  document.getElementById("pathway-lede").innerHTML =
+    `Two results drive everything here. First, <b>${fmt(D.energy_split.auxiliary_share_pct,0)}% of `+
+    `shaft energy on this corridor is auxiliary load</b>, not propulsion: the ships spend far more `+
+    `time alongside or queueing than crossing, and a ro-pax runs its vehicle-deck ventilation and `+
+    `passenger services throughout. That makes shore power a serious option in its own right. `+
+    `Second, electrification is the cheapest pathway by a wide margin and the only one that cuts `+
+    `primary energy, because an electric drivetrain delivers about 85% of supplied energy to the `+
+    `shaft against ${fmt(D.sanity_checks.find(c=>c.check.indexOf("Implied fuel-to-shaft")===0).value,0)}% `+
+    `for these diesels. Whether it cuts emissions depends entirely on the grid.`;
+
+  hbar("chart-pathways",{data:R.rows.slice(1).map(r=>({label:r.label,v:r.g/1000,
+    color:r.g>base.g?P.hot:P.sea})), w:540,pad:210,
+    max:Math.max(...R.rows.map(r=>r.g/1000))*1.15,
+    fmtv:v=>fmt(v)+" kt", refLine:base.g/1000, refLabel:"baseline "+fmt(base.g/1000)+" kt"});
+
+  document.getElementById("pathway-table").innerHTML = tbl(
+    ["Pathway", R.label+" kt/yr","Change","Energy in GWh","Local pollutants",
+     "Cost $M/yr","vs baseline","$/t"],
+    R.rows.map(r=>[
+      r.label, fmt(r.g/1000),
+      {t:pct(-r.savedPct), cls:r.savedPct<0?"neg":(r.savedPct>0?"pos":"")},
+      fmt(r.energy/1000),
+      r.local ? {t:"-"+fmt(r.local,0)+"%", cls:"pos"} : "-",
+      fmt(r.cost/1e6,1),
+      {t:usd(r.delta), cls:r.delta>0?"neg":(r.delta<0?"pos":"")},
+      r.abate===null?"n/a":fmt(r.abate,0)
+    ]));
+
+  document.getElementById("be-head").textContent =
+    `Electrification pays back on carbon only below about ${fmt(R.breakeven,2)} tonnes per MWh`;
+  document.getElementById("be-text").innerHTML =
+    `These diesels deliver a tonne of ${R.label} for every <b>${fmt(R.shaftMWh/R.base*1000,0)} kWh</b> `+
+    `of shaft work. To beat that, the electricity charging the ships must be cleaner than `+
+    `<b>${fmt(R.breakeven,2)} t/MWh</b> once charging and drivetrain losses are counted. `+
+    `Costs point the other way: the same service costs <b>${usd(R.rows[6].cost)}</b> a year in `+
+    `electricity against <b>${usd(base.cost)}</b> in fuel. Before any of that, `+
+    `<b>${fmt(R.statMWh/1000,0)} GWh</b> a year is drawn by ships sitting still, alongside or at `+
+    `anchor, which shore power can displace without touching a propulsion system.`;
+
+  lineChart("chart-grid",{
+    pts:D.grid_sensitivity.map(g=>({x:g.ef, y:R.shoreMWh*g.ef/1000})),
+    w:440,h:240,xlab:"grid carbon intensity, tCO2/MWh",ylab:"kt "+R.label+"/yr",
+    refY:R.base/1000, refLabel:"diesel baseline", markX:S.ef, markLabel:"current"});
+
+  document.getElementById("battery-table").innerHTML =
+    "<p class='mute' style='margin:16px 0 6px'>Indicative battery sizing for the five busiest "+
+    "vessels, at two crossings of stored energy.</p>" + tbl(
+    ["Vessel","Est. MCR kW","MWh per crossing","Pack MWh","Newbuild $M","Retrofit $M"],
+    D.battery_sizing.slice(0,5).map(b=>[
+      b.name, fmt(b.p_mcr_kw), fmt(b.energy_per_voyage_mwh*R.k,2),
+      fmt(b.battery_pack_mwh_2_crossings*R.k,1),
+      fmt(b.capex_newbuild_musd*R.k,1), fmt(b.capex_retrofit_musd*R.k,1)]));
+
+  hbar("chart-wait",{data:D.waiting_sensitivity.map((w,i)=>({
+    label: i===0 ? "Engines off at anchor" : "Engines idling at anchor",
+    v:w.co2_t_annual/1000, color:i===S.wait?P.sea:P.sea3})),
+    w:430,pad:150,fmtv:v=>fmt(v)+" kt"});
+  hbar("chart-dist",{data:D.distance_sensitivity.map(f=>({label:fmt(f.distance_nm,0)+" nm",
+    v:f.co2_t_annual/1000, color:f.distance_nm===15?P.sea:P.sea3})),
+    w:430,pad:110,fmtv:v=>fmt(v)+" kt"});
+
+  document.getElementById("sanity").innerHTML = tbl(
+    ["Check","Model","Expected range","","What it is checked against"],
+    D.sanity_checks.map(c=>[
+      c.check, fmt(c.value,2)+" "+c.unit,
+      fmt(c.expected_low,2)+" to "+fmt(c.expected_high,2),
+      {t:c.pass?"pass":"FLAG", cls:c.pass?"pos":"neg"},
+      "<span class='mute'>"+c.basis+"</span>"]));
+
+  const A=D.assumptions;
+  const sec=(title,body)=>`<details class="assump"><summary>${title}</summary><div>${body}</div></details>`;
+  document.getElementById("assump").innerHTML =
+    sec("Method <span class='tagline t-src'>SOURCED</span>",
+      Object.entries(A.method_sources).map(([k,v])=>`<p class='mute'>${v}</p>`).join(""))
+    + sec("Engine emission factors, g per kWh <span class='tagline t-src'>SOURCED</span>",
+      "<p>Energy-based factors, so no separate fuel-consumption step is needed. The implied "+
+      "specific fuel consumption of 670 / 3.114 = 215 g/kWh for a medium-speed engine on "+
+      "residual fuel is the IMO baseline value.</p>"+
+      tbl(["Engine","Pollutant","Residual","Distillate"],
+        ["SSD","MSD"].flatMap(e=>["CO2","PM","CO","CH4","N2O"].map(p=>
+          [e,p,A.me_ef[e][p].residual,A.me_ef[e][p].distillate])).concat(
+          ["CO2","PM","CO","CH4","N2O","BC"].map(p=>["Auxiliary",p,A.ae_ef[p].residual,
+            A.ae_ef[p].distillate])))
+      +`<p class='mute'>Sulphur assumed at ${A.sulphur_pct.residual}% for residual and `+
+       `${A.sulphur_pct.distillate}% for distillate; SOx scales linearly with it.</p>`)
+    + sec("Auxiliary power demand <span class='tagline t-src'>SOURCED</span>",
+      `<p>Ro-pax ferries: <b>${A.aux_kw_ropax.under_2000_GT} kW</b> below 2,000 GT and `+
+      `<b>${A.aux_kw_ropax.over_2000_GT} kW</b> above, in every operating phase, with boilers at `+
+      `zero. These are flat published values that do not scale with installed engine power, which `+
+      `is why auxiliary load dominates on a corridor with short crossings and long turnarounds. `+
+      `This replaces the "auxiliary is a percentage of MCR" assumption used in the first pass.</p>`)
+    + sec("Correction factors <span class='tagline t-src'>SOURCED</span>",
+      tbl(["Factor","Value","Basis"],[
+        ["Hull fouling", fmt(A.hull_fouling_range[0],3)+" to "+fmt(A.hull_fouling_range[1],3),
+         "Computed per vessel from age via the Townsin roughness relation"],
+        ["Weather", A.weather_factor, "+10% power demand for coastal shipping"],
+        ["Draught adjustment", fmt(A.daf,3), "Ferry ro-pax annual average"],
+        ["Low-load fuel penalty","1.00 to 1.21",
+         "0.455 L squared minus 0.710 L plus 1.28, minimum at 78% load"]]))
+    + sec("Power estimation <span class='tagline t-assum'>ASSUM</span>",
+      `<p>The register contains no installed main engine power. Displacement from dimensions for `+
+      `${D.power_model.n_from_dimensions} vessels; from `+
+      `<code>${D.power_model.displacement_form}</code> (R&sup2; `+
+      `${fmt(D.power_model.displacement_r2,3)}) for ${D.power_model.n_from_gt_regression}. Draft `+
+      `capped for ${D.power_model.n_draft_capped} vessels with implausible draft-to-beam ratios; `+
+      `installed MCR bounded for ${D.power_model.n_mcr_bounded}. Median result `+
+      `${fmt(D.power_model.median_kw_per_gt,2)} kW per GT.</p><p class='mute'>${A.power.note}</p>`)
+    + sec("Operating profile <span class='tagline t-assum'>ASSUM</span>",
+      tbl(["Parameter","Value"],Object.entries(A.ops).map(([k,v])=>[k,v])))
+    + sec("Prices and exchange rate <span class='tagline t-src'>MKT / GOV</span>",
+      tbl(["Item","Value"],[
+        ["B40 industrial diesel, Region 1","Rp "+fmt(A.prices.b40_hsd_idr_per_litre)+" / litre"],
+        ["MFO high sulphur, Region 1","Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+" / litre"],
+        ["PLN I-3 medium industry","Rp "+fmt(A.prices.pln_i3_idr_per_kwh,2)+" / kWh"],
+        ["PLN I-4 large industry","Rp "+fmt(A.prices.pln_i4_idr_per_kwh,2)+" / kWh"],
+        ["Singapore VLSFO","$"+fmt(A.prices.vlsfo_usd_per_tonne)+" / t"],
+        ["Singapore MGO","$"+fmt(A.prices.mgo_usd_per_tonne)+" / t"],
+        ["B100 / HVO","$"+fmt(A.prices.b100_usd_per_tonne)+" / t"],
+        ["Exchange rate","Rp "+fmt(A.fx)+" / USD"]])
+      +`<p class='mute'><b>Domestic fuel.</b> ${A.prices.domestic_fuel_source}</p>`
+      +`<p class='mute'><b>International.</b> ${A.prices.intl_fuel_source}</p>`
+      +`<p class='mute'><b>Biofuel.</b> ${A.prices.biofuel_source}</p>`
+      +`<p class='mute'><b>Electricity.</b> ${A.prices.pln_source}</p>`
+      +`<p class='mute'><b>FX.</b> ${A.fx_source}</p>`)
+    + sec("Grid carbon intensity <span class='tagline t-assum'>ASSUM</span>",
+      `<p>Default ${A.grid.ef_tco2_per_mwh} tCO<sub>2</sub>/MWh, range ${A.grid.ef_low} to `+
+      `${A.grid.ef_high}.</p><p class='mute'>${A.grid.source}</p>`)
+    + sec("Global warming potentials <span class='tagline t-src'>SOURCED</span>",
+      tbl(["Pollutant","20-year","100-year"],
+        Object.keys(A.gwp["100"]).map(p=>[p,A.gwp["20"][p],A.gwp["100"][p]]))
+      +"<p class='mute'>CH4 and N2O from IPCC AR4; black carbon from Bond et al. (2013).</p>")
+    + sec("Electrification <span class='tagline t-assum'>ASSUM</span>",
+      tbl(["Parameter","Value"],[
+        ["Motor and drive efficiency",A.electric.motor_drive_efficiency],
+        ["Onboard distribution",A.electric.onboard_distribution],
+        ["Charging efficiency",A.electric.charging_efficiency],
+        ["Shore connection efficiency",A.electric.shore_connection_efficiency],
+        ["Usable depth of discharge",A.electric.battery_usable_dod],
+        ["Battery, newbuild","$"+fmt(A.electric.battery_cost_usd_per_kwh_newbuild)+" / kWh"],
+        ["Battery, retrofit","$"+fmt(A.electric.battery_cost_usd_per_kwh_retrofit)+" / kWh"]])
+      +`<p class='mute'>${A.electric.battery_cost_source}</p>`)
+    + sec("Fuel-switching pathways <span class='tagline t-assum'>ASSUM</span>",
+      `<p class='mute'>${A.pathway_source}</p><p class='mute'>${A.terminology}</p>`)
+    + sec("Fleet-wide extrapolation <span class='tagline t-assum'>ASSUM</span>",
+      `<p>Applying an assumed activity level to the `+
+      `${fmt(D.fleet_indicative.n_vessels_in_service)} in-service vessels in the register gives an `+
+      `indicative <b>${fmt(D.fleet_indicative.co2_t_yr/1000)} kt CO<sub>2</sub></b> a year on `+
+      `<b>${fmt(D.fleet_indicative.installed_mcr_mw)} MW</b> of installed power. `+
+      `<b>This is an illustration, not a result.</b></p>`
+      +`<p class='mute'>${D.fleet_indicative.assumptions.note}</p>`)
+    + sec("Route geometry <span class='tagline t-src'>LIT</span>",
+      `<p>${A.route_distance.distance_nm} nm, sensitivity ${A.route_distance.distance_nm_low} to `+
+      `${A.route_distance.distance_nm_high} nm.</p>`
+      +`<p class='mute'>${A.route_distance.distance_nm_source}</p>`);
+}
+
+/* ---------- controls ---------- */
+function bind(){
+  const wsel=document.getElementById("s-wait");
+  D.waiting_sensitivity.forEach((w,i)=>{
+    const o=document.createElement("option");
+    o.value=i; o.textContent = i===0 ? "Off (IMO convention)" : "Idling";
+    wsel.appendChild(o);
+  });
+  const map={ef:"s-ef",tariff:"s-tariff",mfo:"s-mfo",b40:"s-b40",b100:"s-b100"};
+  function sync(){
+    for(const k in map) document.getElementById(map[k]).value=S[k];
+    wsel.value=S.wait; document.getElementById("s-gwp").value=S.gwp;
+    document.getElementById("v-ef").textContent=fmt(S.ef,2);
+    document.getElementById("v-tariff").textContent=fmt(S.tariff);
+    document.getElementById("v-mfo").textContent=fmt(S.mfo);
+    document.getElementById("v-b40").textContent=fmt(S.b40);
+    document.getElementById("v-b100").textContent=fmt(S.b100);
+    render();
+  }
+  for(const k in map)
+    document.getElementById(map[k]).addEventListener("input",e=>{
+      S[k]=parseFloat(e.target.value); sync();});
+  wsel.addEventListener("change",e=>{S.wait=parseInt(e.target.value); sync();});
+  document.getElementById("s-gwp").addEventListener("change",e=>{S.gwp=e.target.value; sync();});
+  document.getElementById("reset").addEventListener("click",()=>{
+    S=Object.assign({},DEF); sync();});
+  sync();
+}
+bind();
+</script>
+</body>
+</html>

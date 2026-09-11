@@ -1,0 +1,11 @@
+# Client data is not committed
+*.xlsx
+*.xls
+data/
+__pycache__/
+*.pyc
+.DS_Store
+.venv/
+
+# Never publish the raw commercial ship register
+outputs/vessels_with_power.csv

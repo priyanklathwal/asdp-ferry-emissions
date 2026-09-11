@@ -1,0 +1,918 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Merak-Bakauheni ferry energy and emissions</title>
+<style>
+/*
+  Editorial layout after the explanatory-graphics tradition: one column of prose at a
+  comfortable measure, graphics allowed to break wider than the text, the takeaway stated
+  in the caption rather than left for the reader to decode, and series labelled in place
+  instead of through a legend.
+
+  Colour does one job only. Muted blue is observed reality. Warm red marks the thing the
+  reader is meant to notice, which on this page is usually an intervention going the wrong
+  way. Green marks money or emissions saved. Nothing else is coloured.
+*/
+:root{
+  --bg:#FAF9F5; --panel:#F1EFE8; --ink:#23282B; --mid:#6B7478; --faint:#DAD7CE;
+  --sea:#2F5F73; --sea2:#8FB0BF; --sea3:#C3D5DD;
+  --hot:#D4552C; --good:#3F7D5C;
+  --water:#E9F0F2; --land:#E5E1D5;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);
+     font-size:17px;line-height:1.65;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1060px;margin:0 auto;padding:0 32px}
+.col{max-width:660px}
+a{color:var(--sea)}
+
+header.masthead{padding:72px 0 8px}
+.masthead h1{margin:0 0 18px;font-family:var(--sans);font-size:44px;line-height:1.05;
+             font-weight:750;letter-spacing:-.03em;max-width:16ch}
+.masthead .sub{font-size:19px;line-height:1.55;color:var(--mid);max-width:56ch;margin:0}
+.byline{font-family:var(--sans);font-size:12.5px;color:var(--mid);margin-top:26px;
+        padding-top:14px;border-top:1px solid var(--faint);max-width:660px}
+
+.flag{background:var(--panel);padding:22px 26px;margin:36px 0 0;font-size:15.5px;
+      max-width:760px;line-height:1.6}
+
+section{padding:56px 0 8px;border-top:1px solid var(--faint);margin-top:52px}
+section > h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+h3{font-family:var(--sans);font-size:31px;font-weight:700;letter-spacing:-.025em;
+   line-height:1.15;margin:0 0 22px;max-width:20ch}
+p{max-width:66ch;margin:0 0 18px}
+.mute{color:var(--mid);font-size:15px}
+strong,b{font-weight:600}
+
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin:30px 0 12px;
+      border-top:2px solid var(--ink)}
+.kpi{padding:18px 24px 20px 0}
+.kpi .v{font-family:var(--sans);font-size:34px;font-weight:750;line-height:1;
+        letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.kpi .v small{font-size:14px;font-weight:600;color:var(--mid);letter-spacing:0}
+.kpi .l{font-size:13.5px;color:var(--mid);margin-top:10px;line-height:1.45;
+        font-family:var(--sans);max-width:24ch}
+
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:44px}
+.grid-side{display:grid;grid-template-columns:minmax(0,1fr) 262px;gap:44px;align-items:start}
+.wide{margin:8px 0}
+
+table{border-collapse:collapse;width:100%;font-family:var(--sans);font-size:13.5px}
+th,td{text-align:right;padding:9px 12px 9px 0;border-bottom:1px solid var(--faint);
+      font-variant-numeric:tabular-nums}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:11px;letter-spacing:.04em;color:var(--mid);font-weight:600;
+         border-bottom:1.5px solid var(--ink);text-transform:none}
+tbody tr:hover{background:var(--panel)}
+td.neg{color:var(--hot);font-weight:700}
+td.pos{color:var(--good);font-weight:700}
+
+.controls{background:var(--panel);padding:24px}
+.controls h4{margin:0 0 18px;font-family:var(--sans);font-size:13px;font-weight:700}
+.ctl{margin-bottom:19px}
+.ctl label{display:flex;justify-content:space-between;font-family:var(--sans);font-size:12.5px;
+           color:var(--mid);margin-bottom:6px;gap:10px}
+.ctl label b{color:var(--ink);font-variant-numeric:tabular-nums}
+input[type=range]{width:100%;accent-color:var(--sea)}
+select{width:100%;padding:6px;font-family:var(--sans);font-size:13px;
+       border:1px solid var(--faint);background:#fff;color:var(--ink)}
+.reset{font-family:var(--sans);font-size:12px;background:none;border:1px solid var(--ink);
+       padding:7px 12px;cursor:pointer;color:var(--ink)}
+.reset:hover{background:var(--ink);color:var(--bg)}
+
+svg text{font-family:var(--sans)}
+.chart{margin:10px 0 6px}
+figcaption{font-size:14px;color:var(--mid);margin-top:12px;max-width:68ch;line-height:1.55}
+figcaption b{color:var(--ink);font-weight:600}
+
+details.assump{border-bottom:1px solid var(--faint)}
+details.assump summary{padding:14px 0;cursor:pointer;font-family:var(--sans);font-size:14.5px;
+                       font-weight:600;list-style:none}
+details.assump summary::-webkit-details-marker{display:none}
+details.assump summary::before{content:"+ ";color:var(--mid)}
+details.assump[open] summary::before{content:"\2212 "}
+details.assump summary:hover{color:var(--sea)}
+details.assump > div{padding:2px 0 22px;font-size:14.5px}
+
+.tagline{display:inline-block;font-family:var(--sans);font-size:10px;font-weight:700;
+         padding:2px 6px;margin-left:8px;vertical-align:2px;border-radius:2px}
+.t-assum{background:#F6DFD5;color:#8E3416} .t-src{background:#DCE7EB;color:#25505F}
+
+footer{border-top:1px solid var(--faint);padding:32px 0 72px;font-family:var(--sans);
+       font-size:12.5px;color:var(--mid);margin-top:56px}
+
+@media (max-width:900px){
+  .wrap{padding:0 22px}
+  .kpis{grid-template-columns:1fr 1fr}
+  .grid2,.grid-side{grid-template-columns:1fr}
+  .masthead h1{font-size:31px} .masthead .sub{font-size:17px}
+  h3{font-size:25px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <h1>What the Sunda Strait ferries burn</h1>
+    <p class="sub">Every twelve minutes or so, a ferry leaves Merak for Bakauheni. It is fifteen
+       nautical miles. Here is what that costs in energy, in carbon, and in the air over two
+       Indonesian port towns &mdash; and what would actually change it.</p>
+    <p class="byline" id="byline"></p>
+  </div>
+</header>
+
+<div class="wrap"><figure class="chart wide">
+  <div id="chart-map"></div>
+  <figcaption id="map-cap"></figcaption>
+</figure></div>
+
+<div class="wrap">
+
+<div class="flag">
+  <b>Read this before using any number on this page.</b>
+  Emission factors, auxiliary power demand, low-load penalties, hull fouling and the phase structure
+  are transcribed from the published inventory literature and carry a
+  <span class="tagline t-src">SOURCED</span> tag. What remains analyst judgement carries
+  <span class="tagline t-assum">ASSUM</span>, and the largest of those is installed engine power:
+  the register supplied has no kW field, so power is estimated from hull dimensions. Nine sanity
+  checks against independent benchmarks are reported below and all currently pass.
+</div>
+
+<section id="headline">
+  <h2>WHERE THIS LANDS</h2>
+  <h3>One crossing, roughly the annual emissions of a small coal unit</h3>
+  <div class="kpis" id="kpis"></div>
+  <p class="mute" id="kpi-note"></p>
+</section>
+
+<section id="data">
+  <h2>WHAT THE DATA ACTUALLY CONTAINS</h2>
+  <h3>The inventory and the corridor barely overlap</h3>
+  <div class="grid2">
+    <div>
+      <p>The covering note describes the worktab as a sub-set of vessels operated or owned by ASDP.
+         It is broader than that. Of the vessels in the register, only a minority carry an ASDP
+         corporate owner or operator, and only a handful of them appear on the Merak&ndash;Bakauheni
+         crossing at all in the six-and-a-half months of movement data.</p>
+      <p>The corridor is served by a larger and partly different set of ships. That matters for
+         framing: a fleet-replacement question asked of the register is a different question from a
+         decarbonisation question asked of the corridor.</p>
+      <div id="coverage-table"></div>
+    </div>
+    <div>
+      <figure class="chart">
+        <div id="chart-age"></div>
+        <figcaption>Age profile of the register. A replacement programme is decided by this chart
+          more than by any emissions number: the tonnage sits disproportionately in hulls past
+          thirty years old.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="baseline">
+  <h2>BASELINE</h2>
+  <h3>Slow, short, and constantly repeated</h3>
+  <div class="grid2">
+    <div>
+      <p id="baseline-text"></p>
+      <p>The crossing is about 15 nautical miles. Observed port-to-port times cluster around three
+         hours, which implies an average speed well below the design speed of these hulls. Part of
+         that is genuine slow steaming; part is queueing offshore for a berth, which the movement
+         data cannot separate from sailing. The model treats it as low-load steaming with a floor on
+         propulsion power, and the size of that floor is the largest single uncertainty here.</p>
+      <figure class="chart">
+        <div id="chart-day"></div>
+        <figcaption id="day-cap"></figcaption>
+      </figure>
+      <figure class="chart">
+        <div id="chart-monthly"></div>
+        <figcaption>Monthly crossings and modelled CO<sub>2</sub>. The March peak is the Idul Fitri
+          <em>mudik</em> surge.</figcaption>
+      </figure>
+    </div>
+    <div>
+      <figure class="chart">
+        <div id="chart-vessels"></div>
+        <figcaption>Ten largest emitters on the corridor over the observed window.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="pathways">
+  <h2>FUEL SWITCHING</h2>
+  <h3>On Indonesia's grid, electrifying these ferries would raise emissions and cut costs</h3>
+  <div class="grid-side">
+    <div>
+      <p id="pathway-lede"></p>
+      <figure class="chart">
+        <div id="chart-energy"></div>
+        <figcaption id="energy-cap"></figcaption>
+      </figure>
+      <figure class="chart">
+        <div id="chart-pathways"></div>
+        <figcaption>Annual CO<sub>2</sub> by pathway against the baseline. Bars to the right of the
+          baseline line are worse than doing nothing.</figcaption>
+      </figure>
+      <div id="pathway-table"></div>
+      <p class="mute" style="margin-top:14px">A note on terminology: SAF is an aviation fuel and has
+        no shipping equivalent by that name. The marine analogues are FAME biodiesel, which
+        Indonesia already blends to B40 on land, HVO renewable diesel, and bio- or e-methanol.</p>
+    </div>
+    <aside class="controls">
+      <h4>Scenario controls</h4>
+      <div class="ctl">
+        <label>Grid carbon intensity <b><span id="v-ef"></span> tCO<sub>2</sub>/MWh</b></label>
+        <input type="range" id="s-ef" min="0" max="1.0" step="0.01">
+      </div>
+      <div class="ctl">
+        <label>PLN tariff <b>Rp <span id="v-tariff"></span>/kWh</b></label>
+        <input type="range" id="s-tariff" min="600" max="1800" step="10">
+      </div>
+      <div class="ctl">
+        <label>MFO price <b>Rp <span id="v-mfo"></span>/L</b></label>
+        <input type="range" id="s-mfo" min="6000" max="22000" step="100">
+      </div>
+      <div class="ctl">
+        <label>B40 diesel price <b>Rp <span id="v-b40"></span>/L</b></label>
+        <input type="range" id="s-b40" min="10000" max="30000" step="100">
+      </div>
+      <div class="ctl">
+        <label>B100 / HVO <b>$<span id="v-b100"></span>/t</b></label>
+        <input type="range" id="s-b100" min="700" max="2000" step="10">
+      </div>
+      <div class="ctl">
+        <label>Main engines while queueing offshore</label>
+        <select id="s-wait"></select>
+      </div>
+      <div class="ctl">
+        <label>Climate metric</label>
+        <select id="s-gwp">
+          <option value="co2">CO2 only</option>
+          <option value="100" selected>CO2e, 100-year</option>
+          <option value="20">CO2e, 20-year</option>
+        </select>
+      </div>
+      <button class="reset" id="reset">Reset to defaults</button>
+      <p class="mute" style="font-size:11.5px;margin-top:14px;margin-bottom:0">
+        The climate metric changes which pathway wins. Black carbon is a fifth of 100-year warming
+        here and much more on a 20-year view, and burning nothing eliminates it entirely.
+      </p>
+    </aside>
+  </div>
+</section>
+
+<section id="breakeven">
+  <h2>THE DECIDING NUMBER</h2>
+  <h3 id="be-head"></h3>
+  <div class="grid2">
+    <div>
+      <p id="be-text"></p>
+      <p>This is the argument for treating ferry electrification as a power-sector project rather
+         than a shipping project. The vessels are a captive, highly predictable load at two fixed
+         points, which is close to ideal for a dedicated solar-plus-storage build at the terminals.
+         ASDP is already installing large solar arrays at both ports for terminal load. The question
+         worth putting to them is whether that programme can be sized against a charging load
+         instead.</p>
+      <div id="battery-table"></div>
+    </div>
+    <div>
+      <figure class="chart">
+        <div id="chart-grid"></div>
+        <figcaption>CO<sub>2</sub> from a fully electrified corridor as a function of the carbon
+          intensity of the power supplying it, against the diesel baseline.</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section id="sensitivity">
+  <h2>HOW MUCH TO TRUST THIS</h2>
+  <h3>The structural uncertainty is now small; the data gap is not</h3>
+  <div class="grid2">
+    <figure class="chart">
+      <div id="chart-wait"></div>
+      <figcaption>Whether main engines run while a vessel queues offshore. The IMO convention is
+        that they are off at anchor; the alternative bounds the error at under 7%.</figcaption>
+    </figure>
+    <figure class="chart">
+      <div id="chart-dist"></div>
+      <figcaption>Sailed distance. The port-to-port line is 15 nm; real tracks are longer, and
+        traffic separation in the strait adds more.</figcaption>
+    </figure>
+  </div>
+  <p class="mute">Resolving the phase structure against the vessels' own fastest crossings, rather
+     than imposing an arbitrary floor on engine load, has cut the structural spread from about
+     &plusmn;15% to under 7%. What remains is a data gap, not a modelling choice: installed engine
+     power is absent from the register, and positional AIS would replace the phase inference
+     entirely.</p>
+</section>
+
+<section id="checks">
+  <h2>SANITY CHECKS</h2>
+  <h3>Nine tests against things known independently of this model</h3>
+  <p>A bottom-up model of this kind can be internally consistent and still wrong by a factor of
+     three. Each check below compares a model output against a figure that comes from somewhere
+     else: engine manufacturer data, published ferry schedules, port operating reports, or the
+     ranges the inventory literature reports for this ship class.</p>
+  <div id="sanity"></div>
+</section>
+
+<section id="assumptions">
+  <h2>ASSUMPTIONS REGISTER</h2>
+  <h3>Every number that did not come out of the workbook</h3>
+  <div id="assump"></div>
+</section>
+
+</div>
+
+<footer>
+  <div class="wrap">
+    <div>Prepared for discussion. Model code and inputs are in the accompanying repository;
+        all figures regenerate from <code>src/run.py</code>.</div>
+    <div style="margin-top:8px" id="foot-meta"></div>
+  </div>
+</footer>
+
+<script>
+const D = __DATA__;
+
+/* ---------- formatting ---------- */
+const fmt = (n,d=0)=> n===null||n===undefined||isNaN(n) ? "n/a"
+  : n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
+const usd = n => (n<0?"-$":"$") + fmt(Math.abs(n)/1e6,1) + "M";
+const pct = n => (n>0?"+":"") + fmt(n,1) + "%";
+
+/* ---------- state ---------- */
+const DEF = {
+  ef: D.assumptions.grid.ef_tco2_per_mwh,
+  tariff: D.assumptions.prices.pln_i3_idr_per_kwh,
+  mfo: D.assumptions.prices.mfo_hs_idr_per_litre,
+  b40: D.assumptions.prices.b40_hsd_idr_per_litre,
+  b100: D.assumptions.prices.b100_usd_per_tonne,
+  wait: 0, gwp: "100"
+};
+let S = Object.assign({}, DEF);
+const FX = D.assumptions.fx;
+const T = D.totals_annual;
+
+/* ---------- recompute ---------- */
+function compute(){
+  const ws = D.waiting_sensitivity;
+  const k = ws[S.wait].co2_t_annual / ws[0].co2_t_annual;
+
+  const fuel_t  = T.fuel_t * k;
+  const fuelMWh = T.fuel_energy_mwh * k;
+  const shaftMWh= T.shaft_energy_mwh * k;
+  const shoreMWh= D.shore_energy_mwh_annual * k;
+  const statMWh = T.stationary_mwh;              // unchanged by the waiting-engine choice
+  const metric  = S.gwp === "co2" ? "co2" : (S.gwp === "20" ? "e20" : "e100");
+  const base    = metric === "co2" ? T.co2_t*k : (metric === "e20" ? T.co2e20_t*k : T.co2e100_t*k);
+  const label   = metric === "co2" ? "CO2" : (metric === "e20" ? "CO2e-20" : "CO2e-100");
+
+  const pRes = S.mfo / 0.98 / FX * 1000;
+  const pDis = S.b40 / 0.86 / FX * 1000;
+  const pBlend = T.residual_share*pRes + (1-T.residual_share)*pDis;
+  const baseCost = fuel_t * pBlend;
+  const pKwh = S.tariff / FX;
+  const elecCost = shoreMWh*1000*pKwh;
+  const meohT = fuelMWh*3600/19.9/1000;
+
+  // shore power: displaces only the stationary hotel load
+  const spMWh = statMWh / D.assumptions.electric.shore_connection_efficiency;
+  const spShare = statMWh / shaftMWh * T.aux_fuel_fraction_of_co2;
+  const spCost = baseCost*(1-spShare) + spMWh*1000*pKwh;
+
+  // biofuel and methanol savings differ slightly by metric because black carbon falls too
+  const bioAdj = metric === "co2" ? 1 : 1.05;
+
+  const rows = [
+    {label:"Baseline (as operated)", g:base, energy:fuelMWh, cost:baseCost, local:0,
+     note:"Fuel burn as observed, priced at Indonesian domestic industrial rates."},
+    {label:"B40 drop-in biodiesel", g:base*0.76, energy:fuelMWh, cost:fuel_t*pDis, local:0,
+     note:"No vessel modification. Already the blend Indonesia mandates on land."},
+    {label:"B100 / HVO drop-in", g:base*Math.max(0.10, 0.20/bioAdj), energy:fuelMWh,
+     cost:fuel_t*S.b100, local:40,
+     note:"Drop-in after fuel-system checks. Near-zero sulphur, lower black carbon."},
+    {label:"Bio-methanol (conversion)", g:base*Math.max(0.08, 0.15/bioAdj), energy:fuelMWh,
+     cost:meohT*D.assumptions.prices.bio_methanol_usd_per_tonne, local:95,
+     note:"Engine conversion or newbuild, plus bunkering at both terminals."},
+    {label:"Shore power at berth and anchorage", g:base*(1-spShare)+spMWh*S.ef,
+     energy:fuelMWh*(1-spShare)+spMWh, cost:spCost, local:Math.round(spShare*100),
+     note:"Cold ironing plus a connection for vessels queueing offshore. Touches no propulsion."},
+    {label:"Battery-electric, PLN grid", g:shoreMWh*S.ef, energy:shoreMWh, cost:elecCost, local:100,
+     note:"Shore energy at the industrial tariff. Ship-side emissions follow the grid."},
+    {label:"Battery-electric, dedicated RE", g:shoreMWh*S.ef*0.05, energy:shoreMWh,
+     cost:elecCost, local:100,
+     note:"Same energy from solar plus storage at the two terminals."}
+  ];
+  rows.forEach(r=>{
+    r.saved = base - r.g;
+    r.savedPct = base ? r.saved/base*100 : 0;
+    r.delta = r.cost - baseCost;
+    r.abate = r.saved>0 ? r.delta/r.saved : null;
+  });
+  return {fuel_t, fuelMWh, shaftMWh, shoreMWh, statMWh, base, label, baseCost, rows, k,
+          breakeven: base/shoreMWh, spMWh};
+}
+
+/* ---------- palette ---------- */
+const P = {ink:"#23282B", mute:"#6B7478", rule:"#DAD7CE", faint:"#EFEDE6",
+           sea:"#2F5F73", sea2:"#8FB0BF", sea3:"#C3D5DD",
+           hot:"#D4552C", good:"#3F7D5C", water:"#E9F0F2", land:"#E5E1D5"};
+const MAP = {"paths": ["M693.1 350.9 L702.0 353.2 L719.7 344.9 L731.4 328.2 L744.6 314.7 L767.0 316.5 L799.9 342.3 L812.6 345.9 L825.5 348.1 L857.7 364.1 L871.1 364.3 L879.9 359.0 L888.2 352.4 L899.6 349.3 L959.8 350.1 L971.7 352.4 L982.5 356.5 L990.5 362.3 L994.8 371.1 L995.8 377.1 L996.6 381.2 L999.4 390.4 L1006.9 396.8 L1028.8 401.2 L1052.3 400.4 L1132.0 388.0 L1134.8 387.6 L1141.0 384.3 L1142.8 374.1 L1145.6 367.3 L1146.2 361.2 L1141.0 353.2 L1137.7 347.7 L1140.7 339.5 L1151.8 323.8 L1149.5 305.4 L1161.8 300.2 L1180.8 304.1 L1198.8 312.9 L1204.8 318.6 L1210.5 325.4 Z", "M828.5 977.6 L837.9 973.0 L847.1 973.1 L856.2 971.7 L859.2 966.4 L850.5 954.8 L860.0 946.0 L880.9 920.1 L895.0 906.9 L895.8 886.7 L893.2 868.7 L879.2 858.5 L863.7 860.3 L848.0 853.9 L833.2 858.2 L823.0 873.2 L821.4 874.1 L809.4 877.7 L796.5 879.2 L785.1 878.2 L778.1 875.8 L773.5 873.3 L768.9 871.4 L761.6 870.6 L758.8 868.9 L753.5 861.5 L750.6 859.8 L743.4 858.8 L741.4 856.3 L740.8 852.7 L738.1 848.8 L734.6 846.2 L715.3 831.9 L698.0 833.0 L674.8 822.6 L636.9 791.0 L613.2 783.1 L597.6 780.8 L587.4 780.8 L576.9 782.6 L565.9 784.2 L556.7 787.1 L554.9 794.4 L547.6 796.8 L542.0 789.9 L531.8 791.7 L515.2 792.2 L498.9 795.7 L489.6 798.1 L479.4 795.2 L462.3 791.9 L451.5 790.4 L395.2 797.5 L373.3 801.0 L362.7 809.9 L343.3 803.7 L336.8 807.3 L328.7 799.8 L323.2 795.5 L313.5 794.0 L311.7 795.9 L306.9 799.4 L301.8 801.7 L299.4 799.5 L298.4 795.8 L295.9 791.7 L292.8 788.5 L290.1 787.1 L267.9 778.2 L243.9 776.9 L238.8 778.9 L236.3 789.1 L233.6 793.2 L229.6 796.4 L224.8 797.7 L215.0 793.9 L210.2 784.9 L204.4 764.9 L197.0 760.0 L194.2 756.5 L195.7 752.4 L199.6 751.5 L217.5 754.0 L224.8 751.0 L233.9 743.9 L248.5 728.7 L253.5 719.7 L257.4 710.1 L262.8 702.6 L272.0 699.6 L278.6 702.2 L285.8 708.3 L291.9 715.5 L295.5 721.4 L296.9 728.0 L296.7 733.5 L297.3 738.9 L309.9 759.8 L312.7 768.3 L319.6 776.1 L328.9 779.8 L338.9 776.2 L345.5 766.7 L353.3 741.7 L359.2 730.6 L401.0 692.4 L408.8 681.8 L411.9 673.5 L407.1 629.1 L420.3 602.4 L426.8 597.6 L438.2 598.5 L440.6 617.9 L449.5 622.9 L456.0 630.2 L470.7 627.8 L493.5 618.2 L507.5 599.7 L515.7 577.0 L514.2 559.2 L520.1 467.5 L523.9 448.0 L538.5 404.4 L549.5 383.3 L586.1 345.1 L591.3 342.0 L596.8 337.0 L607.4 302.0 L619.4 289.0 L636.7 282.5 L653.9 284.9 L665.5 298.4 L667.9 332.6 L671.3 338.4 L676.9 340.7 L693.1 350.9 Z", "M539.3 -302.7 L538.6 -279.5 L541.3 -266.8 L560.4 -233.9 L561.0 -216.5 L554.2 -199.4 L545.1 -182.2 L538.6 -164.2 L535.7 -118.9 L538.6 -73.8 L537.1 -50.2 L523.9 -6.8 L520.6 17.7 L523.9 63.3 L522.1 75.4 L515.7 96.0 L520.3 129.0 L520.6 150.9 L518.6 162.1 L508.9 184.5 L505.8 196.0 L499.6 237.1 L493.7 254.6 L484.1 269.3 L467.8 287.4 L465.7 290.8 L460.5 285.8 L460.3 265.3 L456.8 256.5 L439.9 249.5 L398.2 244.6 L389.7 234.5 L386.9 193.2 L380.4 175.7 L368.1 163.7 L365.2 166.4 L360.2 173.2 L357.6 174.9 L352.1 174.4 L348.0 171.7 L344.5 168.7 L340.9 167.3 L335.4 164.4 L317.5 145.5 L290.2 123.1 L278.5 110.5 L243.9 61.7 L227.5 50.2 L212.0 58.0 L209.8 68.5 L215.5 89.0 L210.2 99.8 L210.7 101.8 L205.8 116.5 L204.4 118.1 L201.6 120.4 L195.4 119.6 L186.4 116.5 L174.7 122.6 L174.8 131.4 L179.9 142.2 L183.1 154.4 L183.1 169.1 L184.9 175.0 L188.8 179.3 L192.6 182.5 L193.9 185.1 L186.3 189.8 L172.3 194.5 L161.4 200.5 L163.1 209.0 L173.6 213.0 L186.4 214.7 L193.4 217.6 L186.4 225.4 L176.6 229.9 L165.8 232.0 L148.6 232.7 L142.1 229.9 L118.1 210.9 L27.0 170.9 L-6.0 145.5 L-31.4 138.0 L-42.7 128.7 L-74.3 93.5 L-80.3 88.1 L-89.3 83.5 L-110.0 78.6 L-120.3 74.8 L-125.4 68.6 L-129.1 68.6 L-128.0 70.9 L-125.4 79.4 L-139.2 79.4 L-149.5 80.5 L-158.1 84.3 L-167.2 92.5 L-170.2 101.3 L-167.7 111.6 L-85.4 243.6 L-80.6 263.5 L-78.1 285.7 L-72.1 298.0 L-70.9 303.8 L-73.6 307.4 L-79.9 308.8 L-152.8 307.7 L-157.0 302.8 L-154.4 283.9 L-156.9 271.3 L-163.2 261.7 L-191.2 237.8 L-196.5 234.2 L-204.8 230.3 L-208.2 224.5 L-212.2 214.2 L-246.7 182.2 L-255.3 178.6 L-292.4 156.0 L-296.1 146.5 L-283.5 135.7 L-290.4 125.4 L-313.4 101.0 Z", "M219.3 626.7 L220.0 640.2 L219.1 660.9 L215.0 680.0 L206.4 688.4 L197.2 691.3 L187.3 704.0 L181.1 706.9 L176.3 703.1 L177.4 694.3 L181.9 684.5 L186.4 677.5 L180.0 674.5 L176.3 669.1 L172.3 656.0 L149.3 679.3 L143.0 681.5 L141.7 671.6 L152.4 658.3 L179.2 637.1 L183.1 641.1 L187.5 635.8 L193.5 632.5 L198.8 631.2 L201.2 632.1 L203.1 628.7 L207.5 626.9 L213.5 626.3 L219.3 626.7 Z"], "canvas": [900, 665], "merak": [607.0, 309.3], "bakauheni": [478.2, 276.3], "java": [741.2, 478.8], "sumatra": [158.8, 212.8], "source": "Natural Earth 1:10m physical land, clipped to 104.85-106.55E / 6.60-5.35S, equirectangular with local cos-latitude scaling"};
+
+/* ---------- tiny svg chart kit ---------- */
+const NS="http://www.w3.org/2000/svg";
+function el(t,a={}){const e=document.createElementNS(NS,t);
+  for(const k in a) e.setAttribute(k,a[k]); return e;}
+function txt(x,y,s,a={}){const t=el("text",Object.assign(
+  {x,y,"font-size":11,fill:P.mute},a)); t.textContent=s; return t;}
+
+function hbar(mount,{data,w=520,rowH=32,pad=190,max=null,fmtv=v=>fmt(v),
+                     refLine=null,refLabel=""}){
+  const host=document.getElementById(mount); host.innerHTML="";
+  const h=data.length*rowH+42;
+  const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
+  const m=max!==null?max:Math.max(...data.map(d=>d.v))*1.12;
+  const x0=pad, x1=w-16, sc=v=>x0+(v/m)*(x1-x0);
+  data.forEach((d,i)=>{
+    const y=i*rowH+14;
+    svg.appendChild(txt(x0-8,y+13,d.label,{"text-anchor":"end",fill:P.ink,"font-size":12}));
+    svg.appendChild(el("rect",{x:x0,y:y,width:Math.max(1,sc(d.v)-x0),height:rowH-13,
+      fill:d.color||P.sea}));
+    svg.appendChild(txt(sc(d.v)+6,y+13,fmtv(d.v),{fill:P.ink,"font-size":11.5,
+      "font-weight":"bold"}));
+  });
+  if(refLine!==null){
+    const rx=sc(refLine);
+    svg.appendChild(el("line",{x1:rx,y1:6,x2:rx,y2:h-30,stroke:P.ink,
+      "stroke-width":1.5,"stroke-dasharray":"4 3"}));
+    svg.appendChild(txt(rx+5,h-18,refLabel,{fill:P.ink,"font-size":11}));
+  }
+  host.appendChild(svg);
+}
+
+function vbars(mount,{data,w=520,h=210,color=P.sea,line=null,lineColor=P.hot,
+                      fmtv=v=>fmt(v),yLabel=""}){
+  const host=document.getElementById(mount); host.innerHTML="";
+  const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
+  const L=52,R=line?52:14,T=14,B=34;
+  const max=Math.max(...data.map(d=>d.v))*1.15;
+  const bw=(w-L-R)/data.length;
+  svg.appendChild(el("line",{x1:L,y1:h-B,x2:w-R,y2:h-B,stroke:P.rule}));
+  [0,.5,1].forEach(f=>{const y=T+(1-f)*(h-T-B);
+    svg.appendChild(el("line",{x1:L,y1:y,x2:w-R,y2:y,stroke:P.faint}));
+    svg.appendChild(txt(L-6,y+4,fmt(max*f, max<20?1:0),{"text-anchor":"end","font-size":10}));});
+  data.forEach((d,i)=>{
+    const bh=(d.v/max)*(h-T-B);
+    svg.appendChild(el("rect",{x:L+i*bw+bw*0.17,y:h-B-bh,width:bw*0.66,height:Math.max(1,bh),
+      fill:color}));
+    if(data.length<=14)
+      svg.appendChild(txt(L+i*bw+bw/2,h-B+14,d.label,{"text-anchor":"middle","font-size":10}));
+  });
+  if(line){
+    const lmax=Math.max(...line.map(d=>d.v))*1.15;
+    let path="";
+    line.forEach((d,i)=>{const x=L+i*bw+bw/2,y=T+(1-d.v/lmax)*(h-T-B);
+      path+=(i?"L":"M")+x+" "+y;});
+    svg.appendChild(el("path",{d:path,fill:"none",stroke:lineColor,"stroke-width":2}));
+    line.forEach((d,i)=>{const x=L+i*bw+bw/2,y=T+(1-d.v/lmax)*(h-T-B);
+      svg.appendChild(el("circle",{cx:x,cy:y,r:2.6,fill:lineColor}));});
+    svg.appendChild(txt(w-R+6,T+8,"",{}));
+  }
+  if(yLabel) svg.appendChild(txt(L-6,T-2,yLabel,{"text-anchor":"end","font-size":10}));
+  host.appendChild(svg);
+}
+
+function lineChart(mount,{pts,w=460,h=230,xlab="",ylab="",refY=null,refLabel="",
+                          markX=null,markLabel=""}){
+  const host=document.getElementById(mount); host.innerHTML="";
+  const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
+  const L=56,R=16,T=16,B=42;
+  const xs=pts.map(p=>p.x), ys=pts.map(p=>p.y);
+  const xmin=Math.min(...xs), xmax=Math.max(...xs);
+  const ymax=Math.max(Math.max(...ys), refY||0)*1.12;
+  const X=v=>L+((v-xmin)/(xmax-xmin))*(w-L-R);
+  const Y=v=>T+(1-v/ymax)*(h-T-B);
+  [0,.25,.5,.75,1].forEach(f=>{const y=T+(1-f)*(h-T-B);
+    svg.appendChild(el("line",{x1:L,y1:y,x2:w-R,y2:y,stroke:P.faint}));
+    svg.appendChild(txt(L-6,y+4,fmt(ymax*f),{"text-anchor":"end","font-size":10}));});
+  if(refY!==null){
+    svg.appendChild(el("line",{x1:L,y1:Y(refY),x2:w-R,y2:Y(refY),stroke:P.hot,
+      "stroke-width":1.5,"stroke-dasharray":"5 3"}));
+    svg.appendChild(txt(L+6,Y(refY)-6,refLabel,{fill:P.hot,"font-size":11,
+      "font-weight":"bold"}));
+  }
+  let d=""; pts.forEach((p,i)=>{d+=(i?"L":"M")+X(p.x)+" "+Y(p.y);});
+  svg.appendChild(el("path",{d,fill:"none",stroke:P.sea,"stroke-width":2.5}));
+  if(markX!==null && markX>=xmin && markX<=xmax){
+    svg.appendChild(el("line",{x1:X(markX),y1:T,x2:X(markX),y2:h-B,stroke:P.ink,
+      "stroke-width":1.5,"stroke-dasharray":"3 3"}));
+    svg.appendChild(txt(X(markX)+5,T+12,markLabel,{fill:P.ink,"font-size":11,
+      "font-weight":"bold"}));
+  }
+  [xmin,(xmin+xmax)/2,xmax].forEach(v=>
+    svg.appendChild(txt(X(v),h-B+16,fmt(v,2),{"text-anchor":"middle","font-size":10})));
+  svg.appendChild(txt((L+w-R)/2,h-8,xlab,{"text-anchor":"middle","font-size":11}));
+  svg.appendChild(txt(L-6,T-3,ylab,{"text-anchor":"end","font-size":10}));
+  host.appendChild(svg);
+}
+
+/* ---------- render ---------- */
+function tbl(cols, rows){
+  let h="<table><thead><tr>"+cols.map(c=>`<th>${c}</th>`).join("")+"</tr></thead><tbody>";
+  rows.forEach(r=>{h+="<tr>"+r.map(c=>typeof c==="object"
+    ? `<td class="${c.cls||""}">${c.t}</td>` : `<td>${c}</td>`).join("")+"</tr>";});
+  return h+"</tbody></table>";
+}
+
+
+/* ---------- the crossing ---------- */
+function drawMap(){
+  const [W,H]=MAP.canvas, host=document.getElementById("chart-map");
+  host.innerHTML="";
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img",
+    "aria-label":"Map of the Sunda Strait showing the Merak to Bakauheni ferry crossing"});
+  svg.appendChild(el("rect",{x:0,y:0,width:W,height:H,fill:P.water}));
+  MAP.paths.forEach(d=>svg.appendChild(el("path",{d,fill:P.land,stroke:"#CFCABA",
+    "stroke-width":1})));
+  const [mx,my]=MAP.merak,[bx,by]=MAP.bakauheni;
+  svg.appendChild(el("line",{x1:mx,y1:my,x2:bx,y2:by,stroke:P.sea,"stroke-width":2.5,
+    "stroke-dasharray":"7 5"}));
+  [[mx,my,"Merak","start"],[bx,by,"Bakauheni","end"]].forEach(([x,y,n,anch])=>{
+    svg.appendChild(el("circle",{cx:x,cy:y,r:6,fill:P.sea,stroke:P.water,"stroke-width":2.5}));
+    svg.appendChild(txt(x+(anch==="start"?13:-13),y+5,n,
+      {"text-anchor":anch==="start"?"start":"end","font-size":17,"font-weight":"700",fill:P.ink}));
+  });
+  svg.appendChild(txt(MAP.java[0],MAP.java[1],"JAVA",
+    {"font-size":15,fill:"#A79E88","letter-spacing":"3",  "text-anchor":"middle"}));
+  svg.appendChild(txt(MAP.sumatra[0],MAP.sumatra[1],"SUMATRA",
+    {"font-size":15,fill:"#A79E88","letter-spacing":"3","text-anchor":"middle"}));
+  // the sentence that makes the map worth looking at
+  const midx=(mx+bx)/2, midy=(my+by)/2;
+  svg.appendChild(el("line",{x1:midx-4,y1:midy-10,x2:midx-40,y2:midy-64,
+    stroke:P.mute,"stroke-width":1}));
+  svg.appendChild(txt(midx-44,midy-72,"15 nautical miles,",
+    {"text-anchor":"end","font-size":15,"font-weight":"700",fill:P.ink}));
+  svg.appendChild(txt(midx-44,midy-54,"about three hours end to end",
+    {"text-anchor":"end","font-size":14,fill:P.mute}));
+  // scale bar: 10 nm
+  const pxPerNm=Math.hypot(mx-bx,my-by)/15, sb=pxPerNm*10;
+  svg.appendChild(el("line",{x1:40,y1:H-38,x2:40+sb,y2:H-38,stroke:P.ink,"stroke-width":2}));
+  ["",""].forEach((_,i)=>svg.appendChild(el("line",{x1:40+i*sb,y1:H-43,x2:40+i*sb,y2:H-33,
+    stroke:P.ink,"stroke-width":2})));
+  svg.appendChild(txt(40,H-48,"10 nautical miles",{"font-size":12,fill:P.mute}));
+  host.appendChild(svg);
+}
+
+/* ---------- where the energy actually goes ---------- */
+function drawEnergy(R){
+  const host=document.getElementById("chart-energy"); host.innerHTML="";
+  const W=640,H=250, L=0, barH=44;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img"});
+  const fuel=R.fuelMWh/1000, shaft=R.shaftMWh/1000, shore=R.shoreMWh/1000;
+  const prop=D.energy_split.propulsion_mwh/1000*R.k, hotel=shaft-prop;
+  const sc=v=>v/fuel*W;
+  function row(y,label,segs){
+    svg.appendChild(txt(0,y-9,label,{"font-size":12.5,"font-weight":"700",fill:P.ink}));
+    let x=0;
+    segs.forEach(s=>{
+      const w=sc(s.v);
+      svg.appendChild(el("rect",{x,y,width:Math.max(1,w),height:barH,fill:s.c}));
+      if(w>78){
+        svg.appendChild(txt(x+9,y+20,s.n,{"font-size":12,"font-weight":"600",
+          fill:s.dark?"#fff":P.ink}));
+        svg.appendChild(txt(x+9,y+36,fmt(s.v)+" GWh",{"font-size":12,
+          fill:s.dark?"rgba(255,255,255,.85)":P.mute}));
+      }
+      x+=w;
+    });
+  }
+  row(24,"Fuel energy burned",[
+    {v:prop,n:"Propulsion",c:P.sea,dark:true},
+    {v:hotel,n:"Hotel and ventilation",c:P.sea2},
+    {v:fuel-shaft,n:"Lost as heat",c:P.faint}]);
+  row(128,"The same service, electrified",[
+    {v:shore,n:"Electricity from shore",c:P.good,dark:true},
+    {v:fuel-shore,n:"Not needed",c:P.faint}]);
+  svg.appendChild(el("line",{x1:sc(shaft),y1:14,x2:sc(shaft),y2:206,stroke:P.hot,
+    "stroke-width":1.5,"stroke-dasharray":"4 3"}));
+  svg.appendChild(txt(sc(shaft)+7,220,"useful work at the shaft: "+fmt(shaft)+" GWh",
+    {"font-size":12,"font-weight":"600",fill:P.hot}));
+  host.appendChild(svg);
+  document.getElementById("energy-cap").innerHTML =
+    `<b>Most of the fuel never reaches the propeller, and most of what does is not moving the `+
+    `ship.</b> Only ${fmt(shaft/fuel*100,0)}% of fuel energy becomes shaft work, and `+
+    `${fmt(hotel/shaft*100,0)}% of that goes to hotel and vehicle-deck ventilation rather than `+
+    `propulsion. An electric drivetrain wastes far less, which is why the same service needs `+
+    `${fmt((1-shore/fuel)*100,0)}% less energy delivered.`;
+}
+
+/* ---------- one vessel, one day ---------- */
+function drawDay(){
+  const host=document.getElementById("chart-day"); host.innerHTML="";
+  const W=640,H=132, y=34, barH=40;
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img"});
+  const vs=D.voyage_stats;
+  const wait=vs.median_hours*vs.wait_share_pct/100;
+  const steam=vs.median_hours-wait, berth=vs.berth_hours_median;
+  const cycle=steam+wait+berth, sc=h=>h/24*W;
+  let x=0, n=0;
+  while(x < W-2 && n<12){
+    [[steam,P.sea],[wait,P.sea2],[berth,P.faint]].forEach(([h,c])=>{
+      if(x>=W) return;
+      const w=Math.min(sc(h), W-x);
+      if(w>0) svg.appendChild(el("rect",{x,y,width:w,height:barH,fill:c}));
+      x+=w;
+    });
+    n++;
+  }
+  for(let hh=0; hh<=24; hh+=6){
+    svg.appendChild(el("line",{x1:sc(hh),y1:y+barH,x2:sc(hh),y2:y+barH+5,stroke:P.mute}));
+    svg.appendChild(txt(sc(hh),y+barH+19,hh+":00",{"text-anchor":hh===0?"start":
+      (hh===24?"end":"middle"),"font-size":11,fill:P.mute}));
+  }
+  [["Crossing",P.sea,0],["Queueing offshore",P.sea2,132],["Alongside",P.faint,290]]
+    .forEach(([n2,c,px])=>{
+      svg.appendChild(el("rect",{x:px,y:8,width:11,height:11,fill:c}));
+      svg.appendChild(txt(px+16,18,n2,{"font-size":12,fill:P.ink}));
+    });
+  host.appendChild(svg);
+  document.getElementById("day-cap").innerHTML =
+    `<b>A typical vessel spends most of the day not crossing anything.</b> Median crossing is `+
+    `${fmt(vs.median_hours,1)} hours, of which ${fmt(vs.wait_share_pct,0)}% is queueing for a `+
+    `berth rather than steaming, followed by ${fmt(vs.berth_hours_median,1)} hours alongside. `+
+    `Main engines are off for the grey and pale blue, but the hotel load runs throughout. That is `+
+    `the whole reason auxiliary machinery, not propulsion, dominates this corridor's energy use.`;
+}
+
+function render(){
+  const R = compute();
+
+  document.getElementById("byline").innerHTML =
+    `${fmt(D.coverage.voyages_observed)} crossings by ${D.coverage.route_vessels} vessels, `+
+    `${D.window.start} to ${D.window.end}. Bottom-up model following the IMO and ICCT method. `+
+    `Compiled ${D.generated_utc.slice(0,10)}.`;
+  drawMap(); drawDay();
+  document.getElementById("map-cap").innerHTML =
+    `The Merak&ndash;Bakauheni crossing, the sea link between Java and Sumatra and one of the `+
+    `busiest ferry routes anywhere. Coastline from Natural Earth 1:10m; the dashed line is the `+
+    `port-to-port distance used throughout, not an actual track.`;
+  document.getElementById("foot-meta").textContent =
+    "Model run " + D.generated_utc + ". Route distance " +
+    D.assumptions.route_distance.distance_nm + " nm.";
+
+  document.getElementById("kpis").innerHTML = [
+    [fmt(R.base/1000,0)+' <small>kt</small>',
+     R.label+' a year from this crossing alone'],
+    [fmt(R.fuelMWh/1000,0)+' <small>GWh</small>',
+     'of fuel energy burned a year, of which '+fmt(D.energy_split.auxiliary_share_pct,0)+
+     '% of shaft energy is hotel load, not propulsion'],
+    [fmt(R.shoreMWh/1000,0)+' <small>GWh</small>',
+     'of shore electricity if fully electrified, a '+
+     fmt((1-R.shoreMWh/R.fuelMWh)*100,0)+'% cut in primary energy'],
+    [fmt(R.breakeven,2)+' <small>t/MWh</small>',
+     'grid intensity at which electrifying breaks even on '+R.label]
+  ].map(k=>`<div class="kpi"><div class="v">${k[0]}</div><div class="l">${k[1]}</div></div>`).join("");
+
+  document.getElementById("kpi-note").innerHTML =
+    `Indonesia's grid runs at roughly <b>0.75&ndash;0.90 tCO<sub>2</sub>/MWh</b>. Against a `+
+    `CO<sub>2</sub>-only break-even of `+
+    `<b>${fmt(D.breakeven_grid_ef_tco2_per_mwh,2)}</b> that is clearly worse than diesel; against `+
+    `<b>${fmt(D.breakeven_grid_ef_co2e100,2)}</b> on a 100-year CO<sub>2</sub>e basis it is close `+
+    `to neutral; against <b>${fmt(D.breakeven_grid_ef_co2e20,2)}</b> on a 20-year basis it is `+
+    `clearly better. The difference is black carbon, which is `+
+    `${fmt(D.sanity_checks.find(c=>c.check.indexOf("Black carbon")===0).value,0)}% of 100-year `+
+    `warming here and which electrification removes entirely.`;
+
+  const c=D.coverage;
+  document.getElementById("coverage-table").innerHTML = tbl(
+    ["","Vessels","Comment"],[
+    ["In the supplied register", fmt(c.inventory_vessels), "unique IMO numbers, register-matched"],
+    ["Carrying an ASDP owner or operator", fmt(c.inventory_asdp_flagged),
+     fmt(c.inventory_asdp_flagged/c.inventory_vessels*100,0)+"% of the register"],
+    ["Seen on Merak-Bakauheni", fmt(c.route_vessels), "in the movement data"],
+    ["Both on the corridor and in the register", fmt(c.route_vessels_in_inventory),
+     fmt(c.route_vessels_in_inventory/c.route_vessels*100,0)+"% of corridor vessels"],
+    ["Crossings by ASDP-flagged vessels", fmt(c.voyages_by_asdp_flagged),
+     fmt(c.voyages_by_asdp_flagged/c.voyages_observed*100,0)+"% of all crossings"]
+  ]);
+
+  hbar("chart-age",{data:D.age_profile.map(a=>({label:a.age_band+" years",
+    v:a.total_gt/1000, color:(a.age_band==="31-40"||a.age_band==="40+")?P.hot:P.sea2})),
+    w:440,pad:110,fmtv:v=>fmt(v)+"k GT"});
+
+  document.getElementById("baseline-text").innerHTML =
+    `Across ${fmt(D.coverage.voyages_observed)} observed crossings the model puts the corridor at `+
+    `<b>${fmt(R.fuel_t)} t of fuel</b> and <b>${fmt(R.base)} t of ${R.label}</b> a year. Median `+
+    `port-to-port time is ${fmt(D.voyage_stats.median_hours,1)} hours, of which `+
+    `<b>${fmt(D.voyage_stats.wait_share_pct,0)}%</b> across the fleet is queueing rather than `+
+    `steaming; median time alongside between crossings is `+
+    `${fmt(D.voyage_stats.berth_hours_median,1)} hours. Implied steaming speed is `+
+    `${fmt(D.voyage_stats.median_steam_speed_kn,1)} knots at a median engine load of `+
+    `${fmt(D.voyage_stats.median_load*100,0)}% of rated power.`;
+
+  drawEnergy(R);
+  vbars("chart-monthly",{data:D.monthly.map(m=>({label:m.month.slice(5),v:m.voyages})),
+    line:D.monthly.map(m=>({v:m.co2_t})), w:520,h:200});
+  hbar("chart-vessels",{data:D.per_vessel.slice(0,10).map(v=>({label:v.name,v:v.co2_t})),
+    w:440,pad:130,fmtv:v=>fmt(v)+" t"});
+
+  const base=R.rows[0];
+  document.getElementById("pathway-lede").innerHTML =
+    `Two results drive everything here. First, <b>${fmt(D.energy_split.auxiliary_share_pct,0)}% of `+
+    `shaft energy on this corridor is auxiliary load</b>, not propulsion: the ships spend far more `+
+    `time alongside or queueing than crossing, and a ro-pax runs its vehicle-deck ventilation and `+
+    `passenger services throughout. That makes shore power a serious option in its own right. `+
+    `Second, electrification is the cheapest pathway by a wide margin and the only one that cuts `+
+    `primary energy, because an electric drivetrain delivers about 85% of supplied energy to the `+
+    `shaft against ${fmt(D.sanity_checks.find(c=>c.check.indexOf("Implied fuel-to-shaft")===0).value,0)}% `+
+    `for these diesels. Whether it cuts emissions depends entirely on the grid.`;
+
+  hbar("chart-pathways",{data:R.rows.slice(1).map(r=>({label:r.label,v:r.g/1000,
+    color:r.g>base.g?P.hot:P.sea})), w:540,pad:210,
+    max:Math.max(...R.rows.map(r=>r.g/1000))*1.15,
+    fmtv:v=>fmt(v)+" kt", refLine:base.g/1000, refLabel:"baseline "+fmt(base.g/1000)+" kt"});
+
+  document.getElementById("pathway-table").innerHTML = tbl(
+    ["Pathway", R.label+" kt/yr","Change","Energy in GWh","Local pollutants",
+     "Cost $M/yr","vs baseline","$/t"],
+    R.rows.map(r=>[
+      r.label, fmt(r.g/1000),
+      {t:pct(-r.savedPct), cls:r.savedPct<0?"neg":(r.savedPct>0?"pos":"")},
+      fmt(r.energy/1000),
+      r.local ? {t:"-"+fmt(r.local,0)+"%", cls:"pos"} : "-",
+      fmt(r.cost/1e6,1),
+      {t:usd(r.delta), cls:r.delta>0?"neg":(r.delta<0?"pos":"")},
+      r.abate===null?"n/a":fmt(r.abate,0)
+    ]));
+
+  document.getElementById("be-head").textContent =
+    `Electrification pays back on carbon only below about ${fmt(R.breakeven,2)} tonnes per MWh`;
+  document.getElementById("be-text").innerHTML =
+    `These diesels deliver a tonne of ${R.label} for every <b>${fmt(R.shaftMWh/R.base*1000,0)} kWh</b> `+
+    `of shaft work. To beat that, the electricity charging the ships must be cleaner than `+
+    `<b>${fmt(R.breakeven,2)} t/MWh</b> once charging and drivetrain losses are counted. `+
+    `Costs point the other way: the same service costs <b>${usd(R.rows[6].cost)}</b> a year in `+
+    `electricity against <b>${usd(base.cost)}</b> in fuel. Before any of that, `+
+    `<b>${fmt(R.statMWh/1000,0)} GWh</b> a year is drawn by ships sitting still, alongside or at `+
+    `anchor, which shore power can displace without touching a propulsion system.`;
+
+  lineChart("chart-grid",{
+    pts:D.grid_sensitivity.map(g=>({x:g.ef, y:R.shoreMWh*g.ef/1000})),
+    w:440,h:240,xlab:"grid carbon intensity, tCO2/MWh",ylab:"kt "+R.label+"/yr",
+    refY:R.base/1000, refLabel:"diesel baseline", markX:S.ef, markLabel:"current"});
+
+  document.getElementById("battery-table").innerHTML =
+    "<p class='mute' style='margin:16px 0 6px'>Indicative battery sizing for the five busiest "+
+    "vessels, at two crossings of stored energy.</p>" + tbl(
+    ["Vessel","Est. MCR kW","MWh per crossing","Pack MWh","Newbuild $M","Retrofit $M"],
+    D.battery_sizing.slice(0,5).map(b=>[
+      b.name, fmt(b.p_mcr_kw), fmt(b.energy_per_voyage_mwh*R.k,2),
+      fmt(b.battery_pack_mwh_2_crossings*R.k,1),
+      fmt(b.capex_newbuild_musd*R.k,1), fmt(b.capex_retrofit_musd*R.k,1)]));
+
+  hbar("chart-wait",{data:D.waiting_sensitivity.map((w,i)=>({
+    label: i===0 ? "Engines off at anchor" : "Engines idling at anchor",
+    v:w.co2_t_annual/1000, color:i===S.wait?P.sea:P.sea3})),
+    w:430,pad:150,fmtv:v=>fmt(v)+" kt"});
+  hbar("chart-dist",{data:D.distance_sensitivity.map(f=>({label:fmt(f.distance_nm,0)+" nm",
+    v:f.co2_t_annual/1000, color:f.distance_nm===15?P.sea:P.sea3})),
+    w:430,pad:110,fmtv:v=>fmt(v)+" kt"});
+
+  document.getElementById("sanity").innerHTML = tbl(
+    ["Check","Model","Expected range","","What it is checked against"],
+    D.sanity_checks.map(c=>[
+      c.check, fmt(c.value,2)+" "+c.unit,
+      fmt(c.expected_low,2)+" to "+fmt(c.expected_high,2),
+      {t:c.pass?"pass":"FLAG", cls:c.pass?"pos":"neg"},
+      "<span class='mute'>"+c.basis+"</span>"]));
+
+  const A=D.assumptions;
+  const sec=(title,body)=>`<details class="assump"><summary>${title}</summary><div>${body}</div></details>`;
+  document.getElementById("assump").innerHTML =
+    sec("Method <span class='tagline t-src'>SOURCED</span>",
+      Object.entries(A.method_sources).map(([k,v])=>`<p class='mute'>${v}</p>`).join(""))
+    + sec("Engine emission factors, g per kWh <span class='tagline t-src'>SOURCED</span>",
+      "<p>Energy-based factors, so no separate fuel-consumption step is needed. The implied "+
+      "specific fuel consumption of 670 / 3.114 = 215 g/kWh for a medium-speed engine on "+
+      "residual fuel is the IMO baseline value.</p>"+
+      tbl(["Engine","Pollutant","Residual","Distillate"],
+        ["SSD","MSD"].flatMap(e=>["CO2","PM","CO","CH4","N2O"].map(p=>
+          [e,p,A.me_ef[e][p].residual,A.me_ef[e][p].distillate])).concat(
+          ["CO2","PM","CO","CH4","N2O","BC"].map(p=>["Auxiliary",p,A.ae_ef[p].residual,
+            A.ae_ef[p].distillate])))
+      +`<p class='mute'>Sulphur assumed at ${A.sulphur_pct.residual}% for residual and `+
+       `${A.sulphur_pct.distillate}% for distillate; SOx scales linearly with it.</p>`)
+    + sec("Auxiliary power demand <span class='tagline t-src'>SOURCED</span>",
+      `<p>Ro-pax ferries: <b>${A.aux_kw_ropax.under_2000_GT} kW</b> below 2,000 GT and `+
+      `<b>${A.aux_kw_ropax.over_2000_GT} kW</b> above, in every operating phase, with boilers at `+
+      `zero. These are flat published values that do not scale with installed engine power, which `+
+      `is why auxiliary load dominates on a corridor with short crossings and long turnarounds. `+
+      `This replaces the "auxiliary is a percentage of MCR" assumption used in the first pass.</p>`)
+    + sec("Correction factors <span class='tagline t-src'>SOURCED</span>",
+      tbl(["Factor","Value","Basis"],[
+        ["Hull fouling", fmt(A.hull_fouling_range[0],3)+" to "+fmt(A.hull_fouling_range[1],3),
+         "Computed per vessel from age via the Townsin roughness relation"],
+        ["Weather", A.weather_factor, "+10% power demand for coastal shipping"],
+        ["Draught adjustment", fmt(A.daf,3), "Ferry ro-pax annual average"],
+        ["Low-load fuel penalty","1.00 to 1.21",
+         "0.455 L squared minus 0.710 L plus 1.28, minimum at 78% load"]]))
+    + sec("Power estimation <span class='tagline t-assum'>ASSUM</span>",
+      `<p>The register contains no installed main engine power. Displacement from dimensions for `+
+      `${D.power_model.n_from_dimensions} vessels; from `+
+      `<code>${D.power_model.displacement_form}</code> (R&sup2; `+
+      `${fmt(D.power_model.displacement_r2,3)}) for ${D.power_model.n_from_gt_regression}. Draft `+
+      `capped for ${D.power_model.n_draft_capped} vessels with implausible draft-to-beam ratios; `+
+      `installed MCR bounded for ${D.power_model.n_mcr_bounded}. Median result `+
+      `${fmt(D.power_model.median_kw_per_gt,2)} kW per GT.</p><p class='mute'>${A.power.note}</p>`)
+    + sec("Operating profile <span class='tagline t-assum'>ASSUM</span>",
+      tbl(["Parameter","Value"],Object.entries(A.ops).map(([k,v])=>[k,v])))
+    + sec("Prices and exchange rate <span class='tagline t-src'>MKT / GOV</span>",
+      tbl(["Item","Value"],[
+        ["B40 industrial diesel, Region 1","Rp "+fmt(A.prices.b40_hsd_idr_per_litre)+" / litre"],
+        ["MFO high sulphur, Region 1","Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+" / litre"],
+        ["PLN I-3 medium industry","Rp "+fmt(A.prices.pln_i3_idr_per_kwh,2)+" / kWh"],
+        ["PLN I-4 large industry","Rp "+fmt(A.prices.pln_i4_idr_per_kwh,2)+" / kWh"],
+        ["Singapore VLSFO","$"+fmt(A.prices.vlsfo_usd_per_tonne)+" / t"],
+        ["Singapore MGO","$"+fmt(A.prices.mgo_usd_per_tonne)+" / t"],
+        ["B100 / HVO","$"+fmt(A.prices.b100_usd_per_tonne)+" / t"],
+        ["Exchange rate","Rp "+fmt(A.fx)+" / USD"]])
+      +`<p class='mute'><b>Domestic fuel.</b> ${A.prices.domestic_fuel_source}</p>`
+      +`<p class='mute'><b>International.</b> ${A.prices.intl_fuel_source}</p>`
+      +`<p class='mute'><b>Biofuel.</b> ${A.prices.biofuel_source}</p>`
+      +`<p class='mute'><b>Electricity.</b> ${A.prices.pln_source}</p>`
+      +`<p class='mute'><b>FX.</b> ${A.fx_source}</p>`)
+    + sec("Grid carbon intensity <span class='tagline t-assum'>ASSUM</span>",
+      `<p>Default ${A.grid.ef_tco2_per_mwh} tCO<sub>2</sub>/MWh, range ${A.grid.ef_low} to `+
+      `${A.grid.ef_high}.</p><p class='mute'>${A.grid.source}</p>`)
+    + sec("Global warming potentials <span class='tagline t-src'>SOURCED</span>",
+      tbl(["Pollutant","20-year","100-year"],
+        Object.keys(A.gwp["100"]).map(p=>[p,A.gwp["20"][p],A.gwp["100"][p]]))
+      +"<p class='mute'>CH4 and N2O from IPCC AR4; black carbon from Bond et al. (2013).</p>")
+    + sec("Electrification <span class='tagline t-assum'>ASSUM</span>",
+      tbl(["Parameter","Value"],[
+        ["Motor and drive efficiency",A.electric.motor_drive_efficiency],
+        ["Onboard distribution",A.electric.onboard_distribution],
+        ["Charging efficiency",A.electric.charging_efficiency],
+        ["Shore connection efficiency",A.electric.shore_connection_efficiency],
+        ["Usable depth of discharge",A.electric.battery_usable_dod],
+        ["Battery, newbuild","$"+fmt(A.electric.battery_cost_usd_per_kwh_newbuild)+" / kWh"],
+        ["Battery, retrofit","$"+fmt(A.electric.battery_cost_usd_per_kwh_retrofit)+" / kWh"]])
+      +`<p class='mute'>${A.electric.battery_cost_source}</p>`)
+    + sec("Fuel-switching pathways <span class='tagline t-assum'>ASSUM</span>",
+      `<p class='mute'>${A.pathway_source}</p><p class='mute'>${A.terminology}</p>`)
+    + sec("Fleet-wide extrapolation <span class='tagline t-assum'>ASSUM</span>",
+      `<p>Applying an assumed activity level to the `+
+      `${fmt(D.fleet_indicative.n_vessels_in_service)} in-service vessels in the register gives an `+
+      `indicative <b>${fmt(D.fleet_indicative.co2_t_yr/1000)} kt CO<sub>2</sub></b> a year on `+
+      `<b>${fmt(D.fleet_indicative.installed_mcr_mw)} MW</b> of installed power. `+
+      `<b>This is an illustration, not a result.</b></p>`
+      +`<p class='mute'>${D.fleet_indicative.assumptions.note}</p>`)
+    + sec("Route geometry <span class='tagline t-src'>LIT</span>",
+      `<p>${A.route_distance.distance_nm} nm, sensitivity ${A.route_distance.distance_nm_low} to `+
+      `${A.route_distance.distance_nm_high} nm.</p>`
+      +`<p class='mute'>${A.route_distance.distance_nm_source}</p>`);
+}
+
+/* ---------- controls ---------- */
+function bind(){
+  const wsel=document.getElementById("s-wait");
+  D.waiting_sensitivity.forEach((w,i)=>{
+    const o=document.createElement("option");
+    o.value=i; o.textContent = i===0 ? "Off (IMO convention)" : "Idling";
+    wsel.appendChild(o);
+  });
+  const map={ef:"s-ef",tariff:"s-tariff",mfo:"s-mfo",b40:"s-b40",b100:"s-b100"};
+  function sync(){
+    for(const k in map) document.getElementById(map[k]).value=S[k];
+    wsel.value=S.wait; document.getElementById("s-gwp").value=S.gwp;
+    document.getElementById("v-ef").textContent=fmt(S.ef,2);
+    document.getElementById("v-tariff").textContent=fmt(S.tariff);
+    document.getElementById("v-mfo").textContent=fmt(S.mfo);
+    document.getElementById("v-b40").textContent=fmt(S.b40);
+    document.getElementById("v-b100").textContent=fmt(S.b100);
+    render();
+  }
+  for(const k in map)
+    document.getElementById(map[k]).addEventListener("input",e=>{
+      S[k]=parseFloat(e.target.value); sync();});
+  wsel.addEventListener("change",e=>{S.wait=parseInt(e.target.value); sync();});
+  document.getElementById("s-gwp").addEventListener("change",e=>{S.gwp=e.target.value; sync();});
+  document.getElementById("reset").addEventListener("click",()=>{
+    S=Object.assign({},DEF); sync();});
+  sync();
+}
+bind();
+</script>
+</body>
+</html>

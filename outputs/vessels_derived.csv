@@ -1,0 +1,384 @@
+imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
+9921520,Aceh Hebat 2,1186.0,6.0,853.1457585190009,gt_regression,distillate,True
+9926817,Aceh Hebat 3,1089.0,6.0,812.1500592048915,gt_regression,distillate,True
+8626628,Adhi Swadarma Iii,511.0,41.0,300.1272949499329,dimensions,distillate,True
+9713789,Adinda Windu Karsa,9269.0,11.0,3901.9693121958394,dimensions,residual,True
+9772424,Agung Samudra Xviii,2319.0,12.0,1121.9773415369991,dimensions,residual,True
+9819272,Als Elisa,7331.0,9.0,2856.5556431029486,dimensions,residual,True
+9807217,Als Elvina,7331.0,9.0,2856.5556431029486,dimensions,residual,True
+9031521,Amadea,6687.0,35.0,9930.250921172441,dimensions,residual,True
+8602074,Amarisa,10624.0,40.0,7140.075080119621,dimensions,residual,True
+9049413,Ambu Ambu,574.0,21.0,549.4337532403478,dimensions,distillate,True
+8662268,Arar,617.0,15.0,585.1015708140131,gt_regression,distillate,True
+8824799,Ariwangan,157.0,40.0,251.20000000000002,gt_regression,distillate,True
+9114567,Athaya,13413.0,31.0,10028.376923429872,dimensions,residual,True
+8742862,Awu Awu,682.0,17.0,649.2565630751859,dimensions,distillate,True
+9664201,Badaleon,616.0,15.0,549.4337532403478,dimensions,distillate,True
+5286893,Bahari Nusantara,846.0,67.0,214.15701702067884,dimensions,distillate,True
+9891165,Bahtera Nusantara 01,1585.0,6.0,1008.5811598269981,gt_regression,distillate,True
+9879985,Bahtera Nusantara 02,1851.0,7.0,1103.0542710261282,gt_regression,distillate,True
+9613719,Bahteramas,628.0,16.0,547.72875927531,dimensions,distillate,True
+9972062,Bakkat Menuang,1875.0,4.0,1111.2861263167051,gt_regression,residual,True
+9812391,Bamega Jaya,380.0,10.0,492.52175999328927,dimensions,distillate,True
+8994544,Barau,542.0,32.0,237.71824627475402,dimensions,distillate,True
+8872679,Baronang,526.0,34.0,237.5783811545955,dimensions,distillate,True
+9759733,Batu Mandi,5381.0,11.0,2103.129914708725,dimensions,residual,True
+8731148,Bawal,560.0,18.0,358.2481222827671,dimensions,distillate,True
+9068213,Belanak,1163.0,23.0,502.81202185952964,dimensions,distillate,True
+8991152,Belida,844.0,23.0,275.64960139986846,gt_regression,distillate,True
+8994726,Benua Raya,237.0,26.0,336.8282203735821,gt_regression,distillate,True
+9612301,Berkat Porosida,355.0,16.0,439.5559111059582,dimensions,distillate,True
+8708751,Bintang Balikpapan,627.0,39.0,695.1186179180702,dimensions,distillate,True
+8748103,Bnr,1685.0,16.0,1044.8304517057616,gt_regression,distillate,True
+8748098,Bnr Ii,910.0,17.0,732.1957143414502,gt_regression,distillate,True
+8732312,Bobara,475.0,19.0,439.5559111059582,dimensions,distillate,True
+9085754,Bontang Ekspress Ii,2257.0,33.0,1010.6133443197515,dimensions,distillate,True
+9210593,Bontoharu,1124.0,23.0,513.053484109303,dimensions,distillate,True
+9549475,Brr,1181.0,17.0,735.7354150700596,dimensions,distillate,True
+7323308,Bsp I,5057.0,53.0,4651.4509590895395,dimensions,residual,True
+8735364,Bukit Patung,644.0,18.0,360.13904664733946,dimensions,distillate,True
+8602048,Caitlyn,2905.0,40.0,1483.327077120777,dimensions,residual,True
+9836000,Caitlyn 7,8274.0,8.0,2152.617492528732,dimensions,residual,True
+9613537,Cakalang Ii,693.0,16.0,374.1471273916802,gt_regression,distillate,True
+1034060,Calisha,10000.0,2.0,2500.0,dimensions,residual,True
+9901257,Cantika Lestari 99B,1310.0,7.0,903.5411596317167,gt_regression,distillate,True
+6804472,Citra Mandala Sakti,499.0,59.0,576.0217778968703,dimensions,distillate,True
+9829851,Dalente Woba,1120.0,9.0,820.7505326054492,dimensions,distillate,True
+8872435,Danau Rana,290.0,33.0,316.46881932682714,dimensions,distillate,True
+8864012,Dharma Badra,239.0,51.0,382.40000000000003,dimensions,distillate,True
+7128095,Dharma Ferry 2,2673.0,55.0,687.384856949749,dimensions,residual,True
+8925153,Dharma Ferry 3,499.0,30.0,500.761823992942,gt_regression,distillate,True
+8910990,Dharma Ferry Ix,2916.0,37.0,1119.2723073088955,dimensions,residual,True
+9145865,Dharma Ferry V,11931.0,30.0,19089.600000000002,dimensions,residual,True
+8904563,Dharma Ferry Vi,2825.0,37.0,1821.953125719247,dimensions,distillate,True
+9035113,Dharma Ferry Vii,12415.0,33.0,19864.0,dimensions,residual,True
+9037941,Dharma Ferry Viii,2877.0,35.0,865.3061905070612,dimensions,residual,True
+8103975,Dharma Kartika,259.0,45.0,258.34673634458744,dimensions,distillate,True
+9125437,Dharma Kartika I,1305.0,31.0,740.0919493740969,dimensions,distillate,True
+9162162,Dharma Kartika Ii,9245.0,29.0,14792.0,dimensions,residual,True
+8815358,Dharma Kartika Iii,699.0,37.0,543.1749437766675,gt_regression,residual,True
+9140023,Dharma Kartika Ix,6801.0,30.0,10881.6,dimensions,residual,True
+9174751,Dharma Kartika Vii,9950.0,27.0,4020.5192091251174,gt_regression,residual,True
+8904939,Dharma Kartika Viii,699.0,37.0,662.182191474457,dimensions,distillate,True
+9040467,Dharma Kencana Ii,4144.0,34.0,1623.3932815289043,dimensions,residual,True
+8904226,Dharma Kencana Iii,2510.0,37.0,1252.4643451260122,dimensions,residual,True
+8815346,Dharma Kencana Ix,2624.0,38.0,940.6034090381042,dimensions,residual,True
+9162124,Dharma Kencana V,11933.0,29.0,19092.8,dimensions,residual,True
+9035125,Dharma Kencana Vii,12418.0,33.0,19868.800000000003,dimensions,residual,True
+7908641,Dharma Kosala,625.0,47.0,740.2361527465877,dimensions,distillate,True
+9044516,Dharma Rucitra 9,3270.0,34.0,3469.8428394148195,dimensions,residual,True
+8921767,Dharma Rucitra I,6698.0,36.0,9901.781202347393,dimensions,residual,True
+9333735,Dharma Rucitra Viii,7751.0,20.0,12401.6,dimensions,residual,True
+8892837,Dingkis,404.0,33.0,401.3893933333649,dimensions,distillate,True
+9895056,Dln Batu Layar,9187.0,6.0,3340.285805163186,dimensions,residual,True
+9979400,Dln Mandalika,12611.0,3.0,3152.75,dimensions,residual,True
+9979541,Dln Nusantara,3067.0,3.0,3071.0371969792395,dimensions,residual,True
+9869502,Dln Oasis,9170.0,7.0,2777.7142577381924,gt_regression,residual,True
+8736112,Dolosi,560.0,18.0,287.53812548436525,dimensions,distillate,True
+9821251,Dorothy,7331.0,9.0,2856.5556431029486,dimensions,residual,True
+9848431,Drajat Paciran,2966.0,9.0,1172.176294760723,dimensions,residual,True
+7909061,Duta Banten,8011.0,47.0,7865.261545114083,dimensions,residual,True
+9032719,Egon,4851.0,35.0,4897.981623422385,dimensions,residual,True
+8736904,Egron,470.0,18.0,446.5620775820023,dimensions,distillate,True
+8131051,El Saddai,697.0,44.0,980.3417330275352,dimensions,distillate,True
+7808970,Elsaddai Ii,2625.0,48.0,1229.6522260385907,dimensions,residual,True
+9767285,Erana,1029.0,12.0,814.1752014497107,dimensions,distillate,True
+7116054,Farina Nusantara,4824.0,55.0,3207.756643560898,dimensions,residual,True
+8702501,Ferrindo 5,3587.0,39.0,1239.4474875664953,dimensions,residual,True
+8668846,Gambolo,560.0,14.0,287.53812548436525,dimensions,distillate,True
+9837054,Garda Maritim I,695.0,9.0,606.242134728706,dimensions,distillate,True
+9837028,Garda Maritim Ii,695.0,9.0,626.7136862147028,gt_regression,distillate,True
+8628602,Gerbang Samudra 2,1545.0,31.0,836.4378235045401,dimensions,distillate,True
+8903296,Gerbang Samudra 3,1380.0,37.0,1166.9819878119715,dimensions,distillate,True
+8359005,Gerbang Samudra 5,1375.0,24.0,818.1667344267476,dimensions,distillate,True
+8647270,Gorango,617.0,16.0,286.64584180907633,dimensions,distillate,True
+8994520,Gorare,188.0,35.0,274.8552755995938,dimensions,distillate,True
+8874744,Goropa,547.0,33.0,237.78816340664125,dimensions,distillate,True
+8738495,Gunung Bintan,990.0,18.0,754.0043180308336,dimensions,distillate,True
+8994518,Gunung Palong,188.0,35.0,150.0,dimensions,distillate,True
+8994506,Gutila,495.0,25.0,431.82963041869596,dimensions,distillate,True
+8920165,Hai Da,9353.0,36.0,6082.380286910676,dimensions,residual,True
+9100358,Harmoni Mas 8,7410.0,32.0,2978.4228598549125,dimensions,residual,True
+9276925,Harmoni Mas 89,2053.0,23.0,2368.180417859744,dimensions,residual,True
+8518039,Hm Baruna I,4432.0,40.0,1627.1982992502337,dimensions,residual,True
+9842413,Ihan Batak,546.0,8.0,545.2422011374148,gt_regression,distillate,True
+8943064,Ile Mandiri,500.0,34.0,205.5009349627381,dimensions,distillate,True
+9768966,Ilelabalekan,895.0,11.0,814.1752014497107,dimensions,distillate,True
+8898166,Inelika,634.0,31.0,237.75320612575,dimensions,distillate,True
+9080223,Inerie,175.0,33.0,280.0,dimensions,distillate,True
+9740196,Inerie Ii,1031.0,13.0,814.1752014497107,dimensions,distillate,True
+8324074,Jagantara,5110.0,42.0,7137.697234756998,dimensions,residual,True
+9838979,Jambo X,1346.0,9.0,958.0583592551034,dimensions,distillate,True
+8210015,Jambo Xii,3869.0,43.0,3684.9708291583247,dimensions,residual,True
+9115066,Jambo Xiv,3664.0,31.0,1801.395366888419,dimensions,residual,True
+7818638,Jatra Ii,3902.0,46.0,1758.8097990764652,dimensions,residual,True
+8349244,Jax,1136.0,24.0,832.1987409342814,gt_regression,distillate,True
+9004023,Jembatan Kapuas,404.0,36.0,351.8936052371481,dimensions,distillate,True
+8504703,Jemla Fajar,736.0,41.0,541.590353393593,dimensions,distillate,True
+8734487,Julung Julung,600.0,18.0,575.7425152967274,gt_regression,distillate,True
+9854686,Jws,6311.0,8.0,1956.4306596760903,dimensions,residual,True
+9742285,Kalabia,1167.0,12.0,813.9814078867819,dimensions,distillate,True
+9908736,Kaldera Toba,291.0,5.0,379.19044299114535,gt_regression,distillate,True
+8872356,Kalebi,577.0,60.0,262.5285856319798,dimensions,distillate,True
+9607849,Kalibodri,2129.0,16.0,923.4335646553684,dimensions,distillate,True
+8872382,Kambaniru,549.0,34.0,273.36099112698264,dimensions,distillate,True
+8652108,Karya Maritim I,687.0,16.0,809.2956491294228,dimensions,distillate,True
+8673580,Karya Maritim Iii,1100.0,15.0,816.8745821501822,gt_regression,distillate,True
+9049566,Kasuari Pasifik I,745.0,21.0,404.0581151555182,dimensions,distillate,True
+8713017,Kerapu Ii,335.0,38.0,226.75665001880313,dimensions,distillate,True
+8713029,Kerapu Iii,327.0,38.0,226.71788654161026,dimensions,distillate,True
+9028419,Kie Raha I,745.0,22.0,404.0581151555182,dimensions,distillate,True
+8017671,Kirana,5299.0,46.0,2362.0453185535243,dimensions,residual,True
+8414350,Kirana I,2326.0,42.0,3721.6000000000004,dimensions,residual,True
+7320186,Kirana Ii,6292.0,53.0,5879.899106671332,dimensions,residual,True
+7374539,Kirana Iii,2635.0,52.0,2462.261390110421,dimensions,residual,True
+8220060,Kirana Ix,9168.0,43.0,8169.820832131515,dimensions,residual,True
+9950662,Kirana Vii,1933.0,5.0,1130.9978688145475,gt_regression,distillate,True
+9000900,Kmp Mutiara Barat,19232.0,35.0,16724.79621170366,dimensions,residual,True
+9821067,Kokonao,263.0,10.0,357.68395360228084,gt_regression,distillate,True
+8825327,Komodo,194.0,44.0,150.0,dimensions,distillate,True
+8957986,Kormo Molin,884.0,27.0,289.76670964594786,dimensions,distillate,True
+7124116,Kumala,5764.0,55.0,5401.012338123453,dimensions,residual,True
+9672868,Kundur,338.0,14.0,324.8636378555668,dimensions,distillate,True
+8611568,Labitra Karina,5012.0,37.0,1593.3833189441282,dimensions,residual,True
+9641766,Labuhan Haji,753.0,14.0,509.05823371918984,dimensions,distillate,True
+9828845,Lakaan,1689.0,10.0,553.1764135592424,dimensions,distillate,True
+9817602,Lelemuku,591.0,9.0,222.62866688434863,dimensions,distillate,True
+8996542,Lemuru,227.0,35.0,150.0,dimensions,distillate,True
+8524272,Liputan Xii,1221.0,21.0,867.5870742023037,gt_regression,distillate,True
+8734499,Lobster,627.0,18.0,216.03164949989878,dimensions,distillate,True
+8676403,Lohoraung,458.0,14.0,439.5559111059582,dimensions,distillate,True
+8738512,Lokongbanua,560.0,17.0,287.6645019842087,dimensions,distillate,True
+9627447,Lome,534.0,15.0,538.2936597776016,gt_regression,distillate,True
+9816983,Lompa,581.0,9.0,373.3026903358251,dimensions,distillate,True
+9880207,Lorry Amar,1036.0,8.0,789.0976419355138,gt_regression,distillate,True
+6612908,Mabuhay Nusantara,5035.0,60.0,1622.78888620062,dimensions,residual,True
+9210581,Madani,1106.0,23.0,480.0801906508532,dimensions,distillate,True
+8713031,Madidihang,223.0,38.0,276.70533519738314,dimensions,distillate,True
+9107473,Mahardika Kirana,25718.0,31.0,17124.6325455309,dimensions,residual,True
+8525329,Mamberamo Foja,212.0,9.0,315.840416523764,gt_regression,distillate,True
+8677055,Maming,598.0,15.0,547.72875927531,dimensions,distillate,True
+8806307,Manggani,512.0,38.0,623.999221912451,dimensions,residual,True
+9614646,Manta,627.0,16.0,215.36126356805133,dimensions,distillate,True
+9686041,Manta Ii,611.0,13.0,478.1402664891745,dimensions,distillate,True
+9049401,Manusela,745.0,22.0,404.0581151555182,dimensions,distillate,True
+9034676,Marina Quinta,871.0,34.0,808.9136607213271,dimensions,distillate,True
+8920048,Marina Segunda,824.0,36.0,809.2506729806099,dimensions,distillate,True
+9034664,Marina Tertiera,824.0,34.0,808.9136607213271,dimensions,distillate,True
+7603344,Marisa Nusantara,3898.0,50.0,3544.9987052171855,dimensions,residual,True
+9664287,Marsela,616.0,15.0,549.4337532403478,dimensions,distillate,True
+8743103,Masirei,560.0,17.0,373.68546678411974,dimensions,distillate,True
+8612885,Menggala,2688.0,39.0,1648.2717837755467,dimensions,residual,True
+8650564,Menumbing Raya,652.0,16.0,286.64584180907633,dimensions,distillate,True
+8214891,Mishima,1172.0,44.0,846.6503059537627,dimensions,distillate,True
+7118789,Mitra Nusantara,5813.0,55.0,6277.504161604327,dimensions,residual,True
+8683561,Moinit,1068.0,12.0,814.1752014497107,dimensions,distillate,True
+7352799,Mufidah,5584.0,53.0,4793.339169732277,dimensions,residual,True
+8329488,Mujair,141.0,45.0,150.0,dimensions,distillate,True
+9856335,Munggiyango Hulalo,1633.0,7.0,1026.0979103468992,gt_regression,distillate,True
+9835991,Munic 9,7288.0,8.0,2886.053375378916,dimensions,residual,True
+8210950,Munic Iii,1823.0,43.0,1036.8531604212467,dimensions,distillate,True
+9828833,Munic V,936.0,10.0,789.4312860847115,dimensions,distillate,True
+9855939,Munic Xi,1681.0,8.0,1043.3982472406049,gt_regression,distillate,True
+8998772,Muria,419.0,30.0,467.98371060798485,gt_regression,distillate,True
+9154074,Mutiara Ferindo 1,18460.0,30.0,17085.45600095524,dimensions,residual,True
+8980488,Mutiara Ferindo Iii,994.0,24.0,412.33933456391117,dimensions,distillate,True
+9066784,Mutiara Ferindo Vii,32645.0,32.0,25187.632644297813,dimensions,residual,True
+8699613,Mutiara Indonesia,818.0,18.0,688.5135459774924,gt_regression,distillate,True
+9105176,Mutiara Persada Ii,3965.0,31.0,3760.902522393598,dimensions,residual,True
+9004592,Mutiara Persada Iii,15380.0,35.0,14242.330899147331,dimensions,residual,True
+8820808,Mutiara Pertiwi I,498.0,37.0,796.8000000000001,dimensions,distillate,True
+9162851,Mutiara Pertiwi Iii,303.0,29.0,408.39546784581114,dimensions,distillate,True
+8873582,Mutis,445.0,34.0,247.16446806792626,dimensions,distillate,True
+8658762,Muyu,370.0,15.0,439.5559111059582,dimensions,distillate,True
+8998851,Namparnos,167.0,33.0,267.2,dimensions,distillate,True
+9641039,Napan Wainami,560.0,15.0,553.2677235395487,gt_regression,distillate,True
+8890841,Naraya,1199.0,31.0,1106.3190602643895,dimensions,distillate,True
+9836012,Neomi,8274.0,8.0,2886.053375378916,dimensions,residual,True
+9901104,New Rose,1395.0,7.0,936.9265274120309,gt_regression,residual,True
+9792412,Ngafi,380.0,11.0,492.52175999328927,dimensions,distillate,True
+9045883,Niki Mila Utama,4915.0,34.0,7864.0,dimensions,residual,True
+8908789,Niki Sejahtera,9365.0,36.0,8967.574396648173,dimensions,distillate,True
+8895487,Nuku,352.0,31.0,182.69885905023438,dimensions,distillate,True
+7027423,Nusa Agung,5730.0,56.0,4600.15745766955,dimensions,residual,True
+7206859,Nusa Bahagia,3555.0,54.0,1932.3414205038637,dimensions,residual,True
+8824189,Nusa Bhakti,673.0,43.0,398.7812682847148,dimensions,distillate,True
+7303308,Nusa Dharma,3282.0,53.0,2078.337971165039,dimensions,distillate,True
+8314706,Nusa Dua,536.0,44.0,164.22008936956198,dimensions,distillate,True
+8703309,Nusa Jaya,2799.0,37.0,1965.5139698715504,dimensions,residual,True
+9408061,Nusa Jaya Abadi,629.0,20.0,591.6424345350656,gt_regression,distillate,True
+8997479,Nusa Makmur,497.0,35.0,238.0614261766326,dimensions,distillate,True
+7041015,Nusa Mulia,5837.0,55.0,3187.8784433682463,dimensions,residual,True
+7020700,Nusa Sakti,676.0,57.0,495.17624449699355,dimensions,distillate,True
+8999817,Ocean Star Ii,109.0,31.0,174.4,gt_regression,distillate,True
+9929089,Opudi,354.0,6.0,424.59795700348906,gt_regression,distillate,True
+9929077,Pangkilang,354.0,6.0,424.59795700348906,gt_regression,distillate,True
+7225350,Panorama Nusantara,8915.0,54.0,5849.3233538331815,dimensions,residual,True
+8611647,Pantokrator,4459.0,37.0,1741.0189577544036,dimensions,distillate,True
+8736124,Papua Enam,644.0,18.0,530.0592607833638,dimensions,distillate,True
+9029865,Papua Lima,745.0,20.0,404.0581151555182,dimensions,distillate,True
+8873556,Papuyu,290.0,33.0,316.21715424517146,dimensions,distillate,True
+9881811,Parama Kalyani,1751.0,7.0,1068.2579011875068,gt_regression,distillate,True
+8889000,Pbk Muryati,693.0,31.0,336.59512078641353,dimensions,distillate,True
+8874768,Pelangi Nusantara,909.0,33.0,609.0993493633223,dimensions,distillate,True
+8873570,Poncan Moale,445.0,34.0,247.16446806792626,dimensions,distillate,True
+9872729,Pora Pora,462.0,6.0,495.1281202448945,gt_regression,distillate,True
+9049255,Porodisa,961.0,21.0,426.08669354592115,dimensions,distillate,True
+7910917,Port Link,12619.0,45.0,8286.741706951432,dimensions,residual,True
+8604333,Port Link Iii,9023.0,40.0,14436.800000000001,dimensions,residual,True
+8666147,Portlink V,3575.0,14.0,1420.3599831382203,dimensions,distillate,True
+9172791,Portlink Vii,1998.0,29.0,1642.5829120728013,gt_regression,distillate,True
+9820099,Portlink Viii,2125.0,10.0,888.5915684276281,dimensions,residual,True
+7204655,Prathita Iv,507.0,58.0,715.955145645319,dimensions,distillate,True
+6911691,Prima Nusantara,2773.0,57.0,1237.8917775495636,dimensions,residual,True
+9023419,Primas I,147.0,30.0,235.20000000000002,dimensions,distillate,True
+8999142,Pulau Rubiah,485.0,29.0,183.37866973694668,dimensions,distillate,True
+8737958,Pulau Sabu,1604.0,22.0,484.5192214648665,dimensions,distillate,True
+9210608,Pulau Sagori,380.0,25.0,189.30435719581118,dimensions,distillate,True
+9097939,Pulo Tello,750.0,19.0,187.5,gt_regression,distillate,True
+8621733,Putri Gianyar,819.0,42.0,851.705556327072,dimensions,distillate,True
+9037575,Putri Yasmin,1790.0,34.0,793.9574552629066,dimensions,distillate,True
+9042881,Queen Soya,2983.0,34.0,4617.483010006472,dimensions,residual,True
+9640190,Quicksilver Ix,193.0,12.0,308.8,dimensions,distillate,True
+9072575,Raja Dilaut,937.0,33.0,1416.024901805913,dimensions,distillate,True
+8822222,Rajarakata,8886.0,37.0,6934.053752055627,dimensions,residual,True
+9725031,Ranaka,1029.0,13.0,814.1752014497107,dimensions,distillate,True
+9871646,Raputra Jaya 2888,5578.0,8.0,1883.6917320069763,dimensions,residual,True
+9821263,Reinna,7152.0,9.0,2856.5556431029486,dimensions,residual,True
+8839316,Rhama Giri Nusa,1494.0,37.0,849.8310853989905,dimensions,distillate,True
+9821287,Rishel,7331.0,9.0,2152.617492528732,dimensions,residual,True
+7314199,Roditha,908.0,53.0,1452.8000000000002,dimensions,distillate,True
+8874550,Rokatenda,526.0,34.0,237.61335129357485,dimensions,distillate,True
+9891842,Roswin,1454.0,7.0,377.3031571276812,gt_regression,distillate,True
+7224837,Royal Nusantara,6034.0,53.0,4015.252781688999,dimensions,residual,True
+9807205,Royce I,7288.0,10.0,2580.3161325791784,dimensions,residual,True
+9079767,Sakura Express,3610.0,32.0,2951.1107244093528,dimensions,residual,True
+7640029,Salindo Mutiara 1,1002.0,49.0,1127.559755511305,dimensions,distillate,True
+8976449,Saluang,114.0,26.0,182.4,gt_regression,distillate,True
+8614261,Salvia,2439.0,39.0,3434.611279237677,dimensions,residual,True
+8672861,Salvino,2593.0,32.0,1785.9700355114785,dimensions,residual,True
+9364241,Samandar,672.0,21.0,241.67738958851533,gt_regression,distillate,True
+8738419,Sangke Palangga,556.0,19.0,286.64584180907633,dimensions,distillate,True
+9690406,Sardinela,1789.0,13.0,814.1752014497107,dimensions,distillate,True
+9869069,Satria 99,468.0,8.0,466.6057087778768,dimensions,distillate,True
+7853092,Satria Nusantara,656.0,52.0,377.69701392769554,dimensions,distillate,True
+7851721,Satya Dharma,481.0,57.0,176.75288006693413,dimensions,distillate,True
+9764611,Sebuku,5553.0,12.0,1892.5857212820347,dimensions,residual,True
+9032006,Seira,11607.0,32.0,5156.888784274781,dimensions,residual,True
+8652005,Semah,227.0,16.0,315.95798259927767,dimensions,distillate,True
+8662567,Sembilang,560.0,15.0,549.4337532403478,dimensions,distillate,True
+9068952,Semumu,408.0,30.0,183.37866973694668,dimensions,distillate,True
+8746478,Senangin,560.0,17.0,549.4337532403478,dimensions,distillate,True
+8716162,Serasi Iii,9500.0,38.0,5134.600279778729,dimensions,residual,True
+9157571,Sewindu,2533.0,29.0,4052.8,dimensions,residual,True
+9220366,Shiloh Sejati,9832.0,27.0,15731.2,dimensions,residual,True
+8661159,Siginjai,616.0,14.0,567.2424110234292,dimensions,distillate,True
+8892588,Silok,132.0,31.0,150.0,gt_regression,distillate,True
+9049384,Simeulue,330.0,22.0,150.0,dimensions,distillate,True
+9197612,Simfoni Sejati,8132.0,28.0,3276.1554739662856,dimensions,residual,True
+9152155,Sindu Dwitama,818.0,29.0,1183.8529416900785,dimensions,distillate,True
+9287015,Sindu Tritama,538.0,21.0,760.885573641819,dimensions,distillate,True
+8689096,Sirung,1029.0,13.0,814.1752014497107,dimensions,distillate,True
+8705747,Sms Sagita,5373.0,38.0,8596.800000000001,dimensions,residual,True
+9161223,Sri Gemilang,158.0,30.0,150.0,dimensions,distillate,True
+7214650,Star Belitung,2534.0,54.0,1386.2789339827455,dimensions,residual,True
+9066722,Suki 2,5008.0,33.0,5129.443093302273,dimensions,residual,True
+8785307,Sulthan Murhum,378.0,19.0,297.0525480013348,dimensions,distillate,True
+9843613,Sumber Berkat Ii,1329.0,9.0,873.484793595315,dimensions,distillate,True
+9873503,Surya 777,1196.0,8.0,857.2900249250115,gt_regression,distillate,True
+9939711,Surya Ayla,2419.0,5.0,1287.293303059568,gt_regression,distillate,True
+9931898,Surya Kayangan,2387.0,6.0,1277.4374726351816,gt_regression,distillate,True
+9174749,Swarna Bengawan,213.0,29.0,156.16637769958805,dimensions,distillate,True
+8718366,Swarna Cakra,699.0,38.0,941.5431792754284,dimensions,residual,True
+9078775,Swarna Putri,516.0,32.0,610.6904275309664,dimensions,distillate,True
+9925318,Takabonerate,793.0,6.0,676.2893974584883,gt_regression,distillate,True
+9027386,Tande Mand,646.0,35.0,325.5538184648047,dimensions,distillate,True
+8659364,Tanjung Api,616.0,15.0,584.5540811079838,gt_regression,distillate,True
+9027398,Tanjung Burang,507.0,33.0,237.61335129357485,dimensions,distillate,True
+9618472,Tanjung Madlahar,512.0,15.0,426.90571285217476,dimensions,distillate,True
+9792565,Tanjung Sole,591.0,10.0,566.211961572881,dimensions,distillate,True
+8652536,Tanjung Tungkor,1220.0,18.0,772.0974304584616,dimensions,distillate,True
+8676192,Tarusi,596.0,14.0,215.36126356805133,dimensions,distillate,True
+9029152,Tasik Gemilang,776.0,21.0,315.6310566524894,dimensions,distillate,True
+8873661,Teluk Cenderawasih I,478.0,33.0,396.50292763304134,dimensions,distillate,True
+8873673,Teluk Cendrawasih Ii,478.0,33.0,396.50292763304134,dimensions,distillate,True
+8731150,Teluk Sinabang,750.0,19.0,545.212564048916,dimensions,distillate,True
+8673231,Teluk Singkil,595.0,22.0,572.9685849337363,gt_regression,distillate,True
+8677067,Teluk Tolo,514.0,14.0,357.7644196849404,gt_regression,distillate,True
+8740395,Temi,1148.0,18.0,547.9694927201158,dimensions,distillate,True
+9027439,Terubuk I,399.0,25.0,150.0,dimensions,distillate,True
+8813556,Thalia,2987.0,37.0,4705.822507492981,dimensions,residual,True
+8840860,Tiga Anugrah,299.0,38.0,474.9520133212255,dimensions,distillate,True
+8342519,Tranship 1,8410.0,10.0,2642.4239805602388,gt_regression,residual,True
+8348836,Tranship Ii,996.0,18.0,575.3349302082821,dimensions,distillate,True
+9482328,Tri Sakti Elfina,721.0,19.0,325.32477000662254,dimensions,distillate,True
+9003782,Trima Jaya 9,455.0,36.0,548.1621913557836,dimensions,distillate,True
+8663092,Trimas Ellisa,1392.0,28.0,831.8643500356624,dimensions,distillate,True
+9821249,Trimas Fhadila,7331.0,9.0,2856.5556431029486,dimensions,residual,True
+9016715,Trimas Kanaya,6547.0,36.0,5587.297906078343,dimensions,residual,True
+8997493,Trisila Bhakti I,585.0,30.0,567.3909808446285,gt_regression,distillate,True
+8741973,Trisila Bhakti Ii,525.0,17.0,319.9810962820022,dimensions,distillate,True
+8992821,Tuna,718.0,33.0,334.20260260927904,gt_regression,distillate,True
+8740668,Tuna Tomini,546.0,21.0,179.15867881617376,dimensions,distillate,True
+8694936,Tunu Pratama Jaya 2888,707.0,13.0,697.0420376655014,dimensions,distillate,True
+9080261,Ulin Ferry,244.0,35.0,390.40000000000003,dimensions,distillate,True
+8921755,Virgo 18,9989.0,36.0,11056.280595350794,dimensions,residual,True
+8774413,Watunapato,988.0,13.0,713.1242856220721,dimensions,distillate,True
+8670590,Wayangan,1029.0,13.0,814.1752014497107,dimensions,distillate,True
+7234179,Wicitra Dharma,589.0,54.0,595.0005414393676,dimensions,distillate,True
+8712233,Wicitra Dharma Ii,929.0,39.0,1004.1085080947591,dimensions,distillate,True
+8510350,Windu Karsa Pratama,3123.0,41.0,4049.248479860132,dimensions,residual,True
+9821275,Wira Artha,7331.0,9.0,2856.5556431029486,dimensions,residual,True
+9875812,Wira Berlian,8800.0,7.0,3745.3919623262564,gt_regression,residual,True
+1022548,Wira Harmoni,1546.0,3.0,1104.9727475608724,dimensions,distillate,True
+9819478,Wira Kencana,5648.0,10.0,1622.8457645310725,dimensions,residual,True
+8568137,Wira Mutiara,1239.0,12.0,635.3000449084269,dimensions,distillate,True
+9921051,Wira Nauli,5750.0,5.0,2121.7806813760812,gt_regression,distillate,True
+9884382,Wira Ono Niha,1654.0,7.0,974.935443659981,dimensions,distillate,True
+9804291,Wira Victoria,3792.0,10.0,1493.140510456227,dimensions,residual,True
+9857652,Zoey,6886.0,8.0,2354.4531456584205,gt_regression,residual,True
+9083627,Dharma Rucitra Vii,16164.0,32.0,6204.824860575978,gt_regression,residual,True
+8508802,Harmoni Mas,3545.0,41.0,1604.986453012874,gt_regression,residual,True
+9037965,Harmoni Mas 3,4361.0,34.0,4650.754413664499,gt_regression,residual,True
+8720541,Lestari Maju,749.0,38.0,342.4558556492922,gt_regression,distillate,True
+9208083,Mega 3,29637.0,25.0,40000.0,gt_regression,residual,True
+8822117,Mm Sejati,9759.0,37.0,8394.541619098763,gt_regression,residual,True
+7703716,Mulya Sentosa,1665.0,48.0,855.6278695689941,gt_regression,distillate,True
+9291054,Mulya Sentosa Ii,3491.0,23.0,1080.8606754764064,gt_regression,residual,True
+8774554,Mutiara Alas Iii,376.0,20.0,439.63277545243955,gt_regression,distillate,True
+1134884,Pari 01,271.0,1.0,363.9234904259162,gt_regression,distillate,True
+9130315,Permata Lestari I,357.0,31.0,150.0,gt_regression,distillate,True
+9639139,Port Link Ii,649.0,15.0,649.9667422359637,gt_regression,distillate,True
+9311232,Roro Sawitri,8652.0,22.0,4245.282340627887,gt_regression,residual,True
+9664495,Samudera Indonesia,562.0,14.0,554.4072666055212,gt_regression,distillate,True
+9739616,Samudera Utama,1146.0,13.0,836.4188529589549,gt_regression,distillate,True
+9039573,Serasi V,10226.0,35.0,6783.079000381041,gt_regression,residual,True
+8981573,Sms Swakarya,785.0,29.0,264.358435121856,gt_regression,distillate,True
+8905165,Swarna Bahtera,2003.0,37.0,1116.8154776318738,gt_regression,residual,True
+9403736,Trans Jawa 9,834.0,20.0,696.2541861333098,gt_regression,distillate,True
+8736899,Tri Sakti Adinda,1108.0,20.0,322.5326840412385,gt_regression,distillate,True
+7397294,Trisna Dwitya,876.0,51.0,281.6338837107289,gt_regression,distillate,True
+9707302,Wira Prime,1568.0,13.0,1002.3236690013565,gt_regression,residual,True
+1047639,Kmp Eirene,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+1071484,Kmp Nitya,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+1091666,Munic 3,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+1105285,Keisha,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+1105297,Sms Sagita 8,15000.0,26.0,3750.0,gt_regression,residual,False
+1112719,Wira Qaila,15000.0,26.0,3750.0,gt_regression,residual,False
+1113335,Karya Pacific 2280,1029.0,26.0,786.016072530529,gt_regression,distillate,False
+1114389,Shanaya,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+1146552,Katya,15000.0,26.0,3750.0,gt_regression,residual,False
+1153361,Putra Wajo,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+1153373,New Zhima,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+6725523,Titian Murni,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+7125952,Titian Nusantara,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+7332660,Safira Nusantara,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+7916040,Layar Sentosa,1029.0,26.0,786.016072530529,gt_regression,distillate,False
+8204432,Salvatore,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+8405206,Tribuana 1,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+8503694,Jatra Iii,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+8613580,Elysia,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+8679675,Raputra Jaya 888,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+8718562,Sms Mulawarman,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+8807076,Raja Basa I,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
+9765665,Legundi,3500.0,26.0,1593.1962935561216,gt_regression,residual,False
