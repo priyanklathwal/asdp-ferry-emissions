@@ -1,10 +1,10 @@
 check,value,expected_low,expected_high,unit,pass,basis
-Implied main engine SFC,242.1028920219215,190.0,260.0,g fuel/kWh,True,"IMO baseline SFC for medium-speed engines is 205-215 g/kWh, rising about 18% at the low loads seen on this crossing."
-Implied fuel-to-shaft efficiency,38.455665535477,33.0,45.0,%,True,"Marine four-stroke diesels convert 40-45% of fuel energy to shaft work at design load, less at part load."
-Median installed power,0.6760401510215005,0.35,1.1,kW/GT,True,Ro-pax ferries typically carry 0.4-1.0 kW per GT depending on service speed.
-Median steaming speed,10.714285714285715,7.0,14.0,knots,True,"Published Merak-Bakauheni schedules give 15 nm in 90-120 minutes: 7.5-10 knots on the regular berths, up to 15 knots on the executive service."
-Fuel per crossing,0.1286219435249743,0.03,0.2,"t fuel per 1,000 GT",True,"A 5,000 GT ferry on a 2-3 hour crossing would be expected to burn roughly 0.2-1.0 t, i.e. 0.04-0.20 t per 1,000 GT."
-CO2 intensity of transport supply,25.950849016284497,3.0,30.0,g CO2 / GT-nm,True,Ro-pax is among the least efficient classes per GT-nm: it carries volume rather than mass on short high-frequency services. A 15 nm crossing sits high in the range ICCT reports for this class.
-Auxiliary share of shaft energy,61.835125840650974,20.0,70.0,%,True,"For ro-pax on very short crossings with long turnarounds, hotel and vehicle-deck ventilation load is a large share of total energy; the Fourth IMO GHG Study finds auxiliary demand comparable to propulsion for some passenger classes."
-Black carbon share of CO2e-100,18.525342578850967,2.0,30.0,%,True,Black carbon is a meaningful but not dominant share of 100-year warming from residual-fuel four-stroke engines at low load. It is larger on a 20-year horizon.
-Share of port-to-port time spent waiting,27.98772343003439,5.0,55.0,%,True,"The corridor has roughly 28 berth slots against about 70 available ships, and vessels are reported queueing at anchor for hours at peak."
+Implied main engine SFC,242.103,190.0,260.0,g fuel/kWh,True,"IMO baseline SFC for medium-speed engines is 205-215 g/kWh, rising about 18% at the low loads seen on this crossing."
+Implied fuel-to-shaft efficiency,38.456,33.0,45.0,%,True,"Marine four-stroke diesels convert 40-45% of fuel energy to shaft work at design load, less at part load."
+Median installed power,0.676,0.35,1.1,kW/GT,True,Ro-pax ferries typically carry 0.4-1.0 kW per GT depending on service speed.
+Median steaming speed,10.714,7.0,14.0,knots,True,"Published Merak-Bakauheni schedules give 15 nm in 90-120 minutes: 7.5-10 knots on the regular berths, up to 15 knots on the executive service."
+Fuel per crossing,0.129,0.03,0.2,"t fuel per 1,000 GT",True,"A 5,000 GT ferry on a 2-3 hour crossing would be expected to burn roughly 0.2-1.0 t, i.e. 0.04-0.20 t per 1,000 GT."
+CO2 intensity of transport supply,25.951,3.0,30.0,g CO2 / GT-nm,True,Ro-pax is among the least efficient classes per GT-nm: it carries volume rather than mass on short high-frequency services. A 15 nm crossing sits high in the range ICCT reports for this class.
+Auxiliary share of shaft energy,61.835,20.0,70.0,%,True,"For ro-pax on very short crossings with long turnarounds, hotel and vehicle-deck ventilation load is a large share of total energy; the Fourth IMO GHG Study finds auxiliary demand comparable to propulsion for some passenger classes."
+Black carbon share of CO2e-100,18.525,2.0,30.0,%,True,Black carbon is a meaningful but not dominant share of 100-year warming from residual-fuel four-stroke engines at low load. It is larger on a 20-year horizon.
+Share of port-to-port time spent waiting,27.988,5.0,55.0,%,True,"The corridor has roughly 28 berth slots against about 70 available ships, and vessels are reported queueing at anchor for hours at peak."

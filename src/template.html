@@ -350,6 +350,14 @@ const fmt = (n,d=0)=> n===null||n===undefined||isNaN(n) ? "n/a"
   : n.toLocaleString("en-US",{minimumFractionDigits:d,maximumFractionDigits:d});
 const usd = n => (n<0?"-$":"$") + fmt(Math.abs(n)/1e6,1) + "M";
 const pct = n => (n>0?"+":"") + fmt(n,1) + "%";
+const sig = (n,s=3)=>{
+  if(n===null||n===undefined||isNaN(n)||n===0) return "0";
+  const mag = Math.floor(Math.log10(Math.abs(n)));
+  const f = Math.pow(10, s-1-mag);
+  const r = Math.round(n*f)/f;
+  return r.toLocaleString("en-US",{maximumFractionDigits:Math.max(0,s-1-mag)});
+};
+const kt = n => fmt(n/1000, n<10000?1:0) + " kt";
 
 /* ---------- state ---------- */
 const DEF = {
@@ -713,7 +721,7 @@ function render(){
 
   document.getElementById("baseline-text").innerHTML =
     `Across ${fmt(D.coverage.voyages_observed)} observed crossings the model puts the corridor at `+
-    `<b>${fmt(R.fuel_t)} t of fuel</b> and <b>${fmt(R.base)} t of ${R.label}</b> a year. Median `+
+    `<b>${kt(R.fuel_t)} of fuel</b> and <b>${kt(R.base)} of ${R.label}</b> a year. Median `+
     `port-to-port time is ${fmt(D.voyage_stats.median_hours,1)} hours, of which `+
     `<b>${fmt(D.voyage_stats.wait_share_pct,0)}%</b> across the fleet is queueing rather than `+
     `steaming; median time alongside between crossings is `+
@@ -725,7 +733,7 @@ function render(){
   vbars("chart-monthly",{data:D.monthly.map(m=>({label:m.month.slice(5),v:m.voyages})),
     line:D.monthly.map(m=>({v:m.co2_t})), w:520,h:200});
   hbar("chart-vessels",{data:D.per_vessel.slice(0,10).map(v=>({label:v.name,v:v.co2_t})),
-    w:440,pad:130,fmtv:v=>fmt(v)+" t"});
+    w:440,pad:130,fmtv:v=>fmt(v/1000,1)+" kt"});
 
   const base=R.rows[0];
   document.getElementById("pathway-lede").innerHTML =
@@ -741,25 +749,25 @@ function render(){
   hbar("chart-pathways",{data:R.rows.slice(1).map(r=>({label:r.label,v:r.g/1000,
     color:r.g>base.g?P.hot:P.sea})), w:540,pad:210,
     max:Math.max(...R.rows.map(r=>r.g/1000))*1.15,
-    fmtv:v=>fmt(v)+" kt", refLine:base.g/1000, refLabel:"baseline "+fmt(base.g/1000)+" kt"});
+    fmtv:v=>sig(v,3)+" kt", refLine:base.g/1000, refLabel:"baseline "+sig(base.g/1000,3)+" kt"});
 
   document.getElementById("pathway-table").innerHTML = tbl(
     ["Pathway", R.label+" kt/yr","Change","Energy in GWh","Local pollutants",
      "Cost $M/yr","vs baseline","$/t"],
     R.rows.map(r=>[
-      r.label, fmt(r.g/1000),
+      r.label, sig(r.g/1000,3),
       {t:pct(-r.savedPct), cls:r.savedPct<0?"neg":(r.savedPct>0?"pos":"")},
-      fmt(r.energy/1000),
+      sig(r.energy/1000,3),
       r.local ? {t:"-"+fmt(r.local,0)+"%", cls:"pos"} : "-",
       fmt(r.cost/1e6,1),
       {t:usd(r.delta), cls:r.delta>0?"neg":(r.delta<0?"pos":"")},
-      r.abate===null?"n/a":fmt(r.abate,0)
+      r.abate===null?"n/a":"$"+fmt(Math.round(r.abate/10)*10)
     ]));
 
   document.getElementById("be-head").textContent =
     `Electrification pays back on carbon only below about ${fmt(R.breakeven,2)} tonnes per MWh`;
   document.getElementById("be-text").innerHTML =
-    `These diesels deliver a tonne of ${R.label} for every <b>${fmt(R.shaftMWh/R.base*1000,0)} kWh</b> `+
+    `These diesels deliver a tonne of ${R.label} for every <b>${fmt(Math.round(R.shaftMWh/R.base*1000/10)*10)} kWh</b> `+
     `of shaft work. To beat that, the electricity charging the ships must be cleaner than `+
     `<b>${fmt(R.breakeven,2)} t/MWh</b> once charging and drivetrain losses are counted. `+
     `Costs point the other way: the same service costs <b>${usd(R.rows[6].cost)}</b> a year in `+
@@ -777,23 +785,23 @@ function render(){
     "vessels, at two crossings of stored energy.</p>" + tbl(
     ["Vessel","Est. MCR kW","MWh per crossing","Pack MWh","Newbuild $M","Retrofit $M"],
     D.battery_sizing.slice(0,5).map(b=>[
-      b.name, fmt(b.p_mcr_kw), fmt(b.energy_per_voyage_mwh*R.k,2),
+      b.name, fmt(Math.round(b.p_mcr_kw/50)*50), fmt(b.energy_per_voyage_mwh*R.k,2),
       fmt(b.battery_pack_mwh_2_crossings*R.k,1),
       fmt(b.capex_newbuild_musd*R.k,1), fmt(b.capex_retrofit_musd*R.k,1)]));
 
   hbar("chart-wait",{data:D.waiting_sensitivity.map((w,i)=>({
     label: i===0 ? "Engines off at anchor" : "Engines idling at anchor",
     v:w.co2_t_annual/1000, color:i===S.wait?P.sea:P.sea3})),
-    w:430,pad:150,fmtv:v=>fmt(v)+" kt"});
+    w:430,pad:150,fmtv:v=>sig(v,3)+" kt"});
   hbar("chart-dist",{data:D.distance_sensitivity.map(f=>({label:fmt(f.distance_nm,0)+" nm",
     v:f.co2_t_annual/1000, color:f.distance_nm===15?P.sea:P.sea3})),
-    w:430,pad:110,fmtv:v=>fmt(v)+" kt"});
+    w:430,pad:110,fmtv:v=>sig(v,3)+" kt"});
 
   document.getElementById("sanity").innerHTML = tbl(
     ["Check","Model","Expected range","","What it is checked against"],
     D.sanity_checks.map(c=>[
-      c.check, fmt(c.value,2)+" "+c.unit,
-      fmt(c.expected_low,2)+" to "+fmt(c.expected_high,2),
+      c.check, sig(c.value,3)+" "+c.unit,
+      sig(c.expected_low,3)+" to "+sig(c.expected_high,3),
       {t:c.pass?"pass":"FLAG", cls:c.pass?"pos":"neg"},
       "<span class='mute'>"+c.basis+"</span>"]));
 

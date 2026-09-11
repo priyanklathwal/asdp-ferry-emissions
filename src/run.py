@@ -621,12 +621,15 @@ def main():
     # The full register dump is deliberately NOT written to outputs/. It reproduces the
     # licensed commercial ship register (owner, GT, DWT, dimensions, build year, engine
     # type) almost verbatim, which must not be redistributed. Derived results only.
-    ships_all[["imo", "name", "gt", "age", "p_mcr_kw", "power_method", "fuel",
-               "in_inventory"]].to_csv(os.path.join(OUT, "vessels_derived.csv"), index=False)
-    per.to_csv(os.path.join(OUT, "per_vessel_route_totals.csv"), index=False)
-    scen.to_csv(os.path.join(OUT, "scenarios_annual.csv"), index=False)
-    monthly.to_csv(os.path.join(OUT, "monthly_profile.csv"), index=False)
-    pd.DataFrame(checks).to_csv(os.path.join(OUT, "sanity_checks.csv"), index=False)
+    _vd = ships_all[["imo", "name", "gt", "age", "p_mcr_kw", "power_method", "fuel",
+                     "in_inventory"]].copy()
+    _vd["p_mcr_kw"] = (_vd["p_mcr_kw"] / 50).round() * 50      # estimated, not measured
+    _vd.round({"gt": 0, "age": 0}).to_csv(
+        os.path.join(OUT, "vessels_derived.csv"), index=False)
+    per.round(2).to_csv(os.path.join(OUT, "per_vessel_route_totals.csv"), index=False)
+    scen.round(2).to_csv(os.path.join(OUT, "scenarios_annual.csv"), index=False)
+    monthly.round(1).to_csv(os.path.join(OUT, "monthly_profile.csv"), index=False)
+    pd.DataFrame(checks).round(3).to_csv(os.path.join(OUT, "sanity_checks.csv"), index=False)
 
     payload = {
         "generated_utc": datetime.now(timezone.utc).isoformat(timespec="seconds"),
