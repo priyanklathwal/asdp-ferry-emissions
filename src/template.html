@@ -13,15 +13,16 @@
   --bg:var(--paper); --mid:var(--ink-2); --faint:var(--rule);
   --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;
   --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","Helvetica Neue",Helvetica,Arial,sans-serif;
-  --measure:640px; --wide:920px;
+  --measure:780px; --wide:1040px;
 }
 *{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;-webkit-overflow-scrolling:touch}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--serif);
      font-size:19px;line-height:1.65;-webkit-font-smoothing:antialiased}
 .wrap{max-width:var(--measure);margin:0 auto;padding:0 24px}
 a{color:var(--accent)}
-p{margin:0 0 1.35em}
+p{margin:0 0 1.35em;text-align:justify;hyphens:auto;-webkit-hyphens:auto;text-justify:inter-word}
+p.mute,figcaption,.kpi .l,.ctl label,#pyramid li{text-align:left;hyphens:manual}
 p.mute,.mute{font-family:var(--sans);font-size:14.5px;line-height:1.55;color:var(--ink-2)}
 b{font-weight:600}
 
@@ -124,8 +125,35 @@ section[data-tab].active{display:block}
 section[data-tab].active + section[data-tab].active{padding-top:96px}
 section.active:first-of-type{padding-top:56px}
 
+/* site header */
+header.site{position:sticky;top:0;z-index:20;background:var(--paper);border-top:8px solid var(--brand);
+            border-bottom:1px solid var(--rule)}
+.site-inner{max-width:1180px;margin:0 auto;padding:0 24px;display:flex;align-items:stretch;gap:32px}
+.brand{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--ink);text-decoration:none;
+       display:flex;align-items:center;white-space:nowrap;letter-spacing:-.01em}
+.tabs{position:static;background:none;border:0;margin:0;padding:0;flex:1;justify-content:flex-end}
+.tabs button{padding:18px 14px 16px}
+header.masthead{padding-top:64px}
+.masthead .wrap{max-width:900px}
+.masthead .sub{text-align:justify;hyphens:auto}
+
+/* twin figures on the landing */
+.twin{display:grid;grid-template-columns:1fr 1fr;gap:28px;width:min(var(--wide),100vw - 48px);
+      position:relative;left:50%;transform:translateX(-50%)}
+.twin-fig{width:auto;left:0;transform:none;margin:0}
+.fig-head{font-family:var(--sans);margin:0 0 12px}
+.fig-title{font-size:16px;font-weight:600;line-height:1.35}
+.fig-sub{font-size:13px;color:var(--ink-2);margin-top:4px}
+.twin-controls{display:flex;gap:10px;align-items:center;margin:0 0 12px}
+.twin-controls select{flex:1}
+.mapbox{width:100%;height:440px;background:#EEF3F5;position:relative;border:1px solid var(--rule);overflow:hidden}
+.mapbox-static svg{width:100%;height:100%;display:block}
+
+/* figures share a frame */
+figure.chart > div > svg:not(.free){width:100%;aspect-ratio:9/4;height:auto;display:block}
+
 /* brand chrome, Economist register */
-body::before{content:"";display:block;height:8px;background:var(--brand)}
+
 header.masthead{padding-top:72px}
 .masthead h1{position:relative;padding-top:22px}
 .masthead h1::before{content:"";position:absolute;top:0;left:0;width:64px;height:4px;background:var(--brand)}
@@ -151,6 +179,12 @@ section > h2{color:var(--brand)}
   .kpi .v{font-size:34px}
   .controls{grid-template-columns:1fr;padding:22px}
   .tabs button{font-size:13px;padding:14px 10px 12px}
+  .site-inner{flex-direction:column;gap:0}
+  .brand{padding:12px 0 4px}
+  .tabs{justify-content:flex-start;overflow-x:auto}
+  .twin{grid-template-columns:1fr}
+  .mapbox{height:360px}
+  p{text-align:left;hyphens:manual}
   #answer h3{font-size:30px}
   #answer > p:first-of-type{font-size:18px}
 }
@@ -158,6 +192,21 @@ section > h2{color:var(--brand)}
 </style>
 </head>
 <body>
+
+<header class="site">
+  <div class="site-inner">
+    <a class="brand" href="#answer">Sunda Strait Ferry Emissions</a>
+    <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
+  <button role="tab" data-tab="answer">The answer</button>
+  <button role="tab" data-tab="results">Results</button>
+  <button role="tab" data-tab="energy">Where the energy goes</button>
+  <button role="tab" data-tab="switching">Fuel switching</button>
+  <button role="tab" data-tab="grid">The grid</button>
+  <button role="tab" data-tab="data">Data and confidence</button>
+  <button role="tab" data-tab="assumptions">Assumptions</button>
+</nav>
+  </div>
+</header>
 
 <header class="masthead">
   <div class="wrap">
@@ -168,11 +217,6 @@ section > h2{color:var(--brand)}
     <p class="byline" id="byline"></p>
   </div>
 </header>
-
-<div class="wrap"><figure class="chart wide">
-  <div id="chart-map"></div>
-  <figcaption id="map-cap"></figcaption>
-</figure></div>
 
 <div class="wrap">
 
@@ -186,16 +230,7 @@ section > h2{color:var(--brand)}
   checks against independent benchmarks are reported below and all currently pass.
 </div>
 
-<nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
-  <button role="tab" data-tab="answer">The answer</button>
-  <button role="tab" data-tab="results">Results</button>
-  <button role="tab" data-tab="energy">Where the energy goes</button>
-  <button role="tab" data-tab="switching">Fuel switching</button>
-  <button role="tab" data-tab="grid">The grid</button>
-  <button role="tab" data-tab="data">Data and confidence</button>
-  <button role="tab" data-tab="live">Live map</button>
-  <button role="tab" data-tab="assumptions">Assumptions</button>
-</nav>
+
 <section id="answer" data-tab="answer">
   <h2>THE ANSWER</h2>
   <h3>Decarbonising this crossing is a power-sector decision, not a shipping one</h3>
@@ -204,6 +239,25 @@ section > h2{color:var(--brand)}
      far better one on cost. Nothing about the vessels is the binding constraint. Three findings
      carry that conclusion.</p>
   <ol id="pyramid" style="list-style:none;padding:0;margin:22px 0 0;max-width:68ch"></ol>
+
+  <div class="twin" style="margin-top:44px">
+    <figure class="chart twin-fig">
+      <div class="fig-head"><div class="fig-title">The corridor vessels, live</div>
+        <div class="fig-sub">Public AIS over the Sunda Strait right now. Pick one of the 69 study vessels to centre on it.</div></div>
+      <div class="twin-controls">
+        <select id="s-pick" aria-label="Corridor vessel"></select>
+        <a id="v-pick-link" class="reset" style="text-decoration:none;white-space:nowrap" target="_blank" rel="noopener">Open on VesselFinder</a>
+      </div>
+      <div id="live-one" class="mapbox"><div id="vf-one" style="position:absolute;inset:0"></div></div>
+      <figcaption id="one-cap"></figcaption>
+    </figure>
+    <figure class="chart twin-fig">
+      <div class="fig-head"><div class="fig-title">The crossing this analysis covers</div>
+        <div class="fig-sub">Merak to Bakauheni, fifteen nautical miles across the strait</div></div>
+      <div id="chart-map" class="mapbox mapbox-static"></div>
+      <figcaption id="map-cap"></figcaption>
+    </figure>
+  </div>
 </section>
 
 <section id="headline" data-tab="answer">
@@ -432,45 +486,6 @@ section > h2{color:var(--brand)}
      &plusmn;15% to under 7%. What remains is a data gap, not a modelling choice: installed engine
      power is absent from the register, and positional AIS would replace the phase inference
      entirely.</p>
-</section>
-
-<section id="live" data-tab="live">
-  <h2>LIVE</h2>
-  <h3>The corridor right now</h3>
-  <p>Everything above is reconstructed from seven months of port-call records. This is the same
-     strait as it is at this moment, from public AIS. Ferries show as passenger-vessel markers;
-     the ones queueing off Merak or Bakauheni are usually visible as a cluster just outside each
-     port.</p>
-  <figure class="chart">
-    <div id="live-map" style="width:100%;height:520px;background:var(--water);position:relative">
-      <div id="vf-area" style="position:absolute;inset:0"></div>
-    </div>
-    <figcaption><b>Live AIS, Sunda Strait.</b> Map and vessel positions from VesselFinder's public
-      embed. Terrestrial AIS coverage; positions can lag a few minutes and vessels with their
-      transponders off will not appear. This view shows all traffic in the area, not only the
-      vessels in this study.</figcaption>
-  </figure>
-
-  <p>To follow one of the corridor vessels from the analysis, pick it here. The
-     <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/vessel_imos.csv">full
-     list of 383 IMO numbers</a>, flagged by whether each vessel appears on the corridor, in the
-     register, or both, is in the repository.</p>
-  <div class="controls" style="grid-template-columns:2fr 1fr;align-items:end">
-    <div class="ctl">
-      <label>Corridor vessel <b id="v-pick-meta"></b></label>
-      <select id="s-pick"></select>
-    </div>
-    <div class="ctl">
-      <label>&nbsp;</label>
-      <a id="v-pick-link" class="reset" style="display:inline-block;text-decoration:none" target="_blank" rel="noopener">Open on VesselFinder</a>
-    </div>
-  </div>
-  <figure class="chart" style="margin-top:20px">
-    <div id="live-one" style="width:100%;height:380px;background:var(--water);position:relative">
-      <div id="vf-one" style="position:absolute;inset:0"></div>
-    </div>
-    <figcaption id="one-cap"></figcaption>
-  </figure>
 </section>
 
 <section id="checks" data-tab="data">
@@ -718,9 +733,9 @@ function tbl(cols, rows){
 
 /* ---------- the crossing ---------- */
 function drawMap(){
-  const [W,H]=MAP.canvas, host=document.getElementById("chart-map");
+  const [W,H]=MAP.canvas, host=document.getElementById("chart-map"); host.innerHTML="";
   host.innerHTML="";
-  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",role:"img",
+  const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",class:"free",preserveAspectRatio:"xMidYMid slice",role:"img",
     "aria-label":"Map of the Sunda Strait showing the Merak to Bakauheni ferry crossing"});
   svg.appendChild(el("rect",{x:0,y:0,width:W,height:H,fill:P.water}));
   MAP.paths.forEach(d=>svg.appendChild(el("path",{d,fill:P.land,stroke:"#CFCABA",
@@ -1319,18 +1334,15 @@ function vfEmbed(hostId, opts){
   host.appendChild(f);
 }
 function liveMaps(){
-  vfEmbed("vf-area",{title:"Live AIS, Sunda Strait",vars:{
-    width:"100%",height:"520",latitude:"-5.90",longitude:"105.87",zoom:"11",names:true}});
   const sel=document.getElementById("s-pick");
   const L=D.vessel_picker||[];
   sel.innerHTML=L.map(v=>`<option value="${v.imo}">${v.name} · IMO ${v.imo}</option>`).join("");
   const show=()=>{
     const v=L.find(x=>String(x.imo)===sel.value)||L[0]; if(!v) return;
-    document.getElementById("v-pick-meta").textContent=fmt(v.crossings)+" crossings in the study window";
     document.getElementById("v-pick-link").href="https://www.vesselfinder.com/vessels/details/"+v.imo;
-    document.getElementById("one-cap").innerHTML=`<b>${v.name}.</b> Latest reported position and last 24 hours of track, from public AIS via VesselFinder.`;
+    document.getElementById("one-cap").innerHTML=`<b>${v.name}</b>, ${fmt(v.crossings)} crossings in the study window. Latest reported position and last 24 hours of track from public AIS via VesselFinder. Terrestrial coverage; positions can lag a few minutes.`;
     vfEmbed("vf-one",{title:"Live position of "+v.name,vars:{
-      width:"100%",height:"380",zoom:"10",names:true,imo:String(v.imo),show_track:true}});
+      width:"100%",height:"440",zoom:"10",names:true,imo:String(v.imo),show_track:true}});
   };
   sel.addEventListener("change",show); show();
 }
