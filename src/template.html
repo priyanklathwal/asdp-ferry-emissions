@@ -288,6 +288,32 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   </div>
 </section>
 
+<section id="macc">
+  <h2>WHAT IT COSTS TO ABATE</h2>
+  <h3 id="macc-head"></h3>
+  <p>The standard way to compare these is a marginal abatement cost curve: each option is a block
+     whose width is how much it could cut and whose height is what each tonne costs. Blocks below
+     the axis pay for themselves. The options here are alternatives for the same fleet rather than
+     measures that stack, so the widths show potential, not a cumulative total. The one exception is
+     shore power, which addresses the stationary load and can sit alongside any propulsion choice.</p>
+  <figure class="chart">
+    <div id="chart-macc"></div>
+    <figcaption id="macc-cap"></figcaption>
+  </figure>
+  <div class="controls" style="grid-template-columns:1fr 1fr">
+    <h4>Cost basis</h4>
+    <div class="ctl">
+      <label>Include indicative capital cost, annualised</label>
+      <select id="s-capex"><option value="0">Operating cost only</option><option value="1" selected>With indicative capex</option></select>
+    </div>
+    <div class="ctl">
+      <label>Discount rate and life <b><span id="v-crf"></span></b></label>
+      <input type="range" id="s-rate" min="4" max="12" step="1" value="8">
+    </div>
+    <p class="mute" id="capex-note"></p>
+  </div>
+</section>
+
 <section id="breakeven">
   <h2>FINDING THREE</h2>
   <h3 id="be-head"></h3>
@@ -423,7 +449,7 @@ const DEF = {
   mfo:    Math.round(D.assumptions.prices.mfo_hs_idr_per_litre / 0.98 / D.assumptions.fx * 1000 / 10) * 10,
   b40:    Math.round(D.assumptions.prices.b40_hsd_idr_per_litre / 0.86 / D.assumptions.fx * 1000 / 10) * 10,
   b100: D.assumptions.prices.b100_usd_per_tonne,
-  wait: 0, gwp: "100"
+  wait: 0, gwp: "100", capex: 1, rate: 8
 };
 let S = Object.assign({}, DEF);
 const FX = D.assumptions.fx;
@@ -944,6 +970,7 @@ function render(){
       fmt(b.battery_pack_mwh_2_crossings*R.k,1),
       fmt(b.capex_newbuild_musd*R.k,1), fmt(b.capex_retrofit_musd*R.k,1)]));
 
+  macc("chart-macc");
   hbar("chart-wait",{title:"Whether engines idle while queueing moves the total by under 7%",
     sub:"Annual CO2, kilotonnes", source:"Model output from AIS port-to-port movements, Jan–Aug 2026; IMO/ICCT emission factors.",
     data:D.waiting_sensitivity.map((w,i)=>({
@@ -1060,6 +1087,93 @@ function render(){
 }
 
 
+
+/* ---------- marginal abatement cost curve ---------- */
+// Indicative capital costs, USD millions, whole corridor. All ASSUM. Order-of-magnitude only.
+const CAPEX = {
+  b40:          {musd:0,   life:1,  note:"drop-in, no works"},
+  b100:         {musd:5,   life:10, note:"fuel-system checks and seals across 69 vessels"},
+  bio_methanol: {musd:210, life:15, note:"engine conversion ~$3M per vessel plus bunkering at both terminals"},
+  shore_power:  {musd:60,  life:20, note:"cold-ironing on ~28 berths plus an anchorage connection"},
+  electric_grid:{musd:640, life:12, note:"~830 MWh of batteries at $700/kWh plus high-power chargers"},
+  electric_re:  {musd:940, life:15, note:"batteries and chargers plus ~200 MW solar and storage at the terminals"}
+};
+const crf=(r,n)=>{ r=r/100; return n<=1?1:(r*Math.pow(1+r,n))/(Math.pow(1+r,n)-1); };
+
+function macc(mount){
+  const R=compute(), base=R.rows[0];
+  const keys={"B40 drop-in biodiesel":"b40","B100 / HVO drop-in":"b100","Bio-methanol (conversion)":"bio_methanol",
+              "Shore power at berth and anchorage":"shore_power","Battery-electric, PLN grid":"electric_grid",
+              "Battery-electric, dedicated RE":"electric_re"};
+  const opts=R.rows.slice(1).map(r=>{
+    const k=keys[r.label], c=CAPEX[k]||{musd:0,life:1};
+    let cost=r.delta;
+    if(S.capex){ cost += c.musd*1e6*crf(S.rate,c.life); }
+    // dedicated RE: own generation replaces the tariff bill
+    if(S.capex && k==="electric_re") cost -= R.rows.find(x=>keys[x.label]==="electric_re").cost;
+    return {label:r.label,k,saved:r.saved,cost,perT:r.saved>0?cost/r.saved:null,
+            stack:k==="shore_power"};
+  });
+  const pos=opts.filter(o=>o.saved>base.g*0.005).sort((a,b)=>a.perT-b.perT);
+  const neg=opts.filter(o=>o.saved<=base.g*0.005);
+
+  const host=document.getElementById(mount);
+  const done=frame(host,{
+    title: S.capex ? "With capital costs counted, every option costs money per tonne; drop-in biofuel is the cheapest deep cut"
+                   : "On operating cost alone, only renewables-backed electrification pays for itself",
+    sub:"Marginal abatement cost, $ per tonne "+R.label+" (height), against annual abatement potential in kilotonnes (width)",
+    source:"Model output. Operating costs from the pathway table. "+(S.capex?"Capital costs are indicative ASSUM figures annualised at "+S.rate+"%.":"Capital costs excluded.")});
+
+  const w=900,h=460,L=70,R_=30,T=30,B=70;
+  const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
+  const totW=pos.reduce((s,o)=>s+o.saved,0);
+  const ymax=Math.max(50,...pos.map(o=>o.perT))*1.15, ymin=Math.min(-50,...pos.map(o=>o.perT))*1.15;
+  const X=v=>L+v/totW*(w-L-R_), Y=v=>T+(ymax-v)/(ymax-ymin)*(h-T-B);
+  // gridlines + zero line
+  const step=ymax-ymin>800?200:100;
+  for(let v=Math.ceil(ymin/step)*step; v<=ymax; v+=step){
+    svg.appendChild(el("line",{x1:L,y1:Y(v),x2:w-R_,y2:Y(v),stroke:v===0?P.ink:P.faint,"stroke-width":v===0?1.2:1}));
+    svg.appendChild(txt(L-8,Y(v)+4,(v<0?"−":"")+"$"+fmt(Math.abs(v)),{"text-anchor":"end","font-size":11}));
+  }
+  let x=0;
+  pos.forEach(o=>{
+    const x0=X(x), x1=X(x+o.saved), bw=x1-x0;
+    const y0=Y(Math.max(0,o.perT)), y1=Y(Math.min(0,o.perT));
+    const fill=o.perT<0?P.good:P.rust;
+    svg.appendChild(el("rect",{x:x0+1,y:y0,width:Math.max(1,bw-2),height:Math.max(1,y1-y0),
+      fill,"fill-opacity":o.stack?0.55:0.85}));
+    if(o.stack) svg.appendChild(el("rect",{x:x0+1,y:y0,width:Math.max(1,bw-2),height:Math.max(1,y1-y0),
+      fill:"none",stroke:P.good,"stroke-dasharray":"4 3"}));
+    // value label at the bar's outer end
+    const ly = o.perT<0 ? y1+16 : y0-8;
+    svg.appendChild(txt((x0+x1)/2,ly,(o.perT<0?"−":"")+"$"+fmt(Math.abs(o.perT)),
+      {"text-anchor":"middle","font-size":12,"font-weight":"bold",fill}));
+    // name label, wrapped along the base
+    const words=o.label.replace(" drop-in","").replace("Battery-electric, ","Electric, ").replace(" (conversion)","").split(" ");
+    let lines=[],cur="";
+    words.forEach(wd=>{ if((cur+" "+wd).length>Math.max(8,bw/7)){lines.push(cur);cur=wd;} else cur=(cur?cur+" ":"")+wd; });
+    lines.push(cur);
+    lines.forEach((ln,i)=>svg.appendChild(txt((x0+x1)/2,h-B+18+i*13,ln,{"text-anchor":"middle","font-size":11,fill:P.ink})));
+    svg.appendChild(txt((x0+x1)/2,h-B+18+lines.length*13+2,fmt(o.saved/1000,0)+" kt",{"text-anchor":"middle","font-size":10.5,fill:P.mute}));
+    x+=o.saved;
+  });
+  svg.appendChild(txt(L,h-6,"width: annual abatement potential, kt "+R.label+"  ·  options are alternatives, not a cumulative total  ·  dashed: stacks with any other option",{"font-size":11,fill:P.mute}));
+  svg.appendChild(txt(L-8,T-12,"$/t",{"text-anchor":"end","font-size":11,fill:P.mute}));
+  host.appendChild(svg); done();
+
+  const cheapest=pos[0];
+  document.getElementById("macc-head").textContent = S.capex
+    ? "Once capital is counted, nothing pays for itself, and the cheapest deep cut is "+cheapest.label.toLowerCase().replace(" drop-in","")+" at about $"+fmt(Math.round(cheapest.perT/10)*10)+" a tonne"
+    : "On fuel cost alone, only renewables-backed electrification sits below the line, and it needs new generation, not new ships";
+  document.getElementById("macc-cap").innerHTML =
+    (neg.length? `<b>Not shown:</b> ${neg.map(o=>o.label).join(" and ")} — ${neg.length>1?"they raise":"it raises"} emissions at the current grid intensity, so ${neg.length>1?"they have":"it has"} no abatement to price. `:"")+
+    `Green blocks pay for themselves; red blocks cost money per tonne. The B100 figure of about $${fmt(Math.round((pos.find(o=>o.k==="b100")||{perT:0}).perT/10)*10)} sits at the top of the $30–200 range Corbett, Wang and Winebrake report for speed reduction in the container fleet.`;
+  document.getElementById("v-crf").textContent=S.rate+"%, asset life by option";
+  document.getElementById("capex-note").innerHTML="<b>Indicative capex, $M whole corridor:</b> "+
+    Object.entries(CAPEX).filter(([k])=>k!=="b40").map(([k,c])=>`${k.replace("_"," ")} ${c.musd} (${c.note})`).join("; ")+
+    ". <span class='tagline t-assum'>ASSUM</span> Order-of-magnitude figures for screening, not estimates.";
+}
+
 /* ---------- live AIS embeds (VesselFinder public embed, no key) ---------- */
 function vfEmbed(hostId, opts){
   const host=document.getElementById(hostId); if(!host) return;
@@ -1102,6 +1216,7 @@ function bind(){
   function sync(){
     for(const k in map) document.getElementById(map[k]).value=S[k];
     wsel.value=S.wait; document.getElementById("s-gwp").value=S.gwp;
+    document.getElementById("s-capex").value=S.capex; document.getElementById("s-rate").value=S.rate;
     document.getElementById("v-ef").textContent=fmt(S.ef,2);
     document.getElementById("v-tariff").textContent=fmt(S.tariff);
     document.getElementById("v-mfo").textContent=fmt(S.mfo);
@@ -1114,6 +1229,8 @@ function bind(){
       S[k]=parseFloat(e.target.value); sync();});
   wsel.addEventListener("change",e=>{S.wait=parseInt(e.target.value); sync();});
   document.getElementById("s-gwp").addEventListener("change",e=>{S.gwp=e.target.value; sync();});
+  document.getElementById("s-capex").addEventListener("change",e=>{S.capex=parseInt(e.target.value); sync();});
+  document.getElementById("s-rate").addEventListener("input",e=>{S.rate=parseInt(e.target.value); sync();});
   document.getElementById("reset").addEventListener("click",()=>{
     S=Object.assign({},DEF); sync();});
   sync();
