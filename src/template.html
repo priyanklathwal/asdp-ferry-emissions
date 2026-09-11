@@ -337,8 +337,8 @@ footer{border-top:1px solid var(--faint);padding:32px 0 72px;font-family:var(--s
 </section>
 
 <section id="assumptions">
-  <h2>APPENDIX</h2>
-  <h3>Every number that did not come out of the workbook, with its source</h3>
+  <h2>ASSUMPTIONS AND METHODOLOGY</h2>
+  <h3>Thirty-seven parameters: 22 sourced, 15 assumed</h3>
   <div id="assump"></div>
 </section>
 
@@ -816,90 +816,96 @@ function render(){
       "<span class='mute'>"+c.basis+"</span>"]));
 
   const A=D.assumptions;
-  const sec=(title,body)=>`<details class="assump"><summary>${title}</summary><div>${body}</div></details>`;
+  const S_ = "<span class='tagline t-src'>SOURCED</span>";
+  const A_ = "<span class='tagline t-assum'>ASSUM</span>";
+  const rows = [
+    ["Method", "Model structure", "Activity-based, phase-resolved bottom-up",
+     "Third and Fourth IMO GHG Studies; Olmer et al. (2017), ICCT", S_],
+    ["Method", "Phases", "Steaming, manoeuvring, waiting, alongside",
+     "IMO anchor convention: main engines off while waiting", S_],
+    ["Method", "Waiting time", "Excess over each vessel's own p10 crossing time",
+     "Adaptation to port-to-port AIS events; positional AIS would replace this", A_],
+    ["Method", "Annualisation", "×"+D.window.annualisation_factor,
+     D.window.span_days+" observed days scaled to 365", S_],
+
+    ["Route", "Crossing distance", A.route_distance.distance_nm+" nm",
+     "Published schedules; great-circle between ports is 15.1 nm", S_],
+    ["Route", "Manoeuvring time", A.ops.manoeuvre_hours_per_voyage+" h per crossing",
+     "0.3 h at each end, inside the AIS port polygons", A_],
+    ["Route", "Manoeuvring speed", A.ops.manoeuvre_speed_kn+" kn",
+     "ICCT phase boundary between manoeuvring and cruising", S_],
+    ["Route", "Berth time cap", A.ops.berth_hours_cap+" h",
+     "Longer gaps treated as lay-up, engines cold", A_],
+
+    ["Power", "Propulsion", "Admiralty relation at observed speed",
+     "P = Δ^(2/3) · V³ / C, C = "+A.power.admiralty_coefficient, S_],
+    ["Power", "Displacement", "LOA × 0.95 × beam × draft × Cb × 1.025",
+     "Cb = "+A.power.block_coefficient+"; GT regression where dimensions missing", A_],
+    ["Power", "Installed MCR", "Bounded "+A.power.kw_per_gt_floor+"–"+A.power.kw_per_gt_ceiling+" kW/GT",
+     "Register has no kW field; this is the largest uncertainty", A_],
+    ["Power", "Auxiliary demand", A.aux_kw_ropax.under_2000_GT+" kW / "+A.aux_kw_ropax.over_2000_GT+" kW",
+     "Ferry ro-pax, below / above 2,000 GT, all phases; boilers zero", S_],
+
+    ["Corrections", "Hull fouling", fmt(A.hull_fouling_range[0],2)+"–"+fmt(A.hull_fouling_range[1],2),
+     "Per vessel from age, Townsin roughness relation", S_],
+    ["Corrections", "Weather", "×"+A.weather_factor, "Coastal shipping within 5 nm of shore", S_],
+    ["Corrections", "Draught adjustment", "×"+fmt(A.daf,3), "Ferry ro-pax annual average", S_],
+    ["Corrections", "Low-load fuel penalty", "0.455L² − 0.710L + 1.28",
+     "IMO SFOC load curve, minimum 1.00 at 78% load", S_],
+
+    ["Emissions", "CO₂, main engine", A.me_ef.MSD.CO2.residual+" / "+A.me_ef.MSD.CO2.distillate+" g/kWh",
+     "Medium-speed, residual / distillate; implied SFC 215 g/kWh", S_],
+    ["Emissions", "CO₂, auxiliary", A.ae_ef.CO2.residual+" / "+A.ae_ef.CO2.distillate+" g/kWh",
+     "Residual / distillate", S_],
+    ["Emissions", "Black carbon", "0.25–4.5 g/kg fuel", "Load-dependent, four-stroke engines", S_],
+    ["Emissions", "Fuel sulphur", A.sulphur_pct.residual+"% / "+A.sulphur_pct.distillate+"%",
+     "IMO 2020 cap assumed; domestic price lists still sell high-sulphur MFO", A_],
+    ["Emissions", "GWP, 100-yr", "CH₄ "+A.gwp["100"].CH4+" · N₂O "+A.gwp["100"].N2O+" · BC "+A.gwp["100"].BC,
+     "IPCC AR4; Bond et al. (2013) for black carbon", S_],
+    ["Emissions", "GWP, 20-yr", "CH₄ "+A.gwp["20"].CH4+" · N₂O "+A.gwp["20"].N2O+" · BC "+A.gwp["20"].BC,
+     "Same sources", S_],
+
+    ["Grid", "Carbon intensity", A.grid.ef_tco2_per_mwh+" tCO₂/MWh ("+A.grid.ef_low+"–"+A.grid.ef_high+")",
+     "Not verified against a current MEMR/ESDM decree. Drives the headline conclusion.", A_],
+
+    ["Electrification", "Drivetrain efficiency", fmt(A.electric.motor_drive_efficiency*A.electric.onboard_distribution*100,0)+"%",
+     "Motor and drive × onboard distribution", A_],
+    ["Electrification", "Charging efficiency", fmt(A.electric.charging_efficiency*100,0)+"%",
+     "Shore converter and battery round trip", A_],
+    ["Electrification", "Shore connection", fmt(A.electric.shore_connection_efficiency*100,0)+"%",
+     "Transformer and cable losses", A_],
+    ["Electrification", "Battery cost", "$"+fmt(A.electric.battery_cost_usd_per_kwh_newbuild)+" / $"+fmt(A.electric.battery_cost_usd_per_kwh_retrofit)+" per kWh",
+     "Newbuild / retrofit, marine systems, DNV 2025; treat as upper bound", S_],
+    ["Electrification", "Dedicated RE", "95% saving vs grid", "Solar plus storage at both terminals", A_],
+
+    ["Pathways", "B40", "24% WtW saving", "40% FAME, biogenic CO₂ zero TtW, 60% saving on bio share", A_],
+    ["Pathways", "B100 / HVO", "80% WtW saving", "Waste-oil feedstock, RED II accounting", A_],
+    ["Pathways", "Bio-methanol", "85% WtW saving", "Mass scaled by LHV ratio (19.9 vs 42.7 MJ/kg)", A_],
+
+    ["Prices", "MFO, high sulphur", "Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+" / L",
+     "Pertamina industrial, Region 1, Mar 2026 — an oil-spike fortnight", S_],
+    ["Prices", "B40 industrial diesel", "Rp "+fmt(A.prices.b40_hsd_idr_per_litre)+" / L", "Same source and caveat", S_],
+    ["Prices", "B100 / HVO", "$"+fmt(A.prices.b100_usd_per_tonne)+" / t", "Rotterdam, Jul 2026", S_],
+    ["Prices", "Bio-methanol", "$"+fmt(A.prices.bio_methanol_usd_per_tonne)+" / t", "Indicative; thinly traded", A_],
+    ["Prices", "Electricity", "Rp "+fmt(A.prices.pln_i3_idr_per_kwh,2)+" / kWh", "PLN I-3 medium industry, frozen through Q3 2026", S_],
+    ["Prices", "Exchange rate", "Rp "+fmt(A.fx)+" / USD", "Q3 2026 MEMR tariff-setting parameter, rounded", S_],
+  ];
+  let last="";
   document.getElementById("assump").innerHTML =
-    sec("Method <span class='tagline t-src'>SOURCED</span>",
-      Object.entries(A.method_sources).map(([k,v])=>`<p class='mute'>${v}</p>`).join(""))
-    + sec("Engine emission factors, g per kWh <span class='tagline t-src'>SOURCED</span>",
-      "<p>Energy-based factors, so no separate fuel-consumption step is needed. The implied "+
-      "specific fuel consumption of 670 / 3.114 = 215 g/kWh for a medium-speed engine on "+
-      "residual fuel is the IMO baseline value.</p>"+
-      tbl(["Engine","Pollutant","Residual","Distillate"],
-        ["SSD","MSD"].flatMap(e=>["CO2","PM","CO","CH4","N2O"].map(p=>
-          [e,p,A.me_ef[e][p].residual,A.me_ef[e][p].distillate])).concat(
-          ["CO2","PM","CO","CH4","N2O","BC"].map(p=>["Auxiliary",p,A.ae_ef[p].residual,
-            A.ae_ef[p].distillate])))
-      +`<p class='mute'>Sulphur assumed at ${A.sulphur_pct.residual}% for residual and `+
-       `${A.sulphur_pct.distillate}% for distillate; SOx scales linearly with it.</p>`)
-    + sec("Auxiliary power demand <span class='tagline t-src'>SOURCED</span>",
-      `<p>Ro-pax ferries: <b>${A.aux_kw_ropax.under_2000_GT} kW</b> below 2,000 GT and `+
-      `<b>${A.aux_kw_ropax.over_2000_GT} kW</b> above, in every operating phase, with boilers at `+
-      `zero. These are flat published values that do not scale with installed engine power, which `+
-      `is why auxiliary load dominates on a corridor with short crossings and long turnarounds. `+
-      `This replaces the "auxiliary is a percentage of MCR" assumption used in the first pass.</p>`)
-    + sec("Correction factors <span class='tagline t-src'>SOURCED</span>",
-      tbl(["Factor","Value","Basis"],[
-        ["Hull fouling", fmt(A.hull_fouling_range[0],3)+" to "+fmt(A.hull_fouling_range[1],3),
-         "Computed per vessel from age via the Townsin roughness relation"],
-        ["Weather", A.weather_factor, "+10% power demand for coastal shipping"],
-        ["Draught adjustment", fmt(A.daf,3), "Ferry ro-pax annual average"],
-        ["Low-load fuel penalty","1.00 to 1.21",
-         "0.455 L squared minus 0.710 L plus 1.28, minimum at 78% load"]]))
-    + sec("Power estimation <span class='tagline t-assum'>ASSUM</span>",
-      `<p>The register contains no installed main engine power. Displacement from dimensions for `+
-      `${D.power_model.n_from_dimensions} vessels; from `+
-      `<code>${D.power_model.displacement_form}</code> (R&sup2; `+
-      `${fmt(D.power_model.displacement_r2,3)}) for ${D.power_model.n_from_gt_regression}. Draft `+
-      `capped for ${D.power_model.n_draft_capped} vessels with implausible draft-to-beam ratios; `+
-      `installed MCR bounded for ${D.power_model.n_mcr_bounded}. Median result `+
-      `${fmt(D.power_model.median_kw_per_gt,2)} kW per GT.</p><p class='mute'>${A.power.note}</p>`)
-    + sec("Operating profile <span class='tagline t-assum'>ASSUM</span>",
-      tbl(["Parameter","Value"],Object.entries(A.ops).map(([k,v])=>[k,v])))
-    + sec("Prices and exchange rate <span class='tagline t-src'>MKT / GOV</span>",
-      tbl(["Item","Value"],[
-        ["B40 industrial diesel, Region 1","Rp "+fmt(A.prices.b40_hsd_idr_per_litre)+" / litre"],
-        ["MFO high sulphur, Region 1","Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+" / litre"],
-        ["PLN I-3 medium industry","Rp "+fmt(A.prices.pln_i3_idr_per_kwh,2)+" / kWh"],
-        ["PLN I-4 large industry","Rp "+fmt(A.prices.pln_i4_idr_per_kwh,2)+" / kWh"],
-        ["Singapore VLSFO","$"+fmt(A.prices.vlsfo_usd_per_tonne)+" / t"],
-        ["Singapore MGO","$"+fmt(A.prices.mgo_usd_per_tonne)+" / t"],
-        ["B100 / HVO","$"+fmt(A.prices.b100_usd_per_tonne)+" / t"],
-        ["Exchange rate","Rp "+fmt(A.fx)+" / USD"]])
-      +`<p class='mute'><b>Domestic fuel.</b> ${A.prices.domestic_fuel_source}</p>`
-      +`<p class='mute'><b>International.</b> ${A.prices.intl_fuel_source}</p>`
-      +`<p class='mute'><b>Biofuel.</b> ${A.prices.biofuel_source}</p>`
-      +`<p class='mute'><b>Electricity.</b> ${A.prices.pln_source}</p>`
-      +`<p class='mute'><b>FX.</b> ${A.fx_source}</p>`)
-    + sec("Grid carbon intensity <span class='tagline t-assum'>ASSUM</span>",
-      `<p>Default ${A.grid.ef_tco2_per_mwh} tCO<sub>2</sub>/MWh, range ${A.grid.ef_low} to `+
-      `${A.grid.ef_high}.</p><p class='mute'>${A.grid.source}</p>`)
-    + sec("Global warming potentials <span class='tagline t-src'>SOURCED</span>",
-      tbl(["Pollutant","20-year","100-year"],
-        Object.keys(A.gwp["100"]).map(p=>[p,A.gwp["20"][p],A.gwp["100"][p]]))
-      +"<p class='mute'>CH4 and N2O from IPCC AR4; black carbon from Bond et al. (2013).</p>")
-    + sec("Electrification <span class='tagline t-assum'>ASSUM</span>",
-      tbl(["Parameter","Value"],[
-        ["Motor and drive efficiency",A.electric.motor_drive_efficiency],
-        ["Onboard distribution",A.electric.onboard_distribution],
-        ["Charging efficiency",A.electric.charging_efficiency],
-        ["Shore connection efficiency",A.electric.shore_connection_efficiency],
-        ["Usable depth of discharge",A.electric.battery_usable_dod],
-        ["Battery, newbuild","$"+fmt(A.electric.battery_cost_usd_per_kwh_newbuild)+" / kWh"],
-        ["Battery, retrofit","$"+fmt(A.electric.battery_cost_usd_per_kwh_retrofit)+" / kWh"]])
-      +`<p class='mute'>${A.electric.battery_cost_source}</p>`)
-    + sec("Fuel-switching pathways <span class='tagline t-assum'>ASSUM</span>",
-      `<p class='mute'>${A.pathway_source}</p><p class='mute'>${A.terminology}</p>`)
-    + sec("Fleet-wide extrapolation <span class='tagline t-assum'>ASSUM</span>",
-      `<p>Applying an assumed activity level to the `+
-      `${fmt(D.fleet_indicative.n_vessels_in_service)} in-service vessels in the register gives an `+
-      `indicative <b>${fmt(D.fleet_indicative.co2_t_yr/1000)} kt CO<sub>2</sub></b> a year on `+
-      `<b>${fmt(D.fleet_indicative.installed_mcr_mw)} MW</b> of installed power. `+
-      `<b>This is an illustration, not a result.</b></p>`
-      +`<p class='mute'>${D.fleet_indicative.assumptions.note}</p>`)
-    + sec("Route geometry <span class='tagline t-src'>LIT</span>",
-      `<p>${A.route_distance.distance_nm} nm, sensitivity ${A.route_distance.distance_nm_low} to `+
-      `${A.route_distance.distance_nm_high} nm.</p>`
-      +`<p class='mute'>${A.route_distance.distance_nm_source}</p>`);
+    `<p class="mute" style="margin-bottom:18px">Every parameter that did not come out of the
+       workbook. ${S_} means transcribed from a published table or observed market value.
+       ${A_} means analyst judgement, unsourced, and open to challenge.</p>` +
+    "<table style='font-size:13px'><thead><tr><th>Area</th><th style='text-align:left'>Parameter</th>"+
+    "<th style='text-align:left'>Value</th><th style='text-align:left'>Basis</th><th></th></tr></thead><tbody>"+
+    rows.map(r=>{
+      const area = r[0]===last ? "" : r[0]; last=r[0];
+      return `<tr><td style="font-family:var(--sans);font-weight:600;color:var(--ink)">${area}</td>`+
+             `<td style="text-align:left">${r[1]}</td><td style="text-align:left;font-variant-numeric:tabular-nums">${r[2]}</td>`+
+             `<td style="text-align:left;color:var(--mid)">${r[3]}</td><td>${r[4]}</td></tr>`;
+    }).join("")+"</tbody></table>"+
+    `<p class="mute" style="margin-top:20px">Full derivations in the repository's
+       <code>docs/METHODOLOGY.md</code>; complete source list in <code>docs/SOURCES.md</code>;
+       machine-readable values in <code>src/config.py</code> and <code>src/factors.py</code>.</p>`;
 }
 
 /* ---------- controls ---------- */
