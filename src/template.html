@@ -109,6 +109,20 @@ select{width:100%;padding:7px;font-family:var(--sans);font-size:13px;border:1px 
 footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
        font-family:var(--sans);font-size:13px;color:var(--ink-3)}
 
+/* tabs */
+.tabs{position:sticky;top:0;z-index:5;background:var(--paper);border-bottom:1px solid var(--rule);
+      margin:48px -24px 0;padding:0 24px;display:flex;gap:4px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tabs button{appearance:none;background:none;border:0;border-bottom:2px solid transparent;
+             font-family:var(--sans);font-size:14px;font-weight:500;color:var(--ink-2);
+             padding:16px 14px 14px;cursor:pointer;white-space:nowrap;margin-bottom:-1px}
+.tabs button:hover{color:var(--ink)}
+.tabs button[aria-selected="true"]{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
+section[data-tab]{display:none}
+section[data-tab].active{display:block}
+section[data-tab].active + section[data-tab].active{padding-top:96px}
+section.active:first-of-type{padding-top:56px}
+
 @media (max-width:760px){
   body{font-size:18px}
   .masthead h1{font-size:36px}
@@ -118,6 +132,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   .kpis{grid-template-columns:1fr 1fr}
   .kpi .v{font-size:34px}
   .controls{grid-template-columns:1fr;padding:22px}
+  .tabs button{font-size:13px;padding:14px 10px 12px}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style>
@@ -151,7 +166,16 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   checks against independent benchmarks are reported below and all currently pass.
 </div>
 
-<section id="answer">
+<nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
+  <button role="tab" data-tab="answer">The answer</button>
+  <button role="tab" data-tab="energy">Where the energy goes</button>
+  <button role="tab" data-tab="switching">Fuel switching</button>
+  <button role="tab" data-tab="grid">The grid</button>
+  <button role="tab" data-tab="data">Data and confidence</button>
+  <button role="tab" data-tab="live">Live map</button>
+  <button role="tab" data-tab="assumptions">Assumptions</button>
+</nav>
+<section id="answer" data-tab="answer">
   <h2>THE ANSWER</h2>
   <h3>Decarbonising this crossing is a power-sector decision, not a shipping one</h3>
   <p>Every option that removes fuel from these ships moves the emissions onto Indonesia's
@@ -161,14 +185,14 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   <ol id="pyramid" style="list-style:none;padding:0;margin:22px 0 0;max-width:68ch"></ol>
 </section>
 
-<section id="headline">
+<section id="headline" data-tab="answer">
   <h2>SCALE</h2>
   <h3>A single 15-mile crossing burns 631 GWh of fuel a year</h3>
   <div class="kpis" id="kpis"></div>
   <p class="mute" id="kpi-note"></p>
 </section>
 
-<section id="data">
+<section id="data" data-tab="data">
   <h2>WHAT THE DATA CAN ANSWER</h2>
   <h3>The register you were sent is not the fleet on this route, so fleet replacement and corridor decarbonisation are separate questions</h3>
   <div class="grid2">
@@ -195,7 +219,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   </div>
 </section>
 
-<section id="baseline">
+<section id="baseline" data-tab="energy">
   <h2>FINDING ONE</h2>
   <h3>Hotel load, not propulsion, is where the energy goes: these ships spend most of their day stationary with the generators running</h3>
   <div class="grid2">
@@ -225,7 +249,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   </div>
 </section>
 
-<section id="pathways">
+<section id="pathways" data-tab="switching">
   <h2>FINDING TWO</h2>
   <h3>Every electrification option cuts cost and raises carbon, and only drop-in biofuel reduces emissions today</h3>
   <div class="grid-side">
@@ -288,7 +312,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   </div>
 </section>
 
-<section id="macc">
+<section id="macc" data-tab="switching">
   <h2>WHAT IT COSTS TO ABATE</h2>
   <h3 id="macc-head"></h3>
   <p>The standard way to compare these is a marginal abatement cost curve: each option is a block
@@ -314,7 +338,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   </div>
 </section>
 
-<section id="breakeven">
+<section id="breakeven" data-tab="grid">
   <h2>FINDING THREE</h2>
   <h3 id="be-head"></h3>
   <div class="grid2">
@@ -338,7 +362,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   </div>
 </section>
 
-<section id="sensitivity">
+<section id="sensitivity" data-tab="data">
   <h2>CONFIDENCE</h2>
   <h3>Modelling choices now move the answer by under 7%; the remaining uncertainty is missing data, not method</h3>
   <div class="grid2">
@@ -360,7 +384,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
      entirely.</p>
 </section>
 
-<section id="live">
+<section id="live" data-tab="live">
   <h2>LIVE</h2>
   <h3>The corridor right now</h3>
   <p>Everything above is reconstructed from seven months of port-call records. This is the same
@@ -399,7 +423,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   </figure>
 </section>
 
-<section id="checks">
+<section id="checks" data-tab="data">
   <h2>VALIDATION</h2>
   <h3>Nine outputs check out against benchmarks from outside the model</h3>
   <p>A bottom-up model of this kind can be internally consistent and still wrong by a factor of
@@ -409,7 +433,7 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
   <div id="sanity"></div>
 </section>
 
-<section id="assumptions">
+<section id="assumptions" data-tab="assumptions">
   <h2>ASSUMPTIONS AND METHODOLOGY</h2>
   <h3>Thirty-seven parameters: 22 sourced, 15 assumptions</h3>
   <div id="assump"></div>
@@ -1204,6 +1228,39 @@ function liveMaps(){
   sel.addEventListener("change",show); show();
 }
 
+
+/* ---------- tabs ---------- */
+function tabs(){
+  const bar=document.getElementById("tabs");
+  const btns=[...bar.querySelectorAll("button")];
+  const secs=[...document.querySelectorAll("section[data-tab]")];
+  const order=btns.map(b=>b.dataset.tab);
+  function show(name,push){
+    if(!order.includes(name)) name=order[0];
+    btns.forEach(b=>{const on=b.dataset.tab===name; b.setAttribute("aria-selected",on); b.tabIndex=on?0:-1;});
+    let first=true;
+    secs.forEach(s=>{const on=s.dataset.tab===name; s.classList.toggle("active",on);
+      if(on){ s.style.paddingTop = first ? "56px" : "96px"; first=false; }});
+    if(push) history.replaceState(null,"","#"+name);
+    if(push) window.scrollTo({top:bar.offsetTop-8,behavior:"auto"});
+  }
+  btns.forEach(b=>b.addEventListener("click",()=>show(b.dataset.tab,true)));
+  bar.addEventListener("keydown",e=>{
+    const i=order.indexOf(document.activeElement.dataset&&document.activeElement.dataset.tab);
+    if(i<0) return;
+    if(e.key==="ArrowRight"){const n=order[(i+1)%order.length]; show(n,true); btns[order.indexOf(n)].focus();}
+    if(e.key==="ArrowLeft"){const n=order[(i-1+order.length)%order.length]; show(n,true); btns[order.indexOf(n)].focus();}
+  });
+  // cross-links inside prose: any anchor to #section-id switches tab first
+  document.addEventListener("click",e=>{
+    const a=e.target.closest("a[href^='#']"); if(!a) return;
+    const tgt=document.getElementById(a.getAttribute("href").slice(1));
+    if(tgt&&tgt.dataset.tab){ e.preventDefault(); show(tgt.dataset.tab,true); tgt.scrollIntoView({block:"start"}); }
+  });
+  show((location.hash||"#answer").slice(1),false);
+  window.addEventListener("hashchange",()=>show(location.hash.slice(1),false));
+}
+
 /* ---------- controls ---------- */
 function bind(){
   const wsel=document.getElementById("s-wait");
@@ -1237,6 +1294,7 @@ function bind(){
 }
 bind();
 liveMaps();
+tabs();
 </script>
 </body>
 </html>
