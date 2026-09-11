@@ -244,16 +244,16 @@ footer{border-top:1px solid var(--faint);padding:32px 0 72px;font-family:var(--s
         <input type="range" id="s-ef" min="0" max="1.0" step="0.01">
       </div>
       <div class="ctl">
-        <label>PLN tariff <b>Rp <span id="v-tariff"></span>/kWh</b></label>
-        <input type="range" id="s-tariff" min="600" max="1800" step="10">
+        <label>Electricity tariff <b>$<span id="v-tariff"></span>/MWh</b></label>
+        <input type="range" id="s-tariff" min="30" max="110" step="1">
       </div>
       <div class="ctl">
-        <label>MFO price <b>Rp <span id="v-mfo"></span>/L</b></label>
-        <input type="range" id="s-mfo" min="6000" max="22000" step="100">
+        <label>Residual fuel (MFO) <b>$<span id="v-mfo"></span>/t</b></label>
+        <input type="range" id="s-mfo" min="350" max="1300" step="10">
       </div>
       <div class="ctl">
-        <label>B40 diesel price <b>Rp <span id="v-b40"></span>/L</b></label>
-        <input type="range" id="s-b40" min="10000" max="30000" step="100">
+        <label>B40 diesel <b>$<span id="v-b40"></span>/t</b></label>
+        <input type="range" id="s-b40" min="650" max="2000" step="10">
       </div>
       <div class="ctl">
         <label>B100 / HVO <b>$<span id="v-b100"></span>/t</b></label>
@@ -372,9 +372,9 @@ const kt = n => fmt(n/1000, n<10000?1:0) + " kt";
 /* ---------- state ---------- */
 const DEF = {
   ef: D.assumptions.grid.ef_tco2_per_mwh,
-  tariff: D.assumptions.prices.pln_i3_idr_per_kwh,
-  mfo: D.assumptions.prices.mfo_hs_idr_per_litre,
-  b40: D.assumptions.prices.b40_hsd_idr_per_litre,
+  tariff: Math.round(D.assumptions.prices.pln_i3_idr_per_kwh / D.assumptions.fx * 1000),
+  mfo:    Math.round(D.assumptions.prices.mfo_hs_idr_per_litre / 0.98 / D.assumptions.fx * 1000 / 10) * 10,
+  b40:    Math.round(D.assumptions.prices.b40_hsd_idr_per_litre / 0.86 / D.assumptions.fx * 1000 / 10) * 10,
   b100: D.assumptions.prices.b100_usd_per_tonne,
   wait: 0, gwp: "100"
 };
@@ -396,11 +396,11 @@ function compute(){
   const base    = metric === "co2" ? T.co2_t*k : (metric === "e20" ? T.co2e20_t*k : T.co2e100_t*k);
   const label   = metric === "co2" ? "CO2" : (metric === "e20" ? "CO2e-20" : "CO2e-100");
 
-  const pRes = S.mfo / 0.98 / FX * 1000;
-  const pDis = S.b40 / 0.86 / FX * 1000;
+  const pRes = S.mfo;
+  const pDis = S.b40;
   const pBlend = T.residual_share*pRes + (1-T.residual_share)*pDis;
   const baseCost = fuel_t * pBlend;
-  const pKwh = S.tariff / FX;
+  const pKwh = S.tariff / 1000;
   const elecCost = shoreMWh*1000*pKwh;
   const meohT = fuelMWh*3600/19.9/1000;
 
@@ -882,13 +882,15 @@ function render(){
     ["Pathways", "B100 / HVO", "80% WtW saving", "Waste-oil feedstock, RED II accounting", A_],
     ["Pathways", "Bio-methanol", "85% WtW saving", "Mass scaled by LHV ratio (19.9 vs 42.7 MJ/kg)", A_],
 
-    ["Prices", "MFO, high sulphur", "Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+" / L",
-     "Pertamina industrial, Region 1, Mar 2026 — an oil-spike fortnight", S_],
-    ["Prices", "B40 industrial diesel", "Rp "+fmt(A.prices.b40_hsd_idr_per_litre)+" / L", "Same source and caveat", S_],
+    ["Prices", "MFO, high sulphur", "$"+fmt(Math.round(A.prices.mfo_hs_idr_per_litre/0.98/A.fx*1000/10)*10)+" / t",
+     "Rp "+fmt(A.prices.mfo_hs_idr_per_litre)+"/L, Pertamina industrial, Region 1, Mar 2026 — an oil-spike fortnight", S_],
+    ["Prices", "B40 industrial diesel", "$"+fmt(Math.round(A.prices.b40_hsd_idr_per_litre/0.86/A.fx*1000/10)*10)+" / t",
+     "Rp "+fmt(A.prices.b40_hsd_idr_per_litre)+"/L, same source and caveat", S_],
     ["Prices", "B100 / HVO", "$"+fmt(A.prices.b100_usd_per_tonne)+" / t", "Rotterdam, Jul 2026", S_],
     ["Prices", "Bio-methanol", "$"+fmt(A.prices.bio_methanol_usd_per_tonne)+" / t", "Indicative; thinly traded", A_],
-    ["Prices", "Electricity", "Rp "+fmt(A.prices.pln_i3_idr_per_kwh,2)+" / kWh", "PLN I-3 medium industry, frozen through Q3 2026", S_],
-    ["Prices", "Exchange rate", "Rp "+fmt(A.fx)+" / USD", "Q3 2026 MEMR tariff-setting parameter, rounded", S_],
+    ["Prices", "Electricity", "$"+fmt(A.prices.pln_i3_idr_per_kwh/A.fx*1000,1)+" / MWh",
+     "Rp "+fmt(A.prices.pln_i3_idr_per_kwh,2)+"/kWh, PLN I-3 medium industry, frozen through Q3 2026", S_],
+    ["Prices", "Exchange rate", "Rp "+fmt(A.fx)+" / USD", "Mid-market, 11 Sep 2026", S_],
   ];
   let last="";
   document.getElementById("assump").innerHTML =

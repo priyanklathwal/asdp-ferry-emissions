@@ -117,9 +117,9 @@ OPS = {
 # ----------------------------------------------------------------------------------
 # 6. PRICES
 # ----------------------------------------------------------------------------------
-FX_IDR_PER_USD = 17000.0
-FX_SOURCE = "[MKT] Rp 16,959/USD was the Q3-2026 tariff-setting parameter published by MEMR; " \
-            "spot was around Rp 17,700 in late Aug 2026. 17,000 used as a round planning rate."
+FX_IDR_PER_USD = 17900.0
+FX_SOURCE = "[MKT] Mid-market USD/IDR 17,900 on 11 September 2026 (50-day average 17,927; " \
+            "52-week range 16,095 to 18,180)."
 
 PRICES = {
     # Indonesian domestic, ex-VAT/PBBKB, Region 1 (Sumatra, Java, Bali, Madura)

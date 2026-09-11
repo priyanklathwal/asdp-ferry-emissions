@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-11T17:25:58+00:00",
+ "generated_utc": "2026-09-11T17:33:15+00:00",
  "route": "Merak (Java) - Bakauheni (Sumatra)",
  "method_version": "v2, ICCT/IMO phase-resolved",
  "window": {
@@ -72,14 +72,14 @@
    "co2e100_saved_pct": 0.0,
    "energy_in_mwh": 630992.632703121,
    "energy_saved_pct": 0.0,
-   "annual_cost_usd": 50991234.91559144,
+   "annual_cost_usd": 48427429.808103606,
    "cost_delta_usd": 0.0,
    "local_pollutant_removed_pct": 0.0,
    "note": "Fuel burn as observed, priced at Indonesian domestic industrial rates.",
    "abatement_cost_usd_per_tco2": null,
    "abatement_cost_usd_per_tco2e": null,
-   "baseline_cost_usd": 50991234.91559144,
-   "blended_fuel_price_usd_per_t": 903.1110917592017
+   "baseline_cost_usd": 48427429.808103606,
+   "blended_fuel_price_usd_per_t": 857.7032715031525
   },
   {
    "pathway": "b40",
@@ -92,14 +92,14 @@
    "co2e100_saved_pct": 23.999999999999993,
    "energy_in_mwh": 630992.632703121,
    "energy_saved_pct": 0.0,
-   "annual_cost_usd": 89018016.034725,
-   "cost_delta_usd": 38026781.119133554,
+   "annual_cost_usd": 84542249.86538127,
+   "cost_delta_usd": 36114820.057277665,
    "local_pollutant_removed_pct": 0.0,
    "note": "Drop-in, no vessel modification. Already the mandated blend on land.",
-   "abatement_cost_usd_per_tco2": 900.8257081065267,
-   "abatement_cost_usd_per_tco2e": 728.1699129879363,
-   "baseline_cost_usd": 50991234.91559144,
-   "blended_fuel_price_usd_per_t": 903.1110917592017
+   "abatement_cost_usd_per_tco2": 855.5327954084329,
+   "abatement_cost_usd_per_tco2e": 691.5580179215035,
+   "baseline_cost_usd": 48427429.808103606,
+   "blended_fuel_price_usd_per_t": 857.7032715031525
   },
   {
    "pathway": "b100",
@@ -113,13 +113,13 @@
    "energy_in_mwh": 630992.632703121,
    "energy_saved_pct": 0.0,
    "annual_cost_usd": 78481835.93294899,
-   "cost_delta_usd": 27490601.01735755,
+   "cost_delta_usd": 30054406.124845386,
    "local_pollutant_removed_pct": 40.0,
    "note": "Drop-in after fuel-system checks. Near-zero sulphur and lower black carbon.",
-   "abatement_cost_usd_per_tco2": 195.36946908668074,
-   "abatement_cost_usd_per_tco2e": 161.97352709099124,
-   "baseline_cost_usd": 50991234.91559144,
-   "blended_fuel_price_usd_per_t": 903.1110917592017
+   "abatement_cost_usd_per_tco2": 213.58985075004844,
+   "abatement_cost_usd_per_tco2e": 177.07936474697783,
+   "baseline_cost_usd": 48427429.808103606,
+   "blended_fuel_price_usd_per_t": 857.7032715031525
   },
   {
    "pathway": "bio_methanol",
@@ -133,13 +133,13 @@
    "energy_in_mwh": 630992.632703121,
    "energy_saved_pct": 0.0,
    "annual_cost_usd": 108441949.94194344,
-   "cost_delta_usd": 57450715.026351996,
+   "cost_delta_usd": 60014520.13383983,
    "local_pollutant_removed_pct": 95.0,
    "note": "Engine conversion or newbuild plus bunkering at both terminals.",
-   "abatement_cost_usd_per_tco2": 384.27219496110024,
-   "abatement_cost_usd_per_tco2e": 303.48036163955936,
-   "baseline_cost_usd": 50991234.91559144,
-   "blended_fuel_price_usd_per_t": 903.1110917592017
+   "abatement_cost_usd_per_tco2": 401.42078946779924,
+   "abatement_cost_usd_per_tco2e": 317.0235264345818,
+   "baseline_cost_usd": 48427429.808103606,
+   "blended_fuel_price_usd_per_t": 857.7032715031525
   },
   {
    "pathway": "shore_power",
@@ -152,14 +152,14 @@
    "co2e100_saved_pct": -0.5865615000209994,
    "energy_in_mwh": 537875.331550673,
    "energy_saved_pct": 14.757272324011314,
-   "annual_cost_usd": 42459186.79623851,
-   "cost_delta_usd": -8532048.11935293,
+   "annual_cost_usd": 40324367.34838295,
+   "cost_delta_usd": -8103062.459720656,
    "local_pollutant_removed_pct": 25.875694383327065,
    "note": "Cold ironing at both terminals plus a connection for vessels queueing offshore. Displaces only the stationary hotel load, but that is the single largest block of energy on this corridor and it needs no change to the ships' propulsion.",
    "abatement_cost_usd_per_tco2": null,
    "abatement_cost_usd_per_tco2e": null,
-   "baseline_cost_usd": 50991234.91559144,
-   "blended_fuel_price_usd_per_t": 903.1110917592017
+   "baseline_cost_usd": 48427429.808103606,
+   "blended_fuel_price_usd_per_t": 857.7032715031525
   },
   {
    "pathway": "electric_grid",
@@ -172,14 +172,14 @@
    "co2e100_saved_pct": -14.212974789019006,
    "energy_in_mwh": 292376.26261647115,
    "energy_saved_pct": 53.664076652693225,
-   "annual_cost_usd": 19171971.46994618,
-   "cost_delta_usd": -31819263.44564526,
+   "annual_cost_usd": 18208017.59715559,
+   "cost_delta_usd": -30219412.210948016,
    "local_pollutant_removed_pct": 100.0,
    "note": "Shore energy at the industrial tariff. Ship-side CO2 follows the grid; all ship-side NOx, SOx, PM and black carbon go to zero at the two terminals.",
    "abatement_cost_usd_per_tco2": null,
    "abatement_cost_usd_per_tco2e": null,
-   "baseline_cost_usd": 50991234.91559144,
-   "blended_fuel_price_usd_per_t": 903.1110917592017
+   "baseline_cost_usd": 48427429.808103606,
+   "blended_fuel_price_usd_per_t": 857.7032715031525
   },
   {
    "pathway": "electric_re",
@@ -192,14 +192,14 @@
    "co2e100_saved_pct": 94.28935126054905,
    "energy_in_mwh": 292376.26261647115,
    "energy_saved_pct": 53.664076652693225,
-   "annual_cost_usd": 19171971.46994618,
-   "cost_delta_usd": -31819263.44564526,
+   "annual_cost_usd": 18208017.59715559,
+   "cost_delta_usd": -30219412.210948016,
    "local_pollutant_removed_pct": 100.0,
    "note": "Same energy from dedicated renewables plus storage at the terminals.",
-   "abatement_cost_usd_per_tco2": -194.65781660923648,
-   "abatement_cost_usd_per_tco2e": -155.08931649354685,
-   "baseline_cost_usd": 50991234.91559144,
-   "blended_fuel_price_usd_per_t": 903.1110917592017
+   "abatement_cost_usd_per_tco2": -184.8705520869844,
+   "abatement_cost_usd_per_tco2e": -147.29152963074284,
+   "baseline_cost_usd": 48427429.808103606,
+   "blended_fuel_price_usd_per_t": 857.7032715031525
   }
  ],
  "per_vessel": [
@@ -4030,8 +4030,8 @@
    "bio_methanol_usd_per_tonne": 950.0,
    "methanol_source": "[ASSUM] indicative; bio-methanol is thinly traded and site-specific."
   },
-  "fx": 17000.0,
-  "fx_source": "[MKT] Rp 16,959/USD was the Q3-2026 tariff-setting parameter published by MEMR; spot was around Rp 17,700 in late Aug 2026. 17,000 used as a round planning rate.",
+  "fx": 17900.0,
+  "fx_source": "[MKT] Mid-market USD/IDR 17,900 on 11 September 2026 (50-day average 17,927; 52-week range 16,095 to 18,180).",
   "grid": {
    "ef_tco2_per_mwh": 0.85,
    "ef_low": 0.7,

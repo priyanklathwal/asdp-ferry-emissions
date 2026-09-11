@@ -28,10 +28,10 @@ Three findings carry that conclusion.
 `62%` of shaft energy is auxiliary generators. A crossing takes 1.4 hours; the queueing and turnaround around it take 5.8. Ships sitting still draw `63 GWh` a year, which shore power could displace without touching a propulsion system.
 
 **2 · The grid is the constraint.**
-Full electrification saves `$32M` a year and raises CO₂ by `41%`. Break-even sits at `0.60 tCO₂/MWh`; Indonesia's grid runs 0.75–0.90. On a 100-year CO₂e basis, once black carbon counts, break-even rises to `0.74` and the trade is close to neutral. On a 20-year basis (`1.09`) electrification wins outright.
+Full electrification saves `$30M` a year and raises CO₂ by `41%`. Break-even sits at `0.60 tCO₂/MWh`; Indonesia's grid runs 0.75–0.90. On a 100-year CO₂e basis, once black carbon counts, break-even rises to `0.74` and the trade is close to neutral. On a 20-year basis (`1.09`) electrification wins outright.
 
 **3 · Only drop-in biofuel cuts emissions today.**
-B100 removes 80% with no capital works at roughly `$160/tCO₂e`. Everything cheaper raises emissions; everything cleaner needs new vessels or a cleaner grid.
+B100 removes 80% with no capital works at roughly `$180/tCO₂e`. Everything cheaper raises emissions; everything cleaner needs new vessels or a cleaner grid.
 
 ## Baseline
 
@@ -52,12 +52,12 @@ Black carbon is `19%` of 100-year warming here — four-stroke engines on residu
 | Pathway | kt CO₂/yr | Δ | Δ cost | $/tCO₂e |
 |---|---:|---:|---:|---:|
 | Baseline | 176 | — | — | — |
-| B40 drop-in biodiesel | 134 | +24% | +$38M | $730 |
-| B100 / HVO drop-in | 35 | +80% | +$27M | $160 |
-| Bio-methanol (engine conversion) | 26 | +85% | +$57M | $300 |
-| Shore power at berth and anchorage | 188 | -7% | −$9M | — |
-| Battery-electric, PLN grid | 249 | -41% | −$32M | — |
-| Battery-electric, dedicated RE | 12 | +93% | −$32M | −$160 |
+| B40 drop-in biodiesel | 134 | +24% | +$36M | $690 |
+| B100 / HVO drop-in | 35 | +80% | +$30M | $180 |
+| Bio-methanol (engine conversion) | 26 | +85% | +$60M | $320 |
+| Shore power at berth and anchorage | 188 | -7% | −$8M | — |
+| Battery-electric, PLN grid | 249 | -41% | −$30M | — |
+| Battery-electric, dedicated RE | 12 | +93% | −$30M | −$150 |
 
 ## A caveat about the input data
 
@@ -154,6 +154,10 @@ This is a working draft, not an audited inventory.
 | AIS for ASDP's other routes | Nothing scales to the fleet without it | Same AIS provider |
 | ASDP bunker records | Validates the whole model in one step | ASDP directly |
 | Official grid emission factor | Decides the headline conclusion | MEMR / ESDM |
+
+## Currency
+
+All monetary figures are in US dollars. Indonesian domestic prices — Pertamina industrial fuel and the PLN tariff — are converted at the mid-market rate of Rp 17,900 per dollar on 11 September 2026. The rupiah has moved within a 16,100–18,200 band over the past year, so a ±6% swing in the domestic fuel and electricity lines is well within normal.
 
 ## Data availability
 
