@@ -8,7 +8,7 @@
 :root{
   --paper:#FBFAF7; --ink:#171717; --ink-2:#5F5F5F; --ink-3:#9A9A9A; --rule:#E4E2DC; --panel:#F3F1EB;
   --accent:#1B6F8C; --accent-soft:#CFE0E8; --hot:#B3261E; --good:#1E7F4F; --good-soft:#CDE7D8; --hot-soft:#F1D3CF;
-  --brand:#E3120B; --brand-ink:#8E0B07;
+  --brand:#7A1F1F; --brand-ink:#5C1414;
   --sea:var(--accent); --sea2:var(--accent-soft); --sea3:#E4EEF2; --water:#EEF3F5; --land:#EDE9DF;
   --bg:var(--paper); --mid:var(--ink-2); --faint:var(--rule);
   --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;
@@ -147,6 +147,7 @@ header.masthead{padding-top:64px}
 .twin-controls{display:flex;gap:10px;align-items:center;margin:0 0 12px}
 .twin-controls select{flex:1}
 .mapbox{width:100%;height:440px;background:#EEF3F5;position:relative;border:1px solid var(--rule);overflow:hidden}
+.mapbox-static{background:#fff}
 .mapbox-static svg{width:100%;height:100%;display:block}
 
 /* figures share a frame */
@@ -737,14 +738,14 @@ function drawMap(){
   host.innerHTML="";
   const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,width:"100%",class:"free",preserveAspectRatio:"xMidYMid slice",role:"img",
     "aria-label":"Map of the Sunda Strait showing the Merak to Bakauheni ferry crossing"});
-  svg.appendChild(el("rect",{x:0,y:0,width:W,height:H,fill:P.water}));
+  svg.appendChild(el("rect",{x:0,y:0,width:W,height:H,fill:"#FFFFFF"}));
   MAP.paths.forEach(d=>svg.appendChild(el("path",{d,fill:P.land,stroke:"#CFCABA",
     "stroke-width":1})));
   const [mx,my]=MAP.merak,[bx,by]=MAP.bakauheni;
   svg.appendChild(el("line",{x1:mx,y1:my,x2:bx,y2:by,stroke:P.sea,"stroke-width":2.5,
     "stroke-dasharray":"7 5"}));
   [[mx,my,"Merak","start"],[bx,by,"Bakauheni","end"]].forEach(([x,y,n,anch])=>{
-    svg.appendChild(el("circle",{cx:x,cy:y,r:6,fill:P.sea,stroke:P.water,"stroke-width":2.5}));
+    svg.appendChild(el("circle",{cx:x,cy:y,r:6,fill:P.sea,stroke:"#FFFFFF","stroke-width":2.5}));
     svg.appendChild(txt(x+(anch==="start"?13:-13),y+5,n,
       {"text-anchor":anch==="start"?"start":"end","font-size":17,"font-weight":"700",fill:P.ink}));
   });
@@ -1324,13 +1325,13 @@ function results(){
 function vfEmbed(hostId, opts){
   const host=document.getElementById(hostId); if(!host) return;
   host.innerHTML="";
+  const q=new URLSearchParams(opts.params).toString();
   const f=document.createElement("iframe");
-  f.style.cssText="width:100%;height:100%;border:0";
+  f.style.cssText="width:100%;height:100%;border:0;display:block";
   f.setAttribute("loading","lazy");
+  f.setAttribute("referrerpolicy","no-referrer-when-downgrade");
   f.setAttribute("title", opts.title||"Live AIS map");
-  const vars=Object.entries(opts.vars).map(([k,v])=>`var ${k}=${JSON.stringify(v)};`).join("");
-  f.srcdoc=`<!doctype html><html><body style="margin:0"><script>${vars}<\/script>`+
-           `<script src="https://www.vesselfinder.com/aismap.js"><\/script></body></html>`;
+  f.src="https://www.vesselfinder.com/aismap?"+q;
   host.appendChild(f);
 }
 function liveMaps(){
@@ -1340,9 +1341,10 @@ function liveMaps(){
   const show=()=>{
     const v=L.find(x=>String(x.imo)===sel.value)||L[0]; if(!v) return;
     document.getElementById("v-pick-link").href="https://www.vesselfinder.com/vessels/details/"+v.imo;
-    document.getElementById("one-cap").innerHTML=`<b>${v.name}</b>, ${fmt(v.crossings)} crossings in the study window. Latest reported position and last 24 hours of track from public AIS via VesselFinder. Terrestrial coverage; positions can lag a few minutes.`;
-    vfEmbed("vf-one",{title:"Live position of "+v.name,vars:{
-      width:"100%",height:"440",zoom:"10",names:true,imo:String(v.imo),show_track:true}});
+    document.getElementById("one-cap").innerHTML=`<b>${v.name}</b>, ${fmt(v.crossings)} crossings in the study window. Latest reported position and last 24 hours of track from public AIS via VesselFinder. Terrestrial coverage; positions can lag a few minutes. If the frame is blank, the vessel is out of receiver range or has its transponder off; the link above opens its page directly.`;
+    vfEmbed("vf-one",{title:"Live position of "+v.name,params:{
+      zoom:"10",lat:"-5.90",lon:"105.87",width:"1000",height:"440",names:"true",
+      imo:String(v.imo),track:"true"}});
   };
   sel.addEventListener("change",show); show();
 }
