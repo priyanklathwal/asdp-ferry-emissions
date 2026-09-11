@@ -168,6 +168,7 @@ section.active:first-of-type{padding-top:56px}
 
 <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
   <button role="tab" data-tab="answer">The answer</button>
+  <button role="tab" data-tab="results">Results</button>
   <button role="tab" data-tab="energy">Where the energy goes</button>
   <button role="tab" data-tab="switching">Fuel switching</button>
   <button role="tab" data-tab="grid">The grid</button>
@@ -217,6 +218,35 @@ section.active:first-of-type{padding-top:56px}
       </figure>
     </div>
   </div>
+</section>
+
+<section id="results" data-tab="results">
+  <h2>RESULTS</h2>
+  <h3>The numbers, in one place</h3>
+  <p>Every quantitative output of the model, annualised from the 200-day observation window. The
+     narrative tabs explain these; this tab is for reading them off and taking them away. All
+     figures move with the controls on the Fuel switching tab.</p>
+
+  <p class="mute" style="margin:36px 0 8px"><b>Table R1.</b> Corridor baseline, per year.</p>
+  <div id="res-baseline"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R2.</b> Pathways compared with the baseline.</p>
+  <div id="res-pathways"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R3.</b> Marginal abatement cost, two bases.</p>
+  <div id="res-macc"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R4.</b> Ten largest emitters on the corridor over the observed window.</p>
+  <div id="res-vessels"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R5.</b> Break-even grid carbon intensity for full electrification.</p>
+  <div id="res-breakeven"></div>
+
+  <p class="mute" style="margin:40px 0 0">Machine-readable: 
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/scenarios_annual.csv">scenarios_annual.csv</a> ·
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/per_vessel_route_totals.csv">per_vessel_route_totals.csv</a> ·
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/sanity_checks.csv">sanity_checks.csv</a> ·
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/docs/data.json">data.json</a></p>
 </section>
 
 <section id="baseline" data-tab="energy">
@@ -995,6 +1025,7 @@ function render(){
       fmt(b.capex_newbuild_musd*R.k,1), fmt(b.capex_retrofit_musd*R.k,1)]));
 
   macc("chart-macc");
+  results();
   hbar("chart-wait",{title:"Whether engines idle while queueing moves the total by under 7%",
     sub:"Annual CO2, kilotonnes", source:"Model output from AIS port-to-port movements, Jan–Aug 2026; IMO/ICCT emission factors.",
     data:D.waiting_sensitivity.map((w,i)=>({
@@ -1196,6 +1227,62 @@ function macc(mount){
   document.getElementById("capex-note").innerHTML="<b>Indicative capex, $M whole corridor:</b> "+
     Object.entries(CAPEX).filter(([k])=>k!=="b40").map(([k,c])=>`${k.replace("_"," ")} ${c.musd} (${c.note})`).join("; ")+
     ". <span class='tagline t-assum'>ASSUMPTION</span> Order-of-magnitude figures for screening, not estimates.";
+}
+
+
+/* ---------- results tab ---------- */
+function results(){
+  const R=compute(), T_=D.totals_annual, base=R.rows[0];
+  const k=R.k;
+  const wide=id=>{const e=document.getElementById(id); e.style.cssText="width:min(var(--wide),100vw - 48px);position:relative;left:50%;transform:translateX(-50%)";return e;};
+
+  wide("res-baseline").innerHTML = tbl(["Quantity","Value","Unit","Note"],[
+    ["Crossings observed", fmt(D.coverage.voyages_observed), "", D.window.span_days+" days, "+D.coverage.route_vessels+" vessels"],
+    ["Crossings, annualised", fmt(Math.round(D.coverage.voyages_observed*D.window.annualisation_factor/100)*100), "per year", "×"+D.window.annualisation_factor],
+    ["Fuel burned", sig(T_.fuel_t*k/1000,3), "kt", sig(T_.residual_share*100,2)+"% residual, rest distillate"],
+    ["Fuel energy", sig(T_.fuel_energy_mwh*k/1000,3), "GWh", "lower heating value"],
+    ["Shaft energy", sig(T_.shaft_energy_mwh*k/1000,3), "GWh", fmt(D.energy_split.auxiliary_share_pct,0)+"% auxiliary"],
+    ["Shore electricity if electrified", sig(D.shore_energy_mwh_annual*k/1000,3), "GWh", "after drivetrain and charging losses"],
+    ["CO₂", sig(T_.co2_t*k/1000,3), "kt", "tank-to-wake"],
+    ["CO₂e, 100-year", sig(T_.co2e100_t*k/1000,3), "kt", "CO₂ + CH₄ + N₂O + black carbon"],
+    ["CO₂e, 20-year", sig(T_.co2e20_t*k/1000,3), "kt", "same, GWP-20"],
+    ["NOₓ", sig(T_.nox_t*k,3), "t", "MARPOL tier by build year"],
+    ["SOₓ", sig(T_.sox_t*k,3), "t", "at "+D.assumptions.sulphur_pct.residual+"% sulphur residual"],
+    ["PM", sig(T_.pm_t*k,3), "t", ""],
+    ["Black carbon", sig(T_.bc_t*k,3), "t", "load-dependent, four-stroke"],
+    ["Fuel cost", "$"+fmt(base.cost/1e6,1)+"M", "per year", "at $"+fmt(R.pBlend||0)+"/t blended"],
+    ["Median CO₂ per crossing", sig(D.voyage_stats.median_co2_per_voyage_t*k,2), "t", ""]
+  ]);
+
+  wide("res-pathways").innerHTML = tbl(
+    ["Pathway", R.label+" kt", "Δ emissions", "Energy in GWh", "Cost $M", "Δ cost $M", "Verdict"],
+    R.rows.map(r=>{
+      const dE=-r.savedPct, dC=r.delta/1e6;
+      const v = r===base?{t:"—",cls:"neu"}:(r.saved>base.g*0.005&&r.delta<-5e4)?{t:"cleaner and cheaper",cls:"pos"}:
+                (r.saved>base.g*0.005)?{t:"cleaner, costs more",cls:"neu"}:(r.delta<-5e4)?{t:"cheaper, dirtier",cls:"neg"}:{t:"—",cls:"neu"};
+      return [r.label, sig(r.g/1000,3),
+        Math.abs(dE)<0.05?{t:"—",cls:"neu"}:{t:(dE<0?"−":"+")+Math.abs(dE).toFixed(1)+"%",cls:dE<0?"pos":"neg"},
+        sig(r.energy/1000,3), fmt(r.cost/1e6,1),
+        Math.abs(dC)<0.05?{t:"—",cls:"neu"}:{t:(dC<0?"−":"+")+Math.abs(dC).toFixed(1),cls:dC<0?"pos":"neg"}, v];}));
+
+  const keys={"B40 drop-in biodiesel":"b40","B100 / HVO drop-in":"b100","Bio-methanol (conversion)":"bio_methanol",
+              "Shore power at berth and anchorage":"shore_power","Battery-electric, PLN grid":"electric_grid","Battery-electric, dedicated RE":"electric_re"};
+  wide("res-macc").innerHTML = tbl(
+    ["Pathway","Abatement kt","$/t, operating cost only","$/t, with indicative capex","Capex $M"],
+    R.rows.slice(1).map(r=>{
+      const kk=keys[r.label], c=CAPEX[kk]||{musd:0,life:1};
+      let withCap=r.delta+c.musd*1e6*crf(S.rate,c.life); if(kk==="electric_re") withCap-=r.cost;
+      const cell=(cost)=> r.saved<=base.g*0.005 ? {t:"raises emissions",cls:"neg"} :
+        {t:(cost/r.saved<0?"−":"")+"$"+fmt(Math.abs(Math.round(cost/r.saved/10)*10)), cls:cost/r.saved<0?"pos":"neg"};
+      return [r.label, r.saved>base.g*0.005?sig(r.saved/1000,3):{t:"—",cls:"neu"}, cell(r.delta), cell(withCap), fmt(c.musd)];}));
+
+  wide("res-vessels").innerHTML = tbl(["Vessel","GT","Crossings","Median steaming kn","Mean load","CO₂ t","CO₂ per crossing t"],
+    D.per_vessel.slice(0,10).map(v=>[v.name, fmt(v.gt), fmt(v.voyages), fmt(v.v_steam,1), fmt(v.mean_load*100,0)+"%", fmt(v.co2_t), fmt(v.co2_per_voyage_t,2)]));
+
+  wide("res-breakeven").innerHTML = tbl(["Metric","Break-even grid intensity tCO₂/MWh","Indonesia today","Verdict"],[
+    ["CO₂ only", fmt(D.breakeven_grid_ef_tco2_per_mwh,2), "0.75–0.90", {t:"electric is dirtier",cls:"neg"}],
+    ["CO₂e, 100-year", fmt(D.breakeven_grid_ef_co2e100,2), "0.75–0.90", {t:"close to neutral",cls:"neu"}],
+    ["CO₂e, 20-year", fmt(D.breakeven_grid_ef_co2e20,2), "0.75–0.90", {t:"electric is cleaner",cls:"pos"}]]);
 }
 
 /* ---------- live AIS embeds (VesselFinder public embed, no key) ---------- */
