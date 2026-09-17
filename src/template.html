@@ -156,6 +156,9 @@ figure.chart > div > svg:not(.free){width:100%;aspect-ratio:9/4;height:auto;disp
 /* briefing blocks */
 .keybox{border:1px solid var(--rule);border-top:2px solid var(--accent);padding:22px 28px 10px;margin:40px 0 0;background:#fff}
 .keybox-head{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:600}
+ol.qs{margin:14px 0 16px;padding:0 0 0 22px}
+ol.qs li{margin:0 0 12px;text-align:justify;hyphens:auto}
+ol.qs li b{font-family:var(--sans);font-size:15.5px}
 ol.impl{list-style:none;padding:0;margin:8px 0 28px;counter-reset:n}
 ol.impl li{position:relative;padding:0 0 0 44px;margin:0 0 22px;counter-increment:n;text-align:justify;hyphens:auto}
 ol.impl li::before{content:counter(n);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;
@@ -211,7 +214,7 @@ section > h2{color:var(--brand)}
     <a class="brand" href="#context">Sunda Strait Ferry Emissions</a>
     <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
   <button role="tab" data-tab="context">Context</button>
-  <button role="tab" data-tab="results">Key results</button>
+  <button role="tab" data-tab="results">Key messages</button>
   <button role="tab" data-tab="implications">Implications</button>
   <button role="tab" data-tab="method">Methodology</button>
   <button role="tab" data-tab="data">Data sources and assumptions</button>
@@ -250,19 +253,25 @@ section > h2{color:var(--brand)}
      crosses it on a ferry, from the port of Merak on the Java side to Bakauheni on Sumatra. About
      170 sailings a day, around the clock, carrying trucks, buses, cars and passengers. It is one of
      the busiest ferry corridors in the world.</p>
-  <p>The ferries burn marine diesel and heavy fuel oil. This briefing asks three questions a
-     policymaker would want answered before committing money to cleaning the crossing up. How much
-     fuel and carbon does it actually account for? Where in the operation does the energy go? And of
-     the options on the table, from blending in biofuel to replacing the fleet with battery-powered
-     ships, which ones would cut emissions, at what cost, and under what conditions?</p>
+  <p>The ferries burn marine diesel and heavy fuel oil. This briefing sets out to answer three
+     questions a policymaker would want settled before committing money to cleaning the crossing
+     up.</p>
+  <div class="keybox">
+    <div class="keybox-head">The questions</div>
+    <ol class="qs">
+      <li><b>How much does it account for?</b> The fuel, energy and emissions of the corridor as it
+        runs today, and how that compares with things a reader can picture.</li>
+      <li><b>Where does the energy go?</b> Whether the fuel is burned crossing the strait, or
+        somewhere less obvious in the operation.</li>
+      <li><b>What would actually change it?</b> Of the options on the table, from blending biofuel
+        into the existing fleet to replacing it with battery ships, which cut emissions, at what
+        cost, and under what conditions.</li>
+    </ol>
+  </div>
   <p>The answers are built from seven months of ship-movement records and a register of the
      vessels involved, using the same method the International Maritime Organization uses for its
      global inventories. Every number here is an estimate, and the tabs on methodology and data
      say how good each one is.</p>
-  <div class="keybox">
-    <div class="keybox-head">Key messages</div>
-  <ol id="pyramid" style="list-style:none;padding:0;margin:12px 0 0"></ol>
-  </div>
 
   <div class="twin" style="margin-top:44px">
     <figure class="chart twin-fig">
@@ -323,13 +332,19 @@ section > h2{color:var(--brand)}
 </section>
 
 <section id="baseline" data-tab="results">
-  <h2>KEY RESULTS</h2>
-  <h3>What the corridor emits today, and what each option would change</h3>
+  <h2>KEY MESSAGES</h2>
+  <h3>Three findings, and the evidence behind each</h3>
+  <div class="keybox" style="margin-top:0">
+    <div class="keybox-head">In brief</div>
+    <ol id="pyramid" style="list-style:none;padding:0;margin:12px 0 0"></ol>
+  </div>
+  <p style="margin-top:40px">The rest of this tab is the evidence. It answers the three questions
+     in order: how much, where, and what would change it.</p>
   <p>The figures below are annual, scaled up from the 200 days of ship movements observed between
      late January and mid August 2026. Bars are ranked so the largest quantity sits at the top.
      The tables at the end of this tab carry the same numbers for reference, and everything on the
      page moves together if the controls further down are changed.</p>
-  <h2 style="margin-top:56px">WHERE THE ENERGY GOES</h2>
+  <h2 style="margin-top:64px">HOW MUCH, AND WHERE THE ENERGY GOES</h2>
   <h3>Hotel load, not propulsion, is where the energy goes: these ships spend most of their day stationary with the generators running</h3>
   <div class="grid2">
     <div>
