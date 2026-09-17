@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Live AIS</title>
+<style>html,body{margin:0;height:100%;background:#EEF3F5;overflow:hidden}</style>
+<script>
+  // VesselFinder's public embed (aismap.js) reads these globals and writes its map into the
+  // page with document.write, which only works while the page is being parsed. This helper
+  // exists so the main page can embed it as an iframe and change vessels by changing the URL.
+  var q = new URLSearchParams(location.search);
+  var width  = "100%";
+  var height = String(Math.max(200, window.innerHeight || 440));
+  var names  = true;
+  var zoom   = q.get("zoom")  || "10";
+  var latitude  = q.get("lat") || "-5.90";
+  var longitude = q.get("lon") || "105.87";
+  if (q.get("imo")) { var imo = q.get("imo"); var show_track = true; }
+  if (q.get("mmsi")) { var mmsi = q.get("mmsi"); var show_track = true; }
+</script>
+</head>
+<body>
+<script type="text/javascript" src="https://www.vesselfinder.com/aismap.js"></script>
+<noscript>Live map needs JavaScript.</noscript>
+</body>
+</html>

@@ -1436,13 +1436,12 @@ function results(){
 function vfEmbed(hostId, opts){
   const host=document.getElementById(hostId); if(!host) return;
   host.innerHTML="";
-  const q=new URLSearchParams(opts.params).toString();
   const f=document.createElement("iframe");
   f.style.cssText="width:100%;height:100%;border:0;display:block";
   f.setAttribute("loading","lazy");
-  f.setAttribute("referrerpolicy","no-referrer-when-downgrade");
   f.setAttribute("title", opts.title||"Live AIS map");
-  f.src="https://www.vesselfinder.com/aismap?"+q;
+  // same-origin helper page that runs VesselFinder's embed script at parse time
+  f.src="track.html?"+new URLSearchParams(opts.params).toString();
   host.appendChild(f);
 }
 function liveMaps(){
@@ -1453,9 +1452,7 @@ function liveMaps(){
     const v=L.find(x=>String(x.imo)===sel.value)||L[0]; if(!v) return;
     document.getElementById("v-pick-link").href="https://www.vesselfinder.com/vessels/details/"+v.imo;
     document.getElementById("one-cap").innerHTML=`<b>${v.name}</b>, ${fmt(v.crossings)} crossings in the study window. Latest reported position and last 24 hours of track from public AIS via VesselFinder. Terrestrial coverage; positions can lag a few minutes. If the frame is blank, the vessel is out of receiver range or has its transponder off; the link above opens its page directly.`;
-    vfEmbed("vf-one",{title:"Live position of "+v.name,params:{
-      zoom:"10",lat:"-5.90",lon:"105.87",width:"1000",height:"440",names:"true",
-      imo:String(v.imo),track:"true"}});
+    vfEmbed("vf-one",{title:"Live position of "+v.name,params:{imo:String(v.imo),zoom:"10"}});
   };
   sel.addEventListener("change",show); show();
 }
