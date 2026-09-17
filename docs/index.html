@@ -120,8 +120,8 @@ footer{border-top:1px solid var(--rule);padding:40px 0 96px;margin-top:112px;
              padding:16px 14px 14px;cursor:pointer;white-space:nowrap;margin-bottom:-1px}
 .tabs button:hover{color:var(--ink)}
 .tabs button[aria-selected="true"]{color:var(--ink);font-weight:600;border-bottom-color:var(--ink)}
-section[data-tab]{display:none}
-section[data-tab].active{display:block}
+section[data-tab],header[data-tab]{display:none}
+section[data-tab].active,header[data-tab].active{display:block}
 section[data-tab].active + section[data-tab].active{padding-top:96px}
 section.active:first-of-type{padding-top:56px}
 
@@ -133,7 +133,7 @@ header.site{position:sticky;top:0;z-index:20;background:var(--paper);border-top:
        display:flex;align-items:center;white-space:nowrap;letter-spacing:-.01em}
 .tabs{position:static;background:none;border:0;margin:0;padding:0;flex:1;justify-content:flex-end}
 .tabs button{padding:18px 14px 16px}
-header.masthead{padding-top:64px}
+header.masthead{padding-top:56px;padding-bottom:0}
 .masthead .wrap{max-width:900px}
 .masthead .sub{text-align:justify;hyphens:auto}
 
@@ -221,7 +221,7 @@ section > h2{color:var(--brand)}
   </div>
 </header>
 
-<header class="masthead">
+<header class="masthead" data-tab="context">
   <div class="wrap">
     <h1>What the Sunda Strait ferries burn</h1>
     <p class="sub">Every twelve minutes or so, a ferry leaves Merak for Bakauheni. It is fifteen
@@ -233,15 +233,6 @@ section > h2{color:var(--brand)}
 
 <div class="wrap">
 
-<div class="flag">
-  <b>Read this before using any number on this page.</b>
-  Emission factors, auxiliary power demand, low-load penalties, hull fouling and the phase structure
-  are transcribed from the published inventory literature and carry a
-  <span class="tagline t-src">SOURCED</span> tag. What remains analyst judgement carries
-  <span class="tagline t-assum">ASSUMPTION</span>, and the largest of those is installed engine power:
-  the register supplied has no kW field, so power is estimated from hull dimensions. Nine sanity
-  checks against independent benchmarks are reported below and all currently pass.
-</div>
 
 
 <section id="answer" data-tab="context">
@@ -568,6 +559,15 @@ section > h2{color:var(--brand)}
       useful energy constant and changing what supplies it: a different fuel and its price, or
       electricity at the industrial tariff and the grid's carbon intensity.</div></div>
   </div>
+<div class="flag" style="margin:8px 0 36px">
+  <b>How to read the numbers.</b>
+  Emission factors, auxiliary power demand, low-load penalties, hull fouling and the phase structure
+  are transcribed from the published inventory literature and carry a
+  <span class="tagline t-src">SOURCED</span> tag. What remains analyst judgement carries
+  <span class="tagline t-assum">ASSUMPTION</span>, and the largest of those is installed engine power:
+  the register supplied has no kW field, so power is estimated from hull dimensions. Nine sanity
+  checks against independent benchmarks are reported further down this tab and all currently pass.
+</div>
   <p>Two checks keep this honest. Every input that is not read from the data is tagged as either
      transcribed from a published source or an analyst's assumption, and listed on the data tab.
      And nine model outputs are compared against figures known independently, from engine
@@ -1470,14 +1470,14 @@ function liveMaps(){
 function tabs(){
   const bar=document.getElementById("tabs");
   const btns=[...bar.querySelectorAll("button")];
-  const secs=[...document.querySelectorAll("section[data-tab]")];
+  const secs=[...document.querySelectorAll("[data-tab]")].filter(e=>e.tagName!=="BUTTON");
   const order=btns.map(b=>b.dataset.tab);
   function show(name,push){
     if(!order.includes(name)) name=order[0];
     btns.forEach(b=>{const on=b.dataset.tab===name; b.setAttribute("aria-selected",on); b.tabIndex=on?0:-1;});
     let first=true;
     secs.forEach(s=>{const on=s.dataset.tab===name; s.classList.toggle("active",on);
-      if(on){ s.style.paddingTop = first ? "56px" : "96px"; first=false; }});
+      if(on){ if(s.tagName==="SECTION") s.style.paddingTop = first ? "40px" : "96px"; first=false; }});
     if(push) history.replaceState(null,"","#"+name);
     if(push) window.scrollTo({top:bar.offsetTop-8,behavior:"auto"});
   }
