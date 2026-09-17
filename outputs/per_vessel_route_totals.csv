@@ -60,7 +60,7 @@ IMO,name,is_asdp,voyages,hours,wait_h,fuel_t,co2_t,co2e100_t,shaft_mwh,propulsio
 8807076,Raja Basa I,False,210,695.95,88.62,137.25,427.39,537.76,590.56,90.28,0.1,6.43,3500.0,2000.0,1593.2,gt_regression,residual,False,2.04
 1146552,Katya,False,108,299.93,84.95,109.77,341.83,407.97,480.08,266.79,0.44,10.75,15000.0,2000.0,3750.0,gt_regression,residual,False,3.17
 8518039,Hm Baruna I,False,135,273.15,172.65,79.83,248.58,286.35,354.63,136.2,0.98,25.0,4432.0,1986.0,1627.2,dimensions,residual,True,1.84
-8220060,Kirana Ix,False,63,155.13,32.03,59.62,185.66,253.27,245.63,135.37,0.16,11.06,9168.0,1983.0,8169.82,dimensions,residual,True,2.95
+8220060,Kirana IX,False,63,155.13,32.03,59.62,185.66,253.27,245.63,135.37,0.16,11.06,9168.0,1983.0,8169.82,dimensions,residual,True,2.95
 1153361,Putra Wajo,False,66,206.07,74.08,49.27,153.42,181.59,216.16,69.84,0.44,10.71,3500.0,2000.0,1593.2,gt_regression,residual,False,2.32
 1153373,New Zhima,False,52,162.93,58.97,38.91,121.18,143.42,170.74,55.03,0.44,10.71,3500.0,2000.0,1593.2,gt_regression,residual,False,2.33
 6725523,Titian Murni,False,29,101.38,16.07,19.68,61.3,76.79,84.8,12.1,0.09,6.31,3500.0,2000.0,1593.2,gt_regression,residual,False,2.11

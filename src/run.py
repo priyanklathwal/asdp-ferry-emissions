@@ -32,6 +32,7 @@ Run:  python src/run.py --workbook <path.xlsx>
 
 import argparse
 import json
+import re
 import os
 import sys
 from datetime import datetime, timezone
@@ -67,7 +68,8 @@ def load_workbook(path):
 def clean_inventory(inv):
     df = pd.DataFrame({
         "imo": inv["IMO"].astype("Int64"),
-        "name": inv["Ship Name"].astype(str).str.title(),
+        "name": inv["Ship Name"].astype(str).str.title().str.replace(
+            r"\b(I{2,3}|Iv|Vi{1,3}|Ix|Xi{0,3})\b", lambda m: m.group(0).upper(), regex=True),
         "type": inv["List.Type"],
         "owner": inv["List.Corporate Owner"],
         "company": inv["List.Company"],
@@ -121,7 +123,9 @@ def fill_unmatched_route_vessels(moves, ships):
     for _, r in missing.iterrows():
         gt = band_gt.get(r["band"], default_gt)
         rows.append({
-            "imo": int(r["IMO"]), "name": str(r["name"]).title(), "type": "Ro-ro Ferry",
+            "imo": int(r["IMO"]), "name": re.sub(r"\b(I{2,3}|Iv|Vi{1,3}|Ix|Xi{0,3})\b",
+                                                  lambda m: m.group(0).upper(), str(r["name"]).title()),
+            "type": "Ro-ro Ferry",
             "owner": None, "company": None, "gt": gt, "dwt": np.nan,
             "built": float(C.REFERENCE_YEAR - C.ASSUMED_AGE_UNMATCHED),
             "status": "In Service", "speed_kn": np.nan, "beam_m": np.nan,
@@ -549,7 +553,7 @@ def main():
     busiest = int(voy.groupby("IMO").size().idxmax())
     tl = voy[voy["IMO"] == busiest].sort_values("Last Seen In Origin Port").copy()
     tl_name = str(tl["name"].iat[0])
-    t0 = tl["Last Seen In Origin Port"].min().normalize()
+    t0 = tl["Last Seen In Origin Port"].min().normalize() + pd.Timedelta(days=1)  # first full day
     win = tl[(tl["Last Seen In Origin Port"] >= t0)
              & (tl["Last Seen In Origin Port"] < t0 + pd.Timedelta(days=7))]
     timeline = []

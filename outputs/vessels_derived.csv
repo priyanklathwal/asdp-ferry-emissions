@@ -48,27 +48,27 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8864012,Dharma Badra,239.0,51.0,400.0,dimensions,distillate,True
 7128095,Dharma Ferry 2,2673.0,55.0,700.0,dimensions,residual,True
 8925153,Dharma Ferry 3,499.0,30.0,500.0,gt_regression,distillate,True
-8910990,Dharma Ferry Ix,2916.0,37.0,1100.0,dimensions,residual,True
+8910990,Dharma Ferry IX,2916.0,37.0,1100.0,dimensions,residual,True
 9145865,Dharma Ferry V,11931.0,30.0,19100.0,dimensions,residual,True
-8904563,Dharma Ferry Vi,2825.0,37.0,1800.0,dimensions,distillate,True
-9035113,Dharma Ferry Vii,12415.0,33.0,19850.0,dimensions,residual,True
-9037941,Dharma Ferry Viii,2877.0,35.0,850.0,dimensions,residual,True
+8904563,Dharma Ferry VI,2825.0,37.0,1800.0,dimensions,distillate,True
+9035113,Dharma Ferry VII,12415.0,33.0,19850.0,dimensions,residual,True
+9037941,Dharma Ferry VIII,2877.0,35.0,850.0,dimensions,residual,True
 8103975,Dharma Kartika,259.0,45.0,250.0,dimensions,distillate,True
 9125437,Dharma Kartika I,1305.0,31.0,750.0,dimensions,distillate,True
 9162162,Dharma Kartika Ii,9245.0,29.0,14800.0,dimensions,residual,True
 8815358,Dharma Kartika Iii,699.0,37.0,550.0,gt_regression,residual,True
-9140023,Dharma Kartika Ix,6801.0,30.0,10900.0,dimensions,residual,True
-9174751,Dharma Kartika Vii,9950.0,27.0,4000.0,gt_regression,residual,True
-8904939,Dharma Kartika Viii,699.0,37.0,650.0,dimensions,distillate,True
+9140023,Dharma Kartika IX,6801.0,30.0,10900.0,dimensions,residual,True
+9174751,Dharma Kartika VII,9950.0,27.0,4000.0,gt_regression,residual,True
+8904939,Dharma Kartika VIII,699.0,37.0,650.0,dimensions,distillate,True
 9040467,Dharma Kencana Ii,4144.0,34.0,1600.0,dimensions,residual,True
 8904226,Dharma Kencana Iii,2510.0,37.0,1250.0,dimensions,residual,True
-8815346,Dharma Kencana Ix,2624.0,38.0,950.0,dimensions,residual,True
+8815346,Dharma Kencana IX,2624.0,38.0,950.0,dimensions,residual,True
 9162124,Dharma Kencana V,11933.0,29.0,19100.0,dimensions,residual,True
-9035125,Dharma Kencana Vii,12418.0,33.0,19850.0,dimensions,residual,True
+9035125,Dharma Kencana VII,12418.0,33.0,19850.0,dimensions,residual,True
 7908641,Dharma Kosala,625.0,47.0,750.0,dimensions,distillate,True
 9044516,Dharma Rucitra 9,3270.0,34.0,3450.0,dimensions,residual,True
 8921767,Dharma Rucitra I,6698.0,36.0,9900.0,dimensions,residual,True
-9333735,Dharma Rucitra Viii,7751.0,20.0,12400.0,dimensions,residual,True
+9333735,Dharma Rucitra VIII,7751.0,20.0,12400.0,dimensions,residual,True
 8892837,Dingkis,404.0,33.0,400.0,dimensions,distillate,True
 9895056,Dln Batu Layar,9187.0,6.0,3350.0,dimensions,residual,True
 9979400,Dln Mandalika,12611.0,3.0,3150.0,dimensions,residual,True
@@ -109,7 +109,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9740196,Inerie Ii,1031.0,13.0,800.0,dimensions,distillate,True
 8324074,Jagantara,5110.0,42.0,7150.0,dimensions,residual,True
 9838979,Jambo X,1346.0,9.0,950.0,dimensions,distillate,True
-8210015,Jambo Xii,3869.0,43.0,3700.0,dimensions,residual,True
+8210015,Jambo XII,3869.0,43.0,3700.0,dimensions,residual,True
 9115066,Jambo Xiv,3664.0,31.0,1800.0,dimensions,residual,True
 7818638,Jatra Ii,3902.0,46.0,1750.0,dimensions,residual,True
 8349244,Jax,1136.0,24.0,850.0,gt_regression,distillate,True
@@ -132,8 +132,8 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8414350,Kirana I,2326.0,42.0,3700.0,dimensions,residual,True
 7320186,Kirana Ii,6292.0,53.0,5900.0,dimensions,residual,True
 7374539,Kirana Iii,2635.0,52.0,2450.0,dimensions,residual,True
-8220060,Kirana Ix,9168.0,43.0,8150.0,dimensions,residual,True
-9950662,Kirana Vii,1933.0,5.0,1150.0,gt_regression,distillate,True
+8220060,Kirana IX,9168.0,43.0,8150.0,dimensions,residual,True
+9950662,Kirana VII,1933.0,5.0,1150.0,gt_regression,distillate,True
 9000900,Kmp Mutiara Barat,19232.0,35.0,16700.0,dimensions,residual,True
 9821067,Kokonao,263.0,10.0,350.0,gt_regression,distillate,True
 8825327,Komodo,194.0,44.0,150.0,dimensions,distillate,True
@@ -145,7 +145,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9828845,Lakaan,1689.0,10.0,550.0,dimensions,distillate,True
 9817602,Lelemuku,591.0,9.0,200.0,dimensions,distillate,True
 8996542,Lemuru,227.0,35.0,150.0,dimensions,distillate,True
-8524272,Liputan Xii,1221.0,21.0,850.0,gt_regression,distillate,True
+8524272,Liputan XII,1221.0,21.0,850.0,gt_regression,distillate,True
 8734499,Lobster,627.0,18.0,200.0,dimensions,distillate,True
 8676403,Lohoraung,458.0,14.0,450.0,dimensions,distillate,True
 8738512,Lokongbanua,560.0,17.0,300.0,dimensions,distillate,True
@@ -179,11 +179,11 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9835991,Munic 9,7288.0,8.0,2900.0,dimensions,residual,True
 8210950,Munic Iii,1823.0,43.0,1050.0,dimensions,distillate,True
 9828833,Munic V,936.0,10.0,800.0,dimensions,distillate,True
-9855939,Munic Xi,1681.0,8.0,1050.0,gt_regression,distillate,True
+9855939,Munic XI,1681.0,8.0,1050.0,gt_regression,distillate,True
 8998772,Muria,419.0,30.0,450.0,gt_regression,distillate,True
 9154074,Mutiara Ferindo 1,18460.0,30.0,17100.0,dimensions,residual,True
 8980488,Mutiara Ferindo Iii,994.0,24.0,400.0,dimensions,distillate,True
-9066784,Mutiara Ferindo Vii,32645.0,32.0,25200.0,dimensions,residual,True
+9066784,Mutiara Ferindo VII,32645.0,32.0,25200.0,dimensions,residual,True
 8699613,Mutiara Indonesia,818.0,18.0,700.0,gt_regression,distillate,True
 9105176,Mutiara Persada Ii,3965.0,31.0,3750.0,dimensions,residual,True
 9004592,Mutiara Persada Iii,15380.0,35.0,14250.0,dimensions,residual,True
@@ -227,9 +227,9 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 7910917,Port Link,12619.0,45.0,8300.0,dimensions,residual,True
 8604333,Port Link Iii,9023.0,40.0,14450.0,dimensions,residual,True
 8666147,Portlink V,3575.0,14.0,1400.0,dimensions,distillate,True
-9172791,Portlink Vii,1998.0,29.0,1650.0,gt_regression,distillate,True
-9820099,Portlink Viii,2125.0,10.0,900.0,dimensions,residual,True
-7204655,Prathita Iv,507.0,58.0,700.0,dimensions,distillate,True
+9172791,Portlink VII,1998.0,29.0,1650.0,gt_regression,distillate,True
+9820099,Portlink VIII,2125.0,10.0,900.0,dimensions,residual,True
+7204655,Prathita IV,507.0,58.0,700.0,dimensions,distillate,True
 6911691,Prima Nusantara,2773.0,57.0,1250.0,dimensions,residual,True
 9023419,Primas I,147.0,30.0,250.0,dimensions,distillate,True
 8999142,Pulau Rubiah,485.0,29.0,200.0,dimensions,distillate,True
@@ -239,7 +239,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8621733,Putri Gianyar,819.0,42.0,850.0,dimensions,distillate,True
 9037575,Putri Yasmin,1790.0,34.0,800.0,dimensions,distillate,True
 9042881,Queen Soya,2983.0,34.0,4600.0,dimensions,residual,True
-9640190,Quicksilver Ix,193.0,12.0,300.0,dimensions,distillate,True
+9640190,Quicksilver IX,193.0,12.0,300.0,dimensions,distillate,True
 9072575,Raja Dilaut,937.0,33.0,1400.0,dimensions,distillate,True
 8822222,Rajarakata,8886.0,37.0,6950.0,dimensions,residual,True
 9725031,Ranaka,1029.0,13.0,800.0,dimensions,distillate,True
@@ -337,7 +337,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9884382,Wira Ono Niha,1654.0,7.0,950.0,dimensions,distillate,True
 9804291,Wira Victoria,3792.0,10.0,1500.0,dimensions,residual,True
 9857652,Zoey,6886.0,8.0,2350.0,gt_regression,residual,True
-9083627,Dharma Rucitra Vii,16164.0,32.0,6200.0,gt_regression,residual,True
+9083627,Dharma Rucitra VII,16164.0,32.0,6200.0,gt_regression,residual,True
 8508802,Harmoni Mas,3545.0,41.0,1600.0,gt_regression,residual,True
 9037965,Harmoni Mas 3,4361.0,34.0,4650.0,gt_regression,residual,True
 8720541,Lestari Maju,749.0,38.0,350.0,gt_regression,distillate,True
