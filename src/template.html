@@ -146,7 +146,7 @@ header.masthead{padding-top:56px;padding-bottom:0}
 .fig-sub{font-size:13px;color:var(--ink-2);margin-top:4px}
 .twin-controls{display:flex;gap:10px;align-items:center;margin:0 0 12px}
 .twin-controls select{flex:1}
-.mapbox{width:100%;height:440px;background:#EEF3F5;position:relative;border:1px solid var(--rule);overflow:hidden}
+.mapbox{width:100%;height:440px;background:var(--water);position:relative;border:1px solid var(--rule);overflow:hidden}
 .mapbox-static{background:#fff}
 .mapbox-static svg{width:100%;height:100%;display:block}
 
@@ -226,7 +226,7 @@ section > h2{color:var(--brand)}
     <h1>What the Sunda Strait ferries burn</h1>
     <p class="sub">Every twelve minutes or so, a ferry leaves Merak for Bakauheni. It is fifteen
        nautical miles. Here is what that costs in energy, in carbon, and in the air over two
-       Indonesian port towns, and what would actually change it.</p>
+       Indonesian port towns, and what would change it.</p>
     <p class="byline" id="byline"></p>
   </div>
 </header>
@@ -247,7 +247,7 @@ section > h2{color:var(--brand)}
   <div class="keybox">
     <div class="keybox-head">The questions</div>
     <ol class="qs">
-      <li>How much fuel and carbon does the crossing account for, and where in the operation does the energy actually go?</li>
+      <li>How much fuel and carbon does the crossing account for, and where in the operation does the energy go?</li>
       <li>Which of the fuel-switching options would cut emissions, and at what cost?</li>
       <li>What has to be true about Indonesia's power grid for electrifying the ferries to make sense?</li>
     </ol>
@@ -373,9 +373,9 @@ section > h2{color:var(--brand)}
           baseline line are worse than doing nothing.</figcaption>
       </figure>
       <div id="pathway-table"></div>
-      <p class="mute" style="margin-top:14px">A note on terminology: SAF is an aviation fuel and has
-        no shipping equivalent by that name. The marine analogues are FAME biodiesel, which
-        Indonesia already blends to B40 on land, HVO renewable diesel, and bio- or e-methanol.</p>
+      <p class="mute" style="margin-top:14px">A note on terminology: sustainable aviation fuel has no shipping equivalent by that name. The marine analogues are
+        conventional biodiesel, which Indonesia already blends at 40% into road diesel, renewable
+        diesel made from waste oils, and methanol made from biomass or renewable electricity.</p>
     </div>
     <aside class="controls">
       <h4>Scenario controls</h4>
@@ -388,7 +388,7 @@ section > h2{color:var(--brand)}
         <input type="range" id="s-tariff" min="30" max="110" step="1">
       </div>
       <div class="ctl">
-        <label>Residual fuel (MFO) <b>$<span id="v-mfo"></span>/t</b></label>
+        <label>Residual fuel oil <b>$<span id="v-mfo"></span>/t</b></label>
         <input type="range" id="s-mfo" min="350" max="1300" step="10">
       </div>
       <div class="ctl">
@@ -497,7 +497,7 @@ section > h2{color:var(--brand)}
       biodiesel blend on land; the question is whether the same feedstock can be spared for
       the strait.</li>
     <li><b>Fix the data before spending on the fleet.</b> The vessel list supplied for this study
-      turned out to cover a different set of ships from the ones actually working the corridor, and
+      turned out to cover a different set of ships from the ones working the corridor, and
       it carries no engine power. A replacement programme priced against that list would be priced
       against the wrong fleet. Three inexpensive data requests, described on the methodology tab,
       would remove most of the uncertainty in every figure on this page.</li>
@@ -974,21 +974,25 @@ function render(){
   const _eg = D.scenarios.find(s=>s.pathway==="electric_grid");
   const _b1 = D.scenarios.find(s=>s.pathway==="b100");
   document.getElementById("pyramid").innerHTML = [
-    ["Hotel load dominates",
-     fmt(D.energy_split.auxiliary_share_pct,0)+"% of shaft energy is auxiliary generators, not "+
-     "propulsion, because a crossing takes "+fmt(D.phase_geometry.steam_h,1)+" hours and the "+
-     "queueing and turnaround around it take "+
-     fmt(D.phase_geometry.berth_h+D.phase_geometry.wait_h,1)+". Shore power alone addresses "+
-     fmt(D.totals_annual.stationary_share_pct,0)+"% of the corridor's energy."],
-    ["The grid is the constraint",
-     "Electrifying saves "+usd(Math.abs(_eg.cost_delta_usd))+" a year and raises CO2 by "+
-     fmt(-_eg.co2_saved_pct,0)+"%, because Indonesia's grid is dirtier per unit of useful "+
-     "energy than the ships' own engines. Break-even sits at "+
-     fmt(D.breakeven_grid_ef_tco2_per_mwh,2)+" tCO2/MWh against a grid running 0.75 to 0.90."],
-    ["Only biofuel works today",
-     "B100 cuts "+fmt(_b1.co2_saved_pct,0)+"% with no capital works, at roughly $"+
-     fmt(Math.round(_b1.abatement_cost_usd_per_tco2e/10)*10)+" a tonne. Everything cheaper "+
-     "raises emissions; everything cleaner needs either new vessels or a cleaner grid."]
+    ["Most of the energy is not spent moving the ship",
+     fmt(D.energy_split.auxiliary_share_pct,0)+"% of the energy these ferries use runs onboard "+
+     "generators for ventilation, lighting and passenger services, not the propellers. The "+
+     "crossing itself takes about "+fmt(D.phase_geometry.steam_h,1)+" hours; the queueing and "+
+     "turnaround around it take "+fmt(D.phase_geometry.berth_h+D.phase_geometry.wait_h,1)+
+     ". Plugging ships into shore electricity while they sit in port would reach "+
+     fmt(D.totals_annual.stationary_share_pct,0)+"% of the corridor's energy without touching an engine."],
+    ["The power grid, not the ships, decides whether electrification helps",
+     "Battery ferries would cut the fuel bill by "+usd(Math.abs(_eg.cost_delta_usd))+" a year "+
+     "and raise carbon emissions by "+fmt(-_eg.co2_saved_pct,0)+"%, because Indonesia's "+
+     "coal-heavy grid emits more per unit of useful energy than the ships' own diesels. The grid "+
+     "would need to get to about "+fmt(D.breakeven_grid_ef_tco2_per_mwh,2)+" tonnes of CO2 per "+
+     "megawatt-hour before electric ferries broke even; today it is between 0.75 and 0.90."],
+    ["Only renewable diesel cuts emissions with the fleet that exists",
+     "Switching the current ships to 100% renewable diesel would cut emissions by about "+
+     fmt(_b1.co2_saved_pct,0)+"% with no new hardware, at roughly $"+
+     fmt(Math.round(_b1.abatement_cost_usd_per_tco2e/10)*10)+" for each tonne avoided. Every "+
+     "option that costs less than that raises emissions; every option that cuts more needs "+
+     "either new vessels or a cleaner grid."]
   ].map((r,i)=>{ const col=[ "var(--ink)", "var(--hot)", "var(--good)" ][i];
     return `<li style="display:grid;grid-template-columns:28px 1fr;gap:14px;margin-bottom:18px">
       <span style="font-family:var(--sans);font-size:13px;font-weight:600;color:${col};

@@ -64,3 +64,19 @@ or ink-3. Hot appears only when a value is worse than the baseline.
 - Reference lines dashed ink with a label at the top.
 - Annotations as short sans text with a 1px leader.
 - Axis lines: baseline only. Gridlines: hairline, three or four at most.
+
+## Review protocol
+
+Before each release, five passes in this order, each with one brief and one written finding:
+
+1. **Model and data.** Re-run the model. All sanity checks must pass. Every number that appears in
+   static prose is checked against the model output; numbers that can be generated from the data
+   should be, so they cannot drift.
+2. **Writing.** Read every tab as a policymaker. Flag jargon on the Context, Key messages and
+   Implications tabs; technical terms are allowed on Methodology and Data. Remove hedges and tics.
+   No em dashes in prose.
+3. **Design.** No CSS classes defined but unused; no colour outside the token set; every chart has
+   a title stating its finding, a subtitle with units, and a source line.
+4. **Consistency.** README, METHODOLOGY and the page agree on every headline number and on the tab
+   structure. Every repository link resolves. Every tab button has a section.
+5. **Release.** Build, render-test, push, confirm the Pages build, record the commit.
