@@ -153,6 +153,18 @@ header.masthead{padding-top:64px}
 /* figures share a frame */
 figure.chart > div > svg:not(.free){width:100%;aspect-ratio:9/4;height:auto;display:block}
 
+/* briefing blocks */
+.keybox{border:1px solid var(--rule);border-top:3px solid var(--brand);padding:22px 28px 10px;margin:40px 0 0;background:#fff}
+.keybox-head{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:600}
+ol.impl{list-style:none;padding:0;margin:8px 0 28px;counter-reset:n}
+ol.impl li{position:relative;padding:0 0 0 44px;margin:0 0 22px;counter-increment:n;text-align:justify;hyphens:auto}
+ol.impl li::before{content:counter(n);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;
+  background:var(--brand);color:#fff;font-family:var(--sans);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center}
+.steps{display:grid;gap:14px;margin:8px 0 30px}
+.steps > div{display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start}
+.steps span{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--brand);border-top:2px solid var(--brand);padding-top:6px}
+.steps div div{text-align:justify;hyphens:auto}
+
 /* brand chrome, Economist register */
 
 header.masthead{padding-top:72px}
@@ -196,15 +208,13 @@ section > h2{color:var(--brand)}
 
 <header class="site">
   <div class="site-inner">
-    <a class="brand" href="#answer">Sunda Strait Ferry Emissions</a>
+    <a class="brand" href="#context">Sunda Strait Ferry Emissions</a>
     <nav class="tabs" id="tabs" role="tablist" aria-label="Sections">
-  <button role="tab" data-tab="answer">The answer</button>
-  <button role="tab" data-tab="results">Results</button>
-  <button role="tab" data-tab="energy">Where the energy goes</button>
-  <button role="tab" data-tab="switching">Fuel switching</button>
-  <button role="tab" data-tab="grid">The grid</button>
-  <button role="tab" data-tab="data">Data and confidence</button>
-  <button role="tab" data-tab="assumptions">Assumptions</button>
+  <button role="tab" data-tab="context">Context</button>
+  <button role="tab" data-tab="results">Key results</button>
+  <button role="tab" data-tab="implications">Implications</button>
+  <button role="tab" data-tab="method">Methodology</button>
+  <button role="tab" data-tab="data">Data sources and assumptions</button>
 </nav>
   </div>
 </header>
@@ -232,14 +242,27 @@ section > h2{color:var(--brand)}
 </div>
 
 
-<section id="answer" data-tab="answer">
-  <h2>THE ANSWER</h2>
-  <h3>Decarbonising this crossing is a power-sector decision, not a shipping one</h3>
-  <p>Every option that removes fuel from these ships moves the emissions onto Indonesia's
-     grid, and at today's grid intensity that is a worse trade on carbon even though it is a
-     far better one on cost. Nothing about the vessels is the binding constraint. Three findings
-     carry that conclusion.</p>
-  <ol id="pyramid" style="list-style:none;padding:0;margin:22px 0 0;max-width:68ch"></ol>
+<section id="answer" data-tab="context">
+  <h2>CONTEXT</h2>
+  <h3>Indonesia's busiest ferry crossing, and what it would take to clean it up</h3>
+  <p>Java and Sumatra, the two most populous islands in Indonesia, are joined by a fifteen-mile
+     stretch of water called the Sunda Strait. Almost everything that moves between them by road
+     crosses it on a ferry, from the port of Merak on the Java side to Bakauheni on Sumatra. About
+     170 sailings a day, around the clock, carrying trucks, buses, cars and passengers. It is one of
+     the busiest ferry corridors in the world.</p>
+  <p>The ferries burn marine diesel and heavy fuel oil. This briefing asks three questions a
+     policymaker would want answered before committing money to cleaning the crossing up. How much
+     fuel and carbon does it actually account for? Where in the operation does the energy go? And of
+     the options on the table, from blending in biofuel to replacing the fleet with battery-powered
+     ships, which ones would cut emissions, at what cost, and under what conditions?</p>
+  <p>The answers are built from seven months of ship-movement records and a register of the
+     vessels involved, using the same method the International Maritime Organization uses for its
+     global inventories. Every number here is an estimate, and the tabs on methodology and data
+     say how good each one is.</p>
+  <div class="keybox">
+    <div class="keybox-head">Key messages</div>
+  <ol id="pyramid" style="list-style:none;padding:0;margin:12px 0 0"></ol>
+  </div>
 
   <div class="twin" style="margin-top:44px">
     <figure class="chart twin-fig">
@@ -261,15 +284,19 @@ section > h2{color:var(--brand)}
   </div>
 </section>
 
-<section id="headline" data-tab="answer">
+<section id="headline" data-tab="context">
   <h2>SCALE</h2>
-  <h3>A single 15-mile crossing burns 631 GWh of fuel a year</h3>
+  <h3>The crossing in four numbers</h3>
+  <p>A gigawatt-hour is a million kilowatt-hours; a household in Jakarta uses roughly three
+     thousand kilowatt-hours a year. A kilotonne is a thousand tonnes. Carbon dioxide equivalent
+     folds the other warming pollutants from a diesel exhaust, chiefly black carbon, into one
+     figure using standard weights.</p>
   <div class="kpis" id="kpis"></div>
   <p class="mute" id="kpi-note"></p>
 </section>
 
 <section id="data" data-tab="data">
-  <h2>WHAT THE DATA CAN ANSWER</h2>
+  <h2>DATA SOURCES</h2>
   <h3>The register you were sent is not the fleet on this route, so fleet replacement and corridor decarbonisation are separate questions</h3>
   <div class="grid2">
     <div>
@@ -295,37 +322,14 @@ section > h2{color:var(--brand)}
   </div>
 </section>
 
-<section id="results" data-tab="results">
-  <h2>RESULTS</h2>
-  <h3>The numbers, in one place</h3>
-  <p>Every quantitative output of the model, annualised from the 200-day observation window. The
-     narrative tabs explain these; this tab is for reading them off and taking them away. All
-     figures move with the controls on the Fuel switching tab.</p>
-
-  <p class="mute" style="margin:36px 0 8px"><b>Table R1.</b> Corridor baseline, per year.</p>
-  <div id="res-baseline"></div>
-
-  <p class="mute" style="margin:44px 0 8px"><b>Table R2.</b> Pathways compared with the baseline.</p>
-  <div id="res-pathways"></div>
-
-  <p class="mute" style="margin:44px 0 8px"><b>Table R3.</b> Marginal abatement cost, two bases.</p>
-  <div id="res-macc"></div>
-
-  <p class="mute" style="margin:44px 0 8px"><b>Table R4.</b> Ten largest emitters on the corridor over the observed window.</p>
-  <div id="res-vessels"></div>
-
-  <p class="mute" style="margin:44px 0 8px"><b>Table R5.</b> Break-even grid carbon intensity for full electrification.</p>
-  <div id="res-breakeven"></div>
-
-  <p class="mute" style="margin:40px 0 0">Machine-readable: 
-    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/scenarios_annual.csv">scenarios_annual.csv</a> ·
-    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/per_vessel_route_totals.csv">per_vessel_route_totals.csv</a> ·
-    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/sanity_checks.csv">sanity_checks.csv</a> ·
-    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/docs/data.json">data.json</a></p>
-</section>
-
-<section id="baseline" data-tab="energy">
-  <h2>FINDING ONE</h2>
+<section id="baseline" data-tab="results">
+  <h2>KEY RESULTS</h2>
+  <h3>What the corridor emits today, and what each option would change</h3>
+  <p>The figures below are annual, scaled up from the 200 days of ship movements observed between
+     late January and mid August 2026. Bars are ranked so the largest quantity sits at the top.
+     The tables at the end of this tab carry the same numbers for reference, and everything on the
+     page moves together if the controls further down are changed.</p>
+  <h2 style="margin-top:56px">WHERE THE ENERGY GOES</h2>
   <h3>Hotel load, not propulsion, is where the energy goes: these ships spend most of their day stationary with the generators running</h3>
   <div class="grid2">
     <div>
@@ -354,8 +358,8 @@ section > h2{color:var(--brand)}
   </div>
 </section>
 
-<section id="pathways" data-tab="switching">
-  <h2>FINDING TWO</h2>
+<section id="pathways" data-tab="results">
+  <h2>WHAT FUEL SWITCHING WOULD DO</h2>
   <h3>Every electrification option cuts cost and raises carbon, and only drop-in biofuel reduces emissions today</h3>
   <div class="grid-side">
     <div>
@@ -417,8 +421,8 @@ section > h2{color:var(--brand)}
   </div>
 </section>
 
-<section id="macc" data-tab="switching">
-  <h2>WHAT IT COSTS TO ABATE</h2>
+<section id="macc" data-tab="results">
+  <h2>WHAT EACH TONNE AVOIDED WOULD COST</h2>
   <h3 id="macc-head"></h3>
   <p>The standard way to compare these is a marginal abatement cost curve: each option is a block
      whose width is how much it could cut and whose height is what each tonne costs. Blocks below
@@ -443,8 +447,69 @@ section > h2{color:var(--brand)}
   </div>
 </section>
 
-<section id="breakeven" data-tab="grid">
-  <h2>FINDING THREE</h2>
+<section id="results" data-tab="results">
+  <h2>REFERENCE TABLES</h2>
+  <h3>The same results as numbers</h3>
+
+  <p class="mute" style="margin:36px 0 8px"><b>Table R1.</b> Corridor baseline, per year.</p>
+  <div id="res-baseline"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R2.</b> Pathways compared with the baseline.</p>
+  <div id="res-pathways"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R3.</b> Marginal abatement cost, two bases.</p>
+  <div id="res-macc"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R4.</b> Ten largest emitters on the corridor over the observed window.</p>
+  <div id="res-vessels"></div>
+
+  <p class="mute" style="margin:44px 0 8px"><b>Table R5.</b> Break-even grid carbon intensity for full electrification.</p>
+  <div id="res-breakeven"></div>
+
+  <p class="mute" style="margin:40px 0 0">Machine-readable: 
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/scenarios_annual.csv">scenarios_annual.csv</a> ·
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/per_vessel_route_totals.csv">per_vessel_route_totals.csv</a> ·
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/outputs/sanity_checks.csv">sanity_checks.csv</a> ·
+    <a href="https://github.com/priyanklathwal/asdp-ferry-emissions/blob/main/docs/data.json">data.json</a></p>
+</section>
+
+<section id="implications" data-tab="implications">
+  <h2>IMPLICATIONS</h2>
+  <h3>What follows for policy</h3>
+  <p>Four conclusions fall out of the numbers, and they point in a different direction from the
+     one most fleet-decarbonisation conversations start in.</p>
+  <ol class="impl">
+    <li><b>Treat the ferries as a power-sector project.</b> The cheapest way to run this corridor
+      is on electricity, by a wide margin. Whether that also cuts emissions depends entirely on
+      how the electricity is made. At today's grid mix it does not. Any electrification plan for
+      Merak and Bakauheni should be written together with a plan for the generation that feeds it,
+      most plausibly solar and storage at the two terminals, where the operator is already building
+      large arrays for terminal load.</li>
+    <li><b>Start with the ships that are not moving.</b> More than a quarter of the corridor's
+      energy is drawn by vessels sitting alongside or queueing offshore with their generators
+      running. Shore power at the berths, with a connection for the anchorage, reaches that block
+      without touching a single engine, saves the operator money from the first year, and becomes a
+      clean-energy measure the moment the supply is clean. It is also the enabling infrastructure
+      for any later battery fleet.</li>
+    <li><b>Use biofuel for the emissions that cannot wait.</b> Blending renewable diesel into the
+      existing fleet is the only measure here that cuts emissions this year with no new hardware.
+      It costs more per litre and its abatement cost sits at the high end of what shipping measures
+      usually cost, but it works with the vessels that exist. Indonesia already mandates a 40%
+      biodiesel blend on land; the question is whether the same feedstock can be spared for
+      the strait.</li>
+    <li><b>Fix the data before spending on the fleet.</b> The vessel list supplied for this study
+      turned out to cover a different set of ships from the ones actually working the corridor, and
+      it carries no engine power. A replacement programme priced against that list would be priced
+      against the wrong fleet. Three inexpensive data requests, described on the methodology tab,
+      would remove most of the uncertainty in every figure on this page.</li>
+  </ol>
+  <p>None of this argues against electrifying the corridor. It argues for sequencing: clean the
+     stationary load and the power supply first, buy the batteries second, and blend biofuel in the
+     meantime. Done in that order, each step is cheaper than the last one made it look.</p>
+</section>
+
+<section id="breakeven" data-tab="implications">
+  <h2>THE DECIDING NUMBER</h2>
   <h3 id="be-head"></h3>
   <div class="grid2">
     <div>
@@ -467,8 +532,49 @@ section > h2{color:var(--brand)}
   </div>
 </section>
 
-<section id="sensitivity" data-tab="data">
-  <h2>CONFIDENCE</h2>
+<section id="method" data-tab="method">
+  <h2>METHODOLOGY</h2>
+  <h3>How the numbers were built</h3>
+  <p>The approach is the one the International Maritime Organization uses for its global greenhouse
+     gas inventories, applied to one corridor. It works from the bottom up: take each ship, work out
+     how hard its engines were working for how long, convert that to fuel, and convert fuel to
+     emissions using published factors. The parameter tables come from the International Council
+     on Clean Transportation's documentation of that method.</p>
+  <div class="steps">
+    <div><span>1</span><div><b>Movements.</b> Every recorded departure and arrival between the two
+      ports, 33,695 of them over 200 days, gives each crossing's duration. Time alongside comes from
+      the gap before the same ship's next departure.</div></div>
+    <div><span>2</span><div><b>Phases.</b> Each crossing is split into manoeuvring, steaming, and
+      waiting for a berth. A ship's own fastest crossings define how long the passage takes when it
+      is not queueing; anything longer is treated as waiting with main engines off, the IMO
+      convention for a ship at anchor.</div></div>
+    <div><span>3</span><div><b>Power.</b> The register has no engine power, so propulsion power is
+      estimated from each hull's size and observed speed using a standard naval-architecture
+      relation, with published corrections for hull fouling, weather and draught. Hotel and
+      ventilation load comes from the IMO's published figure for ro-pax ferries.</div></div>
+    <div><span>4</span><div><b>Emissions.</b> Engine work in kilowatt-hours is multiplied by
+      published emission factors for carbon dioxide, methane, nitrous oxide, black carbon and the
+      local air pollutants, with the IMO's penalty for engines running at low load. Fuel mass and
+      fuel energy are recovered from the carbon dioxide.</div></div>
+    <div><span>5</span><div><b>Options.</b> Each fuel-switching pathway is costed by holding the
+      useful energy constant and changing what supplies it: a different fuel and its price, or
+      electricity at the industrial tariff and the grid's carbon intensity.</div></div>
+  </div>
+  <p>Two checks keep this honest. Every input that is not read from the data is tagged as either
+     transcribed from a published source or an analyst's assumption, and listed on the data tab.
+     And nine model outputs are compared against figures known independently, from engine
+     manufacturers' data to the published ferry timetable; all nine currently agree.</p>
+  <h3 style="margin-top:56px">What would most improve it</h3>
+  <table style="max-width:var(--wide)"><thead><tr><th>Ask</th><th style="text-align:left">Why</th><th style="text-align:left">From whom</th></tr></thead><tbody>
+    <tr><td>Installed engine power for each vessel</td><td style="text-align:left">The largest error bar; a standard field in the same register</td><td style="text-align:left">The register provider</td></tr>
+    <tr><td>Ship positions and speeds, not just port calls</td><td style="text-align:left">Replaces the inferred phase split with observation</td><td style="text-align:left">The AIS provider</td></tr>
+    <tr><td>The operator's fuel purchase records</td><td style="text-align:left">Validates the whole model in one comparison</td><td style="text-align:left">ASDP</td></tr>
+    <tr><td>The official grid emission factor</td><td style="text-align:left">Decides the electrification conclusion</td><td style="text-align:left">Ministry of Energy and Mineral Resources</td></tr>
+  </tbody></table>
+</section>
+
+<section id="sensitivity" data-tab="method">
+  <h2>SENSITIVITY</h2>
   <h3>Modelling choices now move the answer by under 7%; the remaining uncertainty is missing data, not method</h3>
   <div class="grid2">
     <figure class="chart">
@@ -489,7 +595,7 @@ section > h2{color:var(--brand)}
      entirely.</p>
 </section>
 
-<section id="checks" data-tab="data">
+<section id="checks" data-tab="method">
   <h2>VALIDATION</h2>
   <h3>Nine outputs check out against benchmarks from outside the model</h3>
   <p>A bottom-up model of this kind can be internally consistent and still wrong by a factor of
@@ -499,8 +605,8 @@ section > h2{color:var(--brand)}
   <div id="sanity"></div>
 </section>
 
-<section id="assumptions" data-tab="assumptions">
-  <h2>ASSUMPTIONS AND METHODOLOGY</h2>
+<section id="assumptions" data-tab="data">
+  <h2>ASSUMPTIONS</h2>
   <h3>Thirty-seven parameters: 22 sourced, 15 assumptions</h3>
   <div id="assump"></div>
 </section>
@@ -531,6 +637,7 @@ const sig = (n,s=3)=>{
   return r.toLocaleString("en-US",{maximumFractionDigits:Math.max(0,s-1-mag)});
 };
 const kt = n => fmt(n/1000, n<10000?1:0) + " kt";
+const ktv = v => (v>=20?fmt(Math.round(v)):fmt(v,1))+" kt";
 
 /* ---------- state ---------- */
 const DEF = {
@@ -634,8 +741,9 @@ function txt(x,y,s,a={}){const t=el("text",Object.assign(
   {x,y,"font-size":11,fill:P.mute},a)); t.textContent=s; return t;}
 
 function hbar(mount,{data,w=520,rowH=32,pad=190,max=null,fmtv=v=>fmt(v),
-                     refLine=null,refLabel="",title,sub,source}){
+                     refLine=null,refLabel="",title,sub,source,rank=true}){
   const host=document.getElementById(mount); const done=frame(host,{title,sub,source});
+  if(rank) data=[...data].sort((a,b)=>b.v-a.v);
   const h=data.length*rowH+42;
   const svg=el("svg",{viewBox:`0 0 ${w} ${h}`,width:"100%",role:"img"});
   const m=max!==null?max:Math.max(...data.map(d=>d.v))*1.12;
@@ -957,7 +1065,7 @@ function render(){
      fmt(c.voyages_by_asdp_flagged/c.voyages_observed*100,0)+"% of all crossings"]
   ]);
 
-  hbar("chart-age",{title:"Most of the tonnage is in hulls past thirty years old",
+  hbar("chart-age",{rank:false,title:"Most of the tonnage is in hulls past thirty years old",
     sub:"Gross tonnage in the supplied register, by age band", source:"Vessel register supplied by the client.",
     data:D.age_profile.map(a=>({label:a.age_band+" years",
     v:a.total_gt/1000, color:(a.age_band==="31-40"||a.age_band==="40+")?P.hot:P.sea2})),
@@ -981,7 +1089,7 @@ function render(){
   hbar("chart-vessels",{title:"Ten vessels account for a large share of the corridor's emissions",
     sub:"Modelled CO2 over the observed window, kilotonnes", source:"Model output from AIS port-to-port movements, Jan–Aug 2026; IMO/ICCT emission factors.",
     data:D.per_vessel.slice(0,10).map(v=>({label:v.name,v:v.co2_t})),
-    w:900,pad:200,rowH:36,fmtv:v=>fmt(v/1000,1)+" kt"});
+    w:900,pad:200,rowH:36,fmtv:v=>ktv(v/1000)});
 
   const base=R.rows[0];
   document.getElementById("pathway-lede").innerHTML =
@@ -999,7 +1107,7 @@ function render(){
     data:R.rows.slice(1).map(r=>({label:r.label,v:r.g/1000,
     color:r.g>base.g?P.hot:P.sea})), w:900,pad:260,rowH:40,
     max:Math.max(...R.rows.map(r=>r.g/1000))*1.15,
-    fmtv:v=>sig(v,3)+" kt", refLine:base.g/1000, refLabel:"baseline "+sig(base.g/1000,3)+" kt"});
+    fmtv:ktv, refLine:base.g/1000, refLabel:"baseline "+ktv(base.g/1000)});
 
   const verdict=r=>{
     if(r===base) return {t:"none",cls:"neu"};
@@ -1062,17 +1170,17 @@ function render(){
 
   macc("chart-macc");
   results();
-  hbar("chart-wait",{title:"Whether engines idle while queueing moves the total by under 7%",
+  hbar("chart-wait",{rank:false,title:"Whether engines idle while queueing moves the total by under 7%",
     sub:"Annual CO2, kilotonnes", source:"Model output from AIS port-to-port movements, Jan–Aug 2026; IMO/ICCT emission factors.",
     data:D.waiting_sensitivity.map((w,i)=>({
     label: i===0 ? "Engines off at anchor" : "Engines idling at anchor",
     v:w.co2_t_annual/1000, color:i===S.wait?P.sea:P.sea3})),
-    w:900,pad:220,rowH:40,fmtv:v=>sig(v,3)+" kt"});
-  hbar("chart-dist",{title:"Sailing four extra miles adds about 8% to the total",
+    w:900,pad:220,rowH:40,fmtv:ktv});
+  hbar("chart-dist",{rank:false,title:"Sailing four extra miles adds about 8% to the total",
     sub:"Annual CO2 by assumed sailed distance, kilotonnes", source:"Model output from AIS port-to-port movements, Jan–Aug 2026; IMO/ICCT emission factors.",
     data:D.distance_sensitivity.map(f=>({label:fmt(f.distance_nm,0)+" nm",
     v:f.co2_t_annual/1000, color:f.distance_nm===15?P.sea:P.sea3})),
-    w:900,pad:140,rowH:38,fmtv:v=>sig(v,3)+" kt"});
+    w:900,pad:140,rowH:38,fmtv:ktv});
 
   document.getElementById("sanity").innerHTML = tbl(
     ["Check","Model","Expected range","","What it is checked against"],
@@ -1378,7 +1486,7 @@ function tabs(){
     const tgt=document.getElementById(a.getAttribute("href").slice(1));
     if(tgt&&tgt.dataset.tab){ e.preventDefault(); show(tgt.dataset.tab,true); tgt.scrollIntoView({block:"start"}); }
   });
-  show((location.hash||"#answer").slice(1),false);
+  show((location.hash||"#context").slice(1),false);
   window.addEventListener("hashchange",()=>show(location.hash.slice(1),false));
 }
 
