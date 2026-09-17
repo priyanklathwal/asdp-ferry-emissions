@@ -8,7 +8,7 @@
 :root{
   --paper:#FBFAF7; --ink:#171717; --ink-2:#5F5F5F; --ink-3:#9A9A9A; --rule:#E4E2DC; --panel:#F3F1EB;
   --accent:#1B6F8C; --accent-soft:#CFE0E8; --hot:#B3261E; --good:#1E7F4F; --good-soft:#CDE7D8; --hot-soft:#F1D3CF;
-  --brand:#7A1F1F; --brand-ink:#5C1414;
+  --brand:#1B6F8C; --brand-ink:#171717;
   --sea:var(--accent); --sea2:var(--accent-soft); --sea3:#E4EEF2; --water:#EEF3F5; --land:#EDE9DF;
   --bg:var(--paper); --mid:var(--ink-2); --faint:var(--rule);
   --serif:Charter,"Iowan Old Style","Palatino Linotype",Georgia,serif;
@@ -126,7 +126,7 @@ section[data-tab].active + section[data-tab].active{padding-top:96px}
 section.active:first-of-type{padding-top:56px}
 
 /* site header */
-header.site{position:sticky;top:0;z-index:20;background:var(--paper);border-top:8px solid var(--brand);
+header.site{position:sticky;top:0;z-index:20;background:var(--paper);border-top:3px solid var(--accent);
             border-bottom:1px solid var(--rule)}
 .site-inner{max-width:1180px;margin:0 auto;padding:0 24px;display:flex;align-items:stretch;gap:32px}
 .brand{font-family:var(--serif);font-weight:700;font-size:17px;color:var(--ink);text-decoration:none;
@@ -154,12 +154,12 @@ header.masthead{padding-top:64px}
 figure.chart > div > svg:not(.free){width:100%;aspect-ratio:9/4;height:auto;display:block}
 
 /* briefing blocks */
-.keybox{border:1px solid var(--rule);border-top:3px solid var(--brand);padding:22px 28px 10px;margin:40px 0 0;background:#fff}
+.keybox{border:1px solid var(--rule);border-top:2px solid var(--accent);padding:22px 28px 10px;margin:40px 0 0;background:#fff}
 .keybox-head{font-family:var(--sans);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--brand);font-weight:600}
 ol.impl{list-style:none;padding:0;margin:8px 0 28px;counter-reset:n}
 ol.impl li{position:relative;padding:0 0 0 44px;margin:0 0 22px;counter-increment:n;text-align:justify;hyphens:auto}
 ol.impl li::before{content:counter(n);position:absolute;left:0;top:2px;width:28px;height:28px;border-radius:50%;
-  background:var(--brand);color:#fff;font-family:var(--sans);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center}
+  background:var(--accent);color:#fff;font-family:var(--sans);font-size:13px;font-weight:600;display:flex;align-items:center;justify-content:center}
 .steps{display:grid;gap:14px;margin:8px 0 30px}
 .steps > div{display:grid;grid-template-columns:36px 1fr;gap:14px;align-items:start}
 .steps span{font-family:var(--sans);font-weight:600;font-size:13px;color:var(--brand);border-top:2px solid var(--brand);padding-top:6px}
@@ -169,14 +169,14 @@ ol.impl li::before{content:counter(n);position:absolute;left:0;top:2px;width:28p
 
 header.masthead{padding-top:72px}
 .masthead h1{position:relative;padding-top:22px}
-.masthead h1::before{content:"";position:absolute;top:0;left:0;width:64px;height:4px;background:var(--brand)}
-.masthead .byline{color:var(--brand-ink);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:11.5px}
+.masthead h1::before{content:"";position:absolute;top:0;left:0;width:56px;height:3px;background:var(--accent)}
+.masthead .byline{color:var(--ink-3);font-weight:500;letter-spacing:.04em;text-transform:uppercase;font-size:11.5px}
 section > h2{color:var(--brand)}
-.tabs button[aria-selected="true"]{border-bottom-color:var(--brand);color:var(--ink)}
-.tabs button:hover{color:var(--brand)}
-.flag{border-left-color:var(--brand)}
-.kpis{border-top:3px solid var(--brand)}
-.kpi .v{color:var(--brand-ink)}
+.tabs button[aria-selected="true"]{border-bottom-color:var(--ink);color:var(--ink)}
+.tabs button:hover{color:var(--ink)}
+.flag{border-left-color:var(--accent)}
+.kpis{border-top:1px solid var(--ink)}
+.kpi .v{color:var(--ink)}
 .kpi .v small{color:var(--ink-2)}
 #answer h3{font-size:42px;line-height:1.12}
 #answer > p:first-of-type{font-size:21px;line-height:1.5;color:var(--ink)}
@@ -618,6 +618,7 @@ section > h2{color:var(--brand)}
     <div>Prepared for discussion. Model code and inputs are in the accompanying repository;
         all figures regenerate from <code>src/run.py</code>.</div>
     <div style="margin-top:8px" id="foot-meta"></div>
+    <div style="margin-top:6px;font-variant-numeric:tabular-nums" id="foot-build"></div>
   </div>
 </footer>
 
@@ -995,6 +996,7 @@ function render(){
     `The Merak&ndash;Bakauheni crossing, the sea link between Java and Sumatra and one of the `+
     `busiest ferry routes anywhere. Coastline from Natural Earth 1:10m; the dashed line is the `+
     `port-to-port distance used throughout, not an actual track.`;
+  document.getElementById("foot-build").textContent = "Build " + D.generated_utc.slice(0,16).replace("T"," ") + " UTC";
   document.getElementById("foot-meta").textContent =
     "Model run " + D.generated_utc + ". Route distance " +
     D.assumptions.route_distance.distance_nm + " nm.";

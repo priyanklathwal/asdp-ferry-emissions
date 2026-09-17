@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-11T17:37:23+00:00",
+ "generated_utc": "2026-09-17T22:22:21+00:00",
  "route": "Merak (Java) - Bakauheni (Sumatra)",
  "method_version": "v2, ICCT/IMO phase-resolved",
  "window": {
@@ -1134,7 +1134,7 @@
    "operating_days_per_year": 300,
    "steaming_hours_per_day": 8.0,
    "mean_sea_load": 0.35,
-   "note": "[ASSUM] Activity is assumed, not observed. Obtaining AIS for the other ASDP routes is the single highest-value next data step."
+   "note": "[ASSUMPTION] Activity is assumed, not observed. Obtaining AIS for the other ASDP routes is the single highest-value next data step."
   }
  },
  "activity_week": {
@@ -4028,7 +4028,7 @@
    "pln_i4_idr_per_kwh": 996.74,
    "pln_source": "[GOV] PLN non-subsidised tariff schedule; rates frozen through Q3 2026.",
    "bio_methanol_usd_per_tonne": 950.0,
-   "methanol_source": "[ASSUM] indicative; bio-methanol is thinly traded and site-specific."
+   "methanol_source": "[ASSUMPTION] indicative; bio-methanol is thinly traded and site-specific."
   },
   "fx": 17900.0,
   "fx_source": "[MKT] Mid-market USD/IDR 17,900 on 11 September 2026 (50-day average 17,927; 52-week range 16,095 to 18,180).",
@@ -4036,7 +4036,7 @@
    "ef_tco2_per_mwh": 0.85,
    "ef_low": 0.7,
    "ef_high": 0.9,
-   "source": "[ASSUM] Indonesian grid emission factors for the JAMALI and Sumatra systems are commonly quoted in the 0.75-0.90 tCO2/MWh range. NOT VERIFIED against a current MEMR/ESDM decree. Must be replaced with the official grid emission factor for the relevant system year before publication."
+   "source": "[ASSUMPTION] Indonesian grid emission factors for the JAMALI and Sumatra systems are commonly quoted in the 0.75-0.90 tCO2/MWh range. NOT VERIFIED against a current MEMR/ESDM decree. Must be replaced with the official grid emission factor for the relevant system year before publication."
   },
   "electric": {
    "motor_drive_efficiency": 0.92,
@@ -4065,98 +4065,6 @@
    "gwp": "IPCC AR4 for CH4 and N2O; Bond et al. (2013) for black carbon.",
    "corbett": "Corbett, Wang & Winebrake (2009), Transp. Res. D 14(8): speed reduction abatement costs, USD 30-200 per tonne CO2 for the container fleet, used here as a reference point for judging the abatement costs reported below. Winebrake, Corbett, Wang, Farrell & Woods (2005), JAWMA 55(4): fleetwide emissions reduction optimisation for passenger ferries, the closest published analogue to this task.",
    "wb": "World Bank Pacific Observatory, Greenhouse Gas Emissions from Maritime Traffic: the Bank's own implementation of the same IMO method on AIS data."
-  }
- },
- "dataset": {
-  "register": {
-   "rows": 360,
-   "unique_imo": 360,
-   "columns": 35,
-   "vessel_types": {
-    "Ro-ro Ferry": 264,
-    "Passenger Ro-ro Cargo": 40,
-    "Ferry": 18,
-    "Landing Craft": 10,
-    "Pure Car Carrier": 7,
-    "Ro-ro Cargo": 6
-   },
-   "gt": {
-    "min": 109.0,
-    "median": 1029.0,
-    "max": 32645.0,
-    "cov": "100%"
-   },
-   "built": {
-    "min": 1959,
-    "median": 1998,
-    "max": 2025,
-    "cov": "100%"
-   },
-   "loa_cov": "91%",
-   "speed_cov": "59%",
-   "fuel_type_cov": "52%",
-   "beam_cov": "99%",
-   "draft_cov": "84%",
-   "power_cov": "0% (field absent)",
-   "status": {
-    "In Service": 348,
-    "Idle": 12
-   },
-   "companies": 102
-  },
-  "ais": {
-   "rows": 33695,
-   "unique_imo": 69,
-   "columns": 18,
-   "start": "2026-01-29",
-   "end": "2026-08-18",
-   "span_days": 200,
-   "per_day": 168.5,
-   "directions": {
-    "Merak\u2192Bakauheni": 15692,
-    "Bakauheni\u2192Merak": 18039
-   },
-   "timestamp_granularity": "hourly bins (37% of timestamps share one minute value)",
-   "fields": [
-    "CVN",
-    "IMO",
-    "Name",
-    "Origin Port",
-    "First Seen In Origin Port",
-    "Last Seen In Origin Port",
-    "Dest. Port",
-    "First Seen In Dest. Port",
-    "Last Seen In Dest. Port",
-    "Port To Port Move",
-    "Countries/Regions",
-    "Vessel Sector",
-    "Detailed Vessel Type",
-    "Alt. Fuel Capable",
-    "Eco Modern",
-    "SOx Scrubber",
-    "HVSC",
-    "BWMS"
-   ],
-   "size_bands": {
-    "Passenger Ferry <10,000 GT": 29847,
-    "Passenger Ferry 10,000 - 29,999 GT": 3674,
-    "Ro-Ro (Less Than 5,000 dwt tonnes)": 165,
-    "General Cargo": 8,
-    "Tug": 1
-   },
-   "fields_used": [
-    "IMO",
-    "Last Seen In Origin Port",
-    "First Seen In Dest. Port",
-    "Last Seen In Dest. Port",
-    "Detailed Vessel Type"
-   ],
-   "fields_absent": [
-    "speed over ground",
-    "position",
-    "draught",
-    "heading"
-   ]
   }
  },
  "vessel_picker": [
@@ -4256,13 +4164,13 @@
    "crossings": 609
   },
   {
-   "imo": 1034060,
-   "name": "Calisha",
+   "imo": 8602074,
+   "name": "Amarisa",
    "crossings": 607
   },
   {
-   "imo": 8602074,
-   "name": "Amarisa",
+   "imo": 1034060,
+   "name": "Calisha",
    "crossings": 607
   },
   {
@@ -4272,7 +4180,7 @@
   },
   {
    "imo": 9807205,
-   "name": "Royce 1",
+   "name": "Royce I",
    "crossings": 588
   },
   {
@@ -4322,12 +4230,12 @@
   },
   {
    "imo": 7323308,
-   "name": "Bsp-I",
+   "name": "Bsp I",
    "crossings": 545
   },
   {
    "imo": 9042881,
-   "name": "Musthika Kencana",
+   "name": "Queen Soya",
    "crossings": 535
   },
   {
@@ -4336,13 +4244,13 @@
    "crossings": 530
   },
   {
-   "imo": 8613580,
-   "name": "Elysia",
+   "imo": 8679675,
+   "name": "Raputra Jaya 888",
    "crossings": 505
   },
   {
-   "imo": 8679675,
-   "name": "Raputra Jaya 888",
+   "imo": 8613580,
+   "name": "Elysia",
    "crossings": 505
   },
   {
@@ -4457,7 +4365,7 @@
   },
   {
    "imo": 8518039,
-   "name": "H. M. Baruna I",
+   "name": "Hm Baruna I",
    "crossings": 135
   },
   {
@@ -4505,5 +4413,97 @@
    "name": "Karya Pacific 2280",
    "crossings": 1
   }
- ]
+ ],
+ "dataset": {
+  "register": {
+   "rows": 360,
+   "unique_imo": 360,
+   "columns": 35,
+   "vessel_types": {
+    "Ro-ro Ferry": 264,
+    "Passenger Ro-ro Cargo": 40,
+    "Ferry": 18,
+    "Landing Craft": 10,
+    "Pure Car Carrier": 7,
+    "Ro-ro Cargo": 6
+   },
+   "gt": {
+    "min": 109.0,
+    "median": 1029.0,
+    "max": 32645.0,
+    "cov": "100%"
+   },
+   "built": {
+    "min": 1959,
+    "median": 1998,
+    "max": 2025,
+    "cov": "100%"
+   },
+   "loa_cov": "91%",
+   "speed_cov": "59%",
+   "fuel_type_cov": "52%",
+   "beam_cov": "99%",
+   "draft_cov": "84%",
+   "power_cov": "0% (field absent)",
+   "status": {
+    "In Service": 348,
+    "Idle": 12
+   },
+   "companies": 102
+  },
+  "ais": {
+   "rows": 33695,
+   "unique_imo": 69,
+   "columns": 18,
+   "start": "2026-01-29",
+   "end": "2026-08-18",
+   "span_days": 200,
+   "per_day": 168.5,
+   "directions": {
+    "Merak\u2192Bakauheni": 15692,
+    "Bakauheni\u2192Merak": 18039
+   },
+   "timestamp_granularity": "hourly bins (37% of timestamps share one minute value)",
+   "fields": [
+    "CVN",
+    "IMO",
+    "Name",
+    "Origin Port",
+    "First Seen In Origin Port",
+    "Last Seen In Origin Port",
+    "Dest. Port",
+    "First Seen In Dest. Port",
+    "Last Seen In Dest. Port",
+    "Port To Port Move",
+    "Countries/Regions",
+    "Vessel Sector",
+    "Detailed Vessel Type",
+    "Alt. Fuel Capable",
+    "Eco Modern",
+    "SOx Scrubber",
+    "HVSC",
+    "BWMS"
+   ],
+   "size_bands": {
+    "Passenger Ferry <10,000 GT": 29847,
+    "Passenger Ferry 10,000 - 29,999 GT": 3674,
+    "Ro-Ro (Less Than 5,000 dwt tonnes)": 165,
+    "General Cargo": 8,
+    "Tug": 1
+   },
+   "fields_used": [
+    "IMO",
+    "Last Seen In Origin Port",
+    "First Seen In Dest. Port",
+    "Last Seen In Dest. Port",
+    "Detailed Vessel Type"
+   ],
+   "fields_absent": [
+    "speed over ground",
+    "position",
+    "draught",
+    "heading"
+   ]
+  }
+ }
 }

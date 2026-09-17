@@ -1,0 +1,585 @@
+"""
+ASDP / Indonesia RoPax voyage emissions and fuel-switching model.
+
+Pipeline
+  1. Read the client workbook: vessel inventory + AIS port-to-port moves.
+  2. Estimate installed main-engine power (the inventory has no kW column).
+  3. Compute per-voyage energy, fuel and CO2 using an IMO-Fourth-GHG-Study-style
+     bottom-up method.
+  4. Evaluate fuel-switching pathways in MWh, tCO2 and USD.
+  5. Emit CSVs and a JSON payload for the dashboard.
+
+Run:  python src/run.py --workbook <path.xlsx>
+"""
+
+import argparse
+import json
+import math
+import os
+import sys
+from datetime import datetime
+
+import numpy as np
+import pandas as pd
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+import config as C  # noqa: E402
+
+OUT = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "outputs")
+DOCS = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "docs")
+
+
+# ======================================================================================
+# 1. LOAD
+# ======================================================================================
+def load_workbook(path):
+    inv = pd.read_excel(path, sheet_name="ASDP list of vessels")
+    moves = pd.concat(
+        [pd.read_excel(path, sheet_name="Merak to B"),
+         pd.read_excel(path, sheet_name="B to Merak")],
+        ignore_index=True,
+    )
+    moves = moves[moves["IMO"].notna()].copy()
+    moves["IMO"] = moves["IMO"].astype(np.int64)
+    for c in ["First Seen In Origin Port", "Last Seen In Origin Port",
+              "First Seen In Dest. Port", "Last Seen In Dest. Port"]:
+        moves[c] = pd.to_datetime(moves[c])
+    return inv, moves
+
+
+def clean_inventory(inv):
+    df = pd.DataFrame({
+        "imo": inv["IMO"].astype("Int64"),
+        "name": inv["Ship Name"].astype(str).str.title(),
+        "type": inv["List.Type"],
+        "owner": inv["List.Corporate Owner"],
+        "company": inv["List.Company"],
+        "gt": pd.to_numeric(inv["List.GT"], errors="coerce"),
+        "dwt": pd.to_numeric(inv["List.DWT"], errors="coerce"),
+        "built": pd.to_numeric(inv["List.Built"], errors="coerce"),
+        "status": inv["List.Status"],
+        "speed_kn": pd.to_numeric(inv["List.Speed (knots)"], errors="coerce"),
+        "beam_m": pd.to_numeric(inv["List.Beam Mld (m)"], errors="coerce"),
+        "draft_m": pd.to_numeric(inv["List.Draft (m)"], errors="coerce"),
+        "loa_m": pd.to_numeric(inv["List.LOA (m)"], errors="coerce"),
+        "engine_fuel_raw": inv["List.Main Engine Fuel Type"],
+        "power_type": inv["List.Power Type"],
+        "sfc_class": inv["List.SFC Vessel Types"],
+        "builder_country": inv["List. Builder Country"],
+    })
+    df = df.dropna(subset=["imo"]).drop_duplicates(subset=["imo"], keep="first")
+    df["imo"] = df["imo"].astype(np.int64)
+
+    # ASDP flag. The client's covering note says the list is "supposedly" ASDP; it is not.
+    own = df["owner"].fillna("").str.upper() + " " + df["company"].fillna("").str.upper()
+    df["is_asdp"] = own.str.contains("ASDP|INDONESIA FERRY", regex=True)
+
+    # Engine family
+    df["engine_family"] = np.where(
+        df["power_type"].fillna("").str.contains("2-Stroke"), "SSD", "MSD")
+
+    # Fuel family. 183 of 369 rows have no engine fuel type recorded.
+    fuel = df["engine_fuel_raw"].fillna("")
+    df["fuel_family"] = np.select(
+        [fuel.str.contains("IFO"), fuel.str.contains("MDO|MGO", regex=True)],
+        ["HFO", "MDO"],
+        default=np.where(df["gt"].fillna(0) >= 2000, "HFO", "MDO"),
+    )
+    df["fuel_family_imputed"] = fuel.eq("")
+
+    df["year_band"] = np.select(
+        [df["built"] < 1984, df["built"] <= 2000],
+        ["pre1984", "1984_2000"], default="post2000")
+    return df
+
+
+# ======================================================================================
+# 2. POWER ESTIMATION
+# ======================================================================================
+def estimate_power(df):
+    """
+    Two quantities are needed, and they are estimated separately on purpose.
+
+    (a) DISPLACEMENT. Drives propulsion power at any given speed through the Admiralty
+        relation. Taken from LOA x beam x draft x Cb where the register reports them,
+        otherwise from a log-log fit of displacement on GT.
+
+    (b) INSTALLED MCR. Only used for the auxiliary load, the manoeuvring allowance, the
+        reported load factor and battery peak sizing. Estimated from the Admiralty
+        relation at the register's design speed, then bounded to a plausible kW/GT band.
+
+    Keeping them separate matters. Propulsion energy at sea is computed from displacement
+    and OBSERVED transit speed, so an unreliable design-speed field in the register does
+    not propagate into the fuel estimate. Under the alternative formulation
+    P_MCR x (v_transit / v_design)^3 the design speed cancels algebraically anyway, but
+    only when P_MCR itself came from the Admiralty relation, which is not true for the
+    vessels that lack dimensions.
+    """
+    p = C.POWER
+
+    # Scantling drafts and evident keying errors inflate displacement. Ferries sit shallow:
+    # the median draft/beam ratio in this register is 0.21. Cap at 0.32.
+    draft = df["draft_m"].copy()
+    suspect = draft.notna() & df["beam_m"].notna() & (draft > 0.32 * df["beam_m"])
+    draft[suspect] = 0.32 * df.loc[suspect, "beam_m"]
+
+    lpp = df["loa_m"] * p["lpp_over_loa"]
+    disp = lpp * df["beam_m"] * draft * p["block_coefficient"] * p["seawater_density"]
+    has_dims = disp.notna() & (disp > 0)
+
+    # Displacement from GT where dimensions are missing
+    fit = has_dims & df["gt"].notna() & (df["gt"] > 0)
+    cd = np.polyfit(np.log(df.loc[fit, "gt"]), np.log(disp[fit]), 1)
+    disp_b, disp_a = cd[0], float(np.exp(cd[1]))
+    disp_r2 = float(np.corrcoef(np.log(df.loc[fit, "gt"]), np.log(disp[fit]))[0, 1] ** 2)
+    fill_d = (~has_dims) & df["gt"].notna()
+    disp[fill_d] = disp_a * df.loc[fill_d, "gt"] ** disp_b
+
+    df["displacement_t"] = disp
+    df["disp_method"] = np.where(has_dims, "dimensions", "gt_regression")
+    df["draft_capped"] = suspect
+
+    # Installed MCR
+    speed = df["speed_kn"].copy()
+    speed = speed.fillna(speed.median())
+    p_mcr = (disp ** (2.0 / 3.0)) * (speed ** 3) / p["admiralty_coefficient"] \
+        / p["service_power_fraction_of_mcr"]
+
+    # Bound kW/GT. Ferry fleets sit roughly 0.25-1.6 kW/GT; values outside that range in
+    # this register trace to bad speed or draft entries, not to genuinely unusual ships.
+    lo = p["kw_per_gt_floor"] * df["gt"]
+    hi = p["kw_per_gt_ceiling"] * df["gt"]
+    df["p_mcr_uncapped_kw"] = p_mcr
+    p_mcr = p_mcr.clip(lower=lo, upper=hi)
+    df["p_mcr_kw"] = p_mcr.clip(lower=150, upper=40000)
+    df["power_method"] = np.where(has_dims, "dimensions", "gt_regression")
+
+    meta = {
+        "n_from_dimensions": int(has_dims.sum()),
+        "n_from_gt_regression": int(fill_d.sum()),
+        "n_draft_capped": int(suspect.sum()),
+        "n_mcr_bounded": int((df["p_mcr_uncapped_kw"] != p_mcr).sum()),
+        "displacement_form": f"displacement (t) = {disp_a:.4f} * GT^{disp_b:.3f}",
+        "displacement_r2": disp_r2,
+        "median_kw_per_gt": float((df["p_mcr_kw"] / df["gt"]).median()),
+        "note": "Propulsion power at sea is computed from displacement and observed transit "
+                "speed, not from installed MCR times a speed ratio.",
+    }
+    return df, meta
+
+
+def fill_unmatched_route_vessels(moves, ships):
+    """Vessels seen on the route but absent from the inventory: infer GT from the AIS size band."""
+    known = set(ships["imo"])
+    seen = moves.groupby("IMO").agg(
+        name=("Name", "first"), band=("Detailed Vessel Type", lambda s: s.mode().iat[0]),
+        n=("IMO", "size")).reset_index()
+    missing = seen[~seen["IMO"].isin(known)].copy()
+    band_gt = {"Passenger Ferry <10,000 GT": 3500.0,
+               "Passenger Ferry 10,000 - 29,999 GT": 15000.0,
+               "Passenger Ferry 30,000+ GT": 32000.0}
+    default_gt = float(ships["gt"].median())
+    rows = []
+    for _, r in missing.iterrows():
+        rows.append({
+            "imo": int(r["IMO"]), "name": str(r["name"]).title(), "type": r["band"],
+            "owner": None, "company": None, "gt": band_gt.get(r["band"], default_gt),
+            "dwt": np.nan, "built": 2000.0, "status": "In Service",
+            "speed_kn": np.nan, "beam_m": np.nan, "draft_m": np.nan, "loa_m": np.nan,
+            "engine_fuel_raw": None, "power_type": "Diesel 4-Stroke",
+            "sfc_class": None, "builder_country": None, "is_asdp": False,
+            "engine_family": "MSD", "fuel_family": "HFO", "fuel_family_imputed": True,
+            "year_band": "1984_2000", "in_inventory": False,
+        })
+    return pd.DataFrame(rows)
+
+
+# ======================================================================================
+# 3. VOYAGE MODEL
+# ======================================================================================
+def sfc_for(engine_family, fuel_family, year_band):
+    return C.SFC_BASE[(engine_family, fuel_family)][year_band]
+
+
+def low_load_penalty(load):
+    for threshold in sorted(C.SFC_LOW_LOAD_PENALTY):
+        if load <= threshold:
+            return C.SFC_LOW_LOAD_PENALTY[threshold]
+    return 1.0
+
+
+def build_voyages(moves, ships, distance_nm=None):
+    o = C.OPS
+    d_nm = distance_nm if distance_nm is not None else C.ROUTE["distance_nm"]
+
+    v = moves.copy()
+    v["hours"] = (v["First Seen In Dest. Port"] - v["Last Seen In Origin Port"]
+                  ).dt.total_seconds() / 3600.0
+    v = v[v["hours"].notna()]
+    v["hours"] = v["hours"].clip(*o["voyage_hours_clip"])
+
+    s = ships.set_index("imo")
+    for col in ["p_mcr_kw", "displacement_t", "speed_kn", "gt", "engine_family",
+                "fuel_family", "year_band", "name", "is_asdp"]:
+        v[col] = v["IMO"].map(s[col])
+    v = v[v["p_mcr_kw"].notna() & v["displacement_t"].notna()]
+
+    v["t_manoeuvre"] = np.minimum(o["manoeuvre_hours_per_voyage"], 0.4 * v["hours"])
+    v["t_transit"] = (v["hours"] - v["t_manoeuvre"]).clip(lower=0.1)
+    v["v_transit_kn"] = d_nm / v["t_transit"]
+
+    # Propulsion power at the observed transit speed, straight from the Admiralty relation.
+    v["p_transit_kw"] = (v["displacement_t"] ** (2.0 / 3.0) * v["v_transit_kn"] ** 3
+                         / C.POWER["admiralty_coefficient"]
+                         * o["weather_fouling_factor"])
+    # Floor. Diesel engines have a minimum stable load, and the Admiralty relation is not
+    # reliable far below design speed because it omits appendage drag, windage and the
+    # propeller working well off its design point. Ferry crews run one engine at a moderate
+    # load rather than all engines at 5%. This floor is the single most influential
+    # assumption in the model on this route, because the observed transit speeds are low.
+    v["p_transit_kw"] = np.maximum(v["p_transit_kw"], v["p_mcr_kw"] * o["min_transit_load"])
+    v["p_transit_kw"] = np.minimum(v["p_transit_kw"], v["p_mcr_kw"] * o["max_load"])
+    v["load"] = (v["p_transit_kw"] / v["p_mcr_kw"]).clip(o["min_load"], o["max_load"])
+
+    v["e_me_kwh"] = (v["p_transit_kw"] * v["t_transit"]
+                     + v["p_mcr_kw"] * o["manoeuvre_load"] * v["t_manoeuvre"])
+
+    aux_kw = v["p_mcr_kw"] * C.AUX_FRACTION["sea"]
+    v["e_ae_kwh"] = aux_kw * v["hours"]
+
+    sfc_me = np.array([sfc_for(ef, ff, yb) * low_load_penalty(ld)
+                       for ef, ff, yb, ld in zip(v["engine_family"], v["fuel_family"],
+                                                 v["year_band"], v["load"])])
+    v["fuel_me_t"] = v["e_me_kwh"] * sfc_me / 1e6
+    v["fuel_ae_t"] = v["e_ae_kwh"] * C.SFC_AUX / 1e6
+    v["fuel_t"] = v["fuel_me_t"] + v["fuel_ae_t"]
+    v["cf"] = v["fuel_family"].map(C.CF)
+    v["co2_t"] = v["fuel_t"] * v["cf"]
+    v["fuel_energy_mwh"] = v["fuel_t"] * 1000 * v["fuel_family"].map(C.LHV_MJ_PER_KG) / 3600.0
+    v["shaft_energy_mwh"] = (v["e_me_kwh"] + v["e_ae_kwh"]) / 1000.0
+    return v
+
+
+def build_berth(moves, ships):
+    """Auxiliary load while alongside, from observed gaps between consecutive voyages."""
+    o = C.OPS
+    m = moves.sort_values(["IMO", "Last Seen In Origin Port"]).copy()
+    m["next_dep"] = m.groupby("IMO")["Last Seen In Origin Port"].shift(-1)
+    m["berth_h"] = (m["next_dep"] - m["Last Seen In Dest. Port"]).dt.total_seconds() / 3600.0
+    m = m[m["berth_h"].notna() & (m["berth_h"] > 0)]
+    m["berth_h"] = m["berth_h"].clip(upper=o["berth_hours_cap"])
+
+    s = ships.set_index("imo")
+    for col in ["p_mcr_kw", "fuel_family", "name", "is_asdp"]:
+        m[col] = m["IMO"].map(s[col])
+    m = m[m["p_mcr_kw"].notna()]
+
+    m["e_berth_kwh"] = m["p_mcr_kw"] * C.AUX_FRACTION["berth"] * m["berth_h"]
+    m["fuel_t"] = m["e_berth_kwh"] * C.SFC_AUX / 1e6
+    m["co2_t"] = m["fuel_t"] * m["fuel_family"].map(C.CF)
+    m["fuel_energy_mwh"] = m["fuel_t"] * 1000 * m["fuel_family"].map(C.LHV_MJ_PER_KG) / 3600.0
+    m["shaft_energy_mwh"] = m["e_berth_kwh"] / 1000.0
+    return m
+
+
+# ======================================================================================
+# 4. SCENARIOS
+# ======================================================================================
+def annualise(df_voy, df_berth):
+    span_days = (df_voy["Last Seen In Origin Port"].max()
+                 - df_voy["Last Seen In Origin Port"].min()).total_seconds() / 86400.0
+    return 365.0 / span_days, span_days
+
+
+def scenario_table(totals, prices, grid_ef, elec):
+    """totals: dict with fuel_t, fuel_energy_mwh, shaft_energy_mwh, co2_t (annualised)."""
+    e = C.ELECTRIC
+    rows = []
+
+    fuel_t = totals["fuel_t"]
+    fuel_mwh = totals["fuel_energy_mwh"]
+    shaft_mwh = totals["shaft_energy_mwh"]
+    co2 = totals["co2_t"]
+
+    # Blended baseline fuel price, USD/t, from the domestic MFO/HSD split actually burned.
+    p_hfo = prices["mfo_hs_idr_per_litre"] / C.DENSITY_KG_PER_L["HFO"] / C.FX_IDR_PER_USD * 1000
+    p_mdo = prices["b40_hsd_idr_per_litre"] / C.DENSITY_KG_PER_L["MDO"] / C.FX_IDR_PER_USD * 1000
+    p_blend = totals["hfo_share"] * p_hfo + (1 - totals["hfo_share"]) * p_mdo
+    base_cost = fuel_t * p_blend
+
+    def add(key, co2_out, energy_out_mwh, cost, note, capex=None):
+        rows.append({
+            "pathway": key, "label": C.PATHWAYS[key]["label"],
+            "co2_t": co2_out, "co2_saved_t": co2 - co2_out,
+            "co2_saved_pct": (co2 - co2_out) / co2 * 100 if co2 else 0,
+            "energy_in_mwh": energy_out_mwh,
+            "energy_saved_mwh": fuel_mwh - energy_out_mwh,
+            "energy_saved_pct": (fuel_mwh - energy_out_mwh) / fuel_mwh * 100 if fuel_mwh else 0,
+            "annual_cost_usd": cost, "cost_delta_usd": cost - base_cost,
+            "capex_usd": capex, "note": note,
+        })
+
+    add("baseline", co2, fuel_mwh, base_cost,
+        "Fuel burn as observed, priced at Pertamina domestic industrial rates.")
+
+    # B40: same energy in, 24% WtW saving, priced entirely at the B40 rate.
+    add("b40", co2 * (1 - 0.24), fuel_mwh, fuel_t * p_mdo,
+        "Drop-in. No vessel modification. Cost rises because B40 diesel is dearer than MFO.")
+
+    # B100 / HVO
+    p_b100 = prices["b100_usd_per_tonne"]
+    add("b100", co2 * (1 - 0.80), fuel_mwh, fuel_t * p_b100,
+        "Drop-in on most 4-stroke engines after fuel-system checks. Feedstock is the constraint.")
+
+    # Bio-methanol: methanol has ~47% of MDO's LHV, so tonnage roughly doubles.
+    meoh_t = fuel_mwh * 3600.0 / C.LHV_MJ_PER_KG["METHANOL"] / 1000.0
+    add("bio_methanol", co2 * (1 - 0.85), fuel_mwh,
+        meoh_t * prices["bio_methanol_usd_per_tonne"],
+        "Requires engine conversion or newbuild plus bunkering infrastructure at both ports.")
+
+    # Battery-electric
+    shore_mwh = shaft_mwh / (e["motor_drive_efficiency"] * e["onboard_distribution"]
+                             * e["charging_efficiency"])
+    p_kwh = prices["pln_i3_idr_per_kwh"] / C.FX_IDR_PER_USD
+    elec_cost = shore_mwh * 1000 * p_kwh
+    add("electric_grid", shore_mwh * grid_ef, shore_mwh, elec_cost,
+        "Shore energy at the PLN medium-industry tariff. CO2 follows the grid, not the ship.")
+    add("electric_re", shore_mwh * grid_ef * 0.05, shore_mwh, elec_cost,
+        "Same energy, supplied by dedicated renewables plus storage at Merak and Bakauheni.")
+
+    df = pd.DataFrame(rows)
+    df["abatement_cost_usd_per_tco2"] = np.where(
+        df["co2_saved_t"] > 0, df["cost_delta_usd"] / df["co2_saved_t"], np.nan)
+    df["baseline_cost_usd"] = base_cost
+    df["blended_fuel_price_usd_per_t"] = p_blend
+    return df
+
+
+# ======================================================================================
+# 5. MAIN
+# ======================================================================================
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--workbook", required=True)
+    args = ap.parse_args()
+
+    os.makedirs(OUT, exist_ok=True)
+    inv, moves = load_workbook(args.workbook)
+    ships = clean_inventory(inv)
+    ships["in_inventory"] = True
+
+    extra = fill_unmatched_route_vessels(moves, ships)
+    ships_all = pd.concat([ships, extra], ignore_index=True)
+    ships_all, pmeta = estimate_power(ships_all)
+
+    voy = build_voyages(moves, ships_all)
+    berth = build_berth(moves, ships_all)
+    scale, span_days = annualise(voy, berth)
+
+    tot = {
+        "fuel_t": float(voy["fuel_t"].sum() + berth["fuel_t"].sum()) * scale,
+        "co2_t": float(voy["co2_t"].sum() + berth["co2_t"].sum()) * scale,
+        "fuel_energy_mwh": float(voy["fuel_energy_mwh"].sum()
+                                 + berth["fuel_energy_mwh"].sum()) * scale,
+        "shaft_energy_mwh": float(voy["shaft_energy_mwh"].sum()
+                                  + berth["shaft_energy_mwh"].sum()) * scale,
+    }
+    hfo_fuel = float(voy.loc[voy["fuel_family"] == "HFO", "fuel_t"].sum()
+                     + berth.loc[berth["fuel_family"] == "HFO", "fuel_t"].sum())
+    tot["hfo_share"] = hfo_fuel / float(voy["fuel_t"].sum() + berth["fuel_t"].sum())
+
+    scen = scenario_table(tot, C.PRICES, C.GRID["ef_tco2_per_mwh"], C.ELECTRIC)
+
+    # Per-vessel roll-up over the observed window
+    per = voy.groupby(["IMO", "name", "is_asdp"]).agg(
+        voyages=("IMO", "size"), hours=("hours", "sum"),
+        fuel_t=("fuel_t", "sum"), co2_t=("co2_t", "sum"),
+        shaft_mwh=("shaft_energy_mwh", "sum"), mean_load=("load", "mean"),
+    ).reset_index()
+    per = per.merge(ships_all[["imo", "gt", "built", "p_mcr_kw", "power_method",
+                               "fuel_family", "in_inventory"]],
+                    left_on="IMO", right_on="imo", how="left").drop(columns=["imo"])
+    per["co2_per_voyage_t"] = per["co2_t"] / per["voyages"]
+    per = per.sort_values("co2_t", ascending=False)
+
+    # Grid sensitivity for electrification
+    shore_mwh = tot["shaft_energy_mwh"] / (
+        C.ELECTRIC["motor_drive_efficiency"] * C.ELECTRIC["onboard_distribution"]
+        * C.ELECTRIC["charging_efficiency"])
+    grid_sens = [{"ef": ef, "co2_t": shore_mwh * ef,
+                  "saving_pct": (tot["co2_t"] - shore_mwh * ef) / tot["co2_t"] * 100}
+                 for ef in [0.0, 0.2, 0.4, 0.6, 0.7, 0.8, 0.85, 0.9, 1.0]]
+
+    # Break-even grid carbon intensity: below this, electrification cuts CO2; above, it adds.
+    breakeven_ef = tot["co2_t"] / shore_mwh
+
+    # Sensitivity to the minimum-propulsion-load floor, the model's most influential assumption
+    floor_sens = []
+    _orig_floor = C.OPS["min_transit_load"]
+    for fl in [0.10, 0.15, 0.20, 0.25]:
+        C.OPS["min_transit_load"] = fl
+        vv = build_voyages(moves, ships_all)
+        floor_sens.append({"floor": fl,
+                           "co2_t_annual": float(vv["co2_t"].sum() + berth["co2_t"].sum()) * scale,
+                           "fuel_t_annual": float(vv["fuel_t"].sum() + berth["fuel_t"].sum()) * scale})
+    C.OPS["min_transit_load"] = _orig_floor
+
+    # Distance sensitivity on total CO2
+    dist_sens = []
+    for d in [15.0, 16.0, 17.0, 18.0, 19.0]:
+        vv = build_voyages(moves, ships_all, distance_nm=d)
+        dist_sens.append({"distance_nm": d,
+                          "co2_t_annual": float(vv["co2_t"].sum()) * scale})
+
+    # Monthly profile
+    voy["month"] = voy["Last Seen In Origin Port"].dt.to_period("M").astype(str)
+    monthly = voy.groupby("month").agg(voyages=("IMO", "size"), co2_t=("co2_t", "sum"),
+                                       fuel_t=("fuel_t", "sum")).reset_index()
+
+    # Battery sizing for the largest ASDP unit on the route
+    per_asdp = per[per["is_asdp"] == True]  # noqa: E712
+    sizing = []
+    for _, r in per.head(12).iterrows():
+        e_per_voy_mwh = r["shaft_mwh"] / r["voyages"]
+        shore_per_voy = e_per_voy_mwh / (C.ELECTRIC["motor_drive_efficiency"]
+                                         * C.ELECTRIC["onboard_distribution"])
+        pack = shore_per_voy / C.ELECTRIC["battery_usable_dod"]
+        sizing.append({
+            "name": r["name"], "gt": r["gt"], "p_mcr_kw": r["p_mcr_kw"],
+            "voyages_period": int(r["voyages"]),
+            "energy_per_voyage_mwh": e_per_voy_mwh,
+            "battery_pack_mwh_1_crossing": pack,
+            "battery_pack_mwh_2_crossings": pack * 2,
+            "capex_newbuild_musd": pack * 2 * 1000
+            * C.ELECTRIC["battery_cost_usd_per_kwh_newbuild"] / 1e6,
+            "capex_retrofit_musd": pack * 2 * 1000
+            * C.ELECTRIC["battery_cost_usd_per_kwh_retrofit"] / 1e6,
+        })
+
+    # ---------------- fleet-wide indicative extrapolation ----------------
+    # We only have AIS for one crossing. To say anything about the whole 360-vessel
+    # inventory we must assume an activity level. This is an ILLUSTRATION, not a result.
+    FLEET_ASSUM = {"operating_days_per_year": 300, "steaming_hours_per_day": 8.0,
+                   "mean_sea_load": 0.35, "note":
+                   "[ASSUM] Activity is assumed, not observed. Obtaining AIS for all ASDP "
+                   "routes is the single highest-value next data step."}
+    act = ships_all[(ships_all["status"].fillna("") == "In Service")
+                    & (ships_all["in_inventory"] == True)].copy()  # noqa: E712
+    hrs = FLEET_ASSUM["operating_days_per_year"] * FLEET_ASSUM["steaming_hours_per_day"]
+    act["e_me_kwh_yr"] = act["p_mcr_kw"] * FLEET_ASSUM["mean_sea_load"] * hrs
+    act["e_ae_kwh_yr"] = act["p_mcr_kw"] * C.AUX_FRACTION["sea"] * hrs
+    sfc_v = np.array([sfc_for(ef, ff, yb) for ef, ff, yb
+                      in zip(act["engine_family"], act["fuel_family"], act["year_band"])])
+    act["fuel_t_yr"] = act["e_me_kwh_yr"] * sfc_v / 1e6 + act["e_ae_kwh_yr"] * C.SFC_AUX / 1e6
+    act["co2_t_yr"] = act["fuel_t_yr"] * act["fuel_family"].map(C.CF)
+    fleet = {
+        "n_vessels_in_service": int(len(act)),
+        "n_asdp_flagged": int(act["is_asdp"].sum()),
+        "installed_mcr_mw": float(act["p_mcr_kw"].sum() / 1000.0),
+        "fuel_t_yr": float(act["fuel_t_yr"].sum()),
+        "co2_t_yr": float(act["co2_t_yr"].sum()),
+        "assumptions": FLEET_ASSUM,
+    }
+    act[["imo", "name", "gt", "built", "p_mcr_kw", "fuel_t_yr", "co2_t_yr", "is_asdp"]] \
+        .sort_values("co2_t_yr", ascending=False) \
+        .to_csv(os.path.join(OUT, "fleet_indicative_annual.csv"), index=False)
+
+    # Age profile of the inventory, which is what a replacement programme turns on
+    age = ships[ships["built"].notna()].copy()
+    age["age"] = 2026 - age["built"]
+    age_bands = pd.cut(age["age"], [-1, 10, 20, 30, 40, 200],
+                       labels=["0-10", "11-20", "21-30", "31-40", "40+"])
+    age_profile = age.groupby(age_bands, observed=True).agg(
+        vessels=("imo", "size"), gt=("gt", "sum")).reset_index()
+    age_profile.columns = ["age_band", "vessels", "total_gt"]
+
+    # ---------------- outputs ----------------
+    ships_all.to_csv(os.path.join(OUT, "vessels_with_power.csv"), index=False)
+    per.to_csv(os.path.join(OUT, "per_vessel_route_totals.csv"), index=False)
+    scen.to_csv(os.path.join(OUT, "scenarios_annual.csv"), index=False)
+    monthly.to_csv(os.path.join(OUT, "monthly_profile.csv"), index=False)
+
+    payload = {
+        "generated_utc": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "route": C.ROUTE["name"],
+        "window": {
+            "start": str(voy["Last Seen In Origin Port"].min().date()),
+            "end": str(voy["Last Seen In Origin Port"].max().date()),
+            "span_days": round(span_days, 1),
+            "annualisation_factor": round(scale, 4),
+        },
+        "coverage": {
+            "inventory_vessels": int(len(ships)),
+            "inventory_asdp_flagged": int(ships["is_asdp"].sum()),
+            "route_vessels": int(voy["IMO"].nunique()),
+            "route_vessels_in_inventory": int(per["in_inventory"].sum()),
+            "voyages_observed": int(len(voy)),
+            "voyages_by_asdp_flagged": int(voy["is_asdp"].sum()),
+        },
+        "power_model": pmeta,
+        "totals_annual": tot,
+        "totals_observed_window": {
+            "fuel_t": float(voy["fuel_t"].sum() + berth["fuel_t"].sum()),
+            "co2_t": float(voy["co2_t"].sum() + berth["co2_t"].sum()),
+            "fuel_energy_mwh": float(voy["fuel_energy_mwh"].sum()
+                                     + berth["fuel_energy_mwh"].sum()),
+            "shaft_energy_mwh": float(voy["shaft_energy_mwh"].sum()
+                                      + berth["shaft_energy_mwh"].sum()),
+        },
+        "voyage_stats": {
+            "median_hours": float(voy["hours"].median()),
+            "median_load": float(voy["load"].median()),
+            "median_transit_speed_kn": float(voy["v_transit_kn"].median()),
+            "median_co2_per_voyage_t": float(voy["co2_t"].median()),
+            "berth_hours_median": float(berth["berth_h"].median()),
+        },
+        "scenarios": scen.to_dict(orient="records"),
+        "per_vessel": per.head(30).replace({np.nan: None}).to_dict(orient="records"),
+        "monthly": monthly.to_dict(orient="records"),
+        "grid_sensitivity": grid_sens,
+        "breakeven_grid_ef_tco2_per_mwh": breakeven_ef,
+        "load_floor_sensitivity": floor_sens,
+        "shore_energy_mwh_annual": shore_mwh,
+        "distance_sensitivity": dist_sens,
+        "battery_sizing": sizing,
+        "fleet_indicative": fleet,
+        "age_profile": age_profile.to_dict(orient="records"),
+        "assumptions": {
+            "cf": C.CF, "lhv": C.LHV_MJ_PER_KG, "sfc_base": {f"{k[0]}|{k[1]}": v for k, v in C.SFC_BASE.items()},
+            "sfc_source": C.SFC_SOURCE, "sfc_aux": C.SFC_AUX,
+            "aux_fraction": C.AUX_FRACTION, "ops": {k: str(v) for k, v in C.OPS.items()},
+            "power": {k: str(v) for k, v in C.POWER.items()},
+            "prices": C.PRICES, "fx": C.FX_IDR_PER_USD, "fx_source": C.FX_SOURCE,
+            "grid": C.GRID, "electric": C.ELECTRIC,
+            "pathway_source": C.PATHWAY_SOURCE, "terminology": C.TERMINOLOGY_NOTE,
+            "route_distance": C.ROUTE,
+        },
+    }
+    os.makedirs(DOCS, exist_ok=True)
+    with open(os.path.join(DOCS, "data.json"), "w") as f:
+        json.dump(payload, f, indent=1, default=float)
+    with open(os.path.join(OUT, "dashboard_data.json"), "w") as f:
+        json.dump(payload, f, indent=1, default=float)
+
+    # console summary
+    print(f"window {payload['window']['start']} -> {payload['window']['end']} "
+          f"({span_days:.0f} d), scale x{scale:.2f}")
+    print(f"power model: {pmeta['displacement_form']}  R2={pmeta['displacement_r2']:.3f}  "
+          f"dims={pmeta['n_from_dimensions']} gt-fit={pmeta['n_from_gt_regression']}  "
+          f"draft-capped={pmeta['n_draft_capped']} mcr-bounded={pmeta['n_mcr_bounded']}  "
+          f"median kW/GT={pmeta['median_kw_per_gt']:.2f}")
+    print(f"voyages {len(voy):,}  vessels {voy['IMO'].nunique()}  "
+          f"median load {voy['load'].median():.2f}  "
+          f"median transit {voy['v_transit_kn'].median():.1f} kn")
+    print(f"OBSERVED WINDOW  fuel {voy['fuel_t'].sum()+berth['fuel_t'].sum():,.0f} t   "
+          f"CO2 {voy['co2_t'].sum()+berth['co2_t'].sum():,.0f} t")
+    print(f"ANNUALISED       fuel {tot['fuel_t']:,.0f} t   CO2 {tot['co2_t']:,.0f} t   "
+          f"fuel energy {tot['fuel_energy_mwh']/1000:,.1f} GWh   "
+          f"shaft {tot['shaft_energy_mwh']/1000:,.1f} GWh")
+    print()
+    print(scen[["label", "co2_t", "co2_saved_pct", "energy_in_mwh",
+                "annual_cost_usd", "cost_delta_usd"]].to_string(index=False))
+
+
+if __name__ == "__main__":
+    main()
