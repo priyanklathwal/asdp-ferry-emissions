@@ -50,6 +50,15 @@ DOCS = os.path.join(ROOT, "docs")
 POLLUTANTS = ["CO2", "NOx", "SOx", "PM", "CO", "CH4", "N2O", "BC"]
 
 
+
+_ROMAN = {"II", "III", "IV", "VI", "VII", "VIII", "IX", "XI", "XII", "XIII", "XIV", "XV",
+          "XVI", "XVII", "XVIII", "XIX", "XX"}
+
+
+def clean_name(s):
+    """Title-case a vessel name but keep Roman numerals upper-case."""
+    return " ".join(w.upper() if w.upper() in _ROMAN else w for w in str(s).title().split())
+
 # ======================================================================================
 # LOAD AND CLEAN
 # ======================================================================================
@@ -68,8 +77,7 @@ def load_workbook(path):
 def clean_inventory(inv):
     df = pd.DataFrame({
         "imo": inv["IMO"].astype("Int64"),
-        "name": inv["Ship Name"].astype(str).str.title().str.replace(
-            r"\b(I{2,3}|Iv|Vi{1,3}|Ix|Xi{0,3})\b", lambda m: m.group(0).upper(), regex=True),
+        "name": inv["Ship Name"].astype(str).map(clean_name),
         "type": inv["List.Type"],
         "owner": inv["List.Corporate Owner"],
         "company": inv["List.Company"],
@@ -123,9 +131,7 @@ def fill_unmatched_route_vessels(moves, ships):
     for _, r in missing.iterrows():
         gt = band_gt.get(r["band"], default_gt)
         rows.append({
-            "imo": int(r["IMO"]), "name": re.sub(r"\b(I{2,3}|Iv|Vi{1,3}|Ix|Xi{0,3})\b",
-                                                  lambda m: m.group(0).upper(), str(r["name"]).title()),
-            "type": "Ro-ro Ferry",
+            "imo": int(r["IMO"]), "name": clean_name(str(r["name"])), "type": "Ro-ro Ferry",
             "owner": None, "company": None, "gt": gt, "dwt": np.nan,
             "built": float(C.REFERENCE_YEAR - C.ASSUMED_AGE_UNMATCHED),
             "status": "In Service", "speed_kn": np.nan, "beam_m": np.nan,

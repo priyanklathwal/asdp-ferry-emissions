@@ -1,5 +1,5 @@
 {
- "generated_utc": "2026-09-17T22:41:58+00:00",
+ "generated_utc": "2026-09-17T22:43:09+00:00",
  "route": "Merak (Java) - Bakauheni (Sumatra)",
  "method_version": "v2, ICCT/IMO phase-resolved",
  "window": {
@@ -205,7 +205,7 @@
  "per_vessel": [
   {
    "IMO": 8604333,
-   "name": "Port Link Iii",
+   "name": "Port Link III",
    "is_asdp": true,
    "voyages": 891,
    "hours": 1955.7333333333333,
@@ -667,7 +667,7 @@
   },
   {
    "IMO": 8503694,
-   "name": "Jatra Iii",
+   "name": "Jatra III",
    "is_asdp": false,
    "voyages": 742,
    "hours": 1814.9833333333333,
@@ -1004,7 +1004,7 @@
  ],
  "battery_sizing": [
   {
-   "name": "Port Link Iii",
+   "name": "Port Link III",
    "gt": 9023.0,
    "p_mcr_kw": 14436.800000000001,
    "voyages_period": 891,
@@ -4141,7 +4141,7 @@
   },
   {
    "imo": 8604333,
-   "name": "Port Link Iii",
+   "name": "Port Link III",
    "crossings": 891
   },
   {
@@ -4151,7 +4151,7 @@
   },
   {
    "imo": 8503694,
-   "name": "Jatra Iii",
+   "name": "Jatra III",
    "crossings": 742
   },
   {
@@ -4321,7 +4321,7 @@
   },
   {
    "imo": 7320186,
-   "name": "Kirana Ii",
+   "name": "Kirana II",
    "crossings": 495
   },
   {
@@ -4456,7 +4456,7 @@
   },
   {
    "imo": 7818638,
-   "name": "Jatra Ii",
+   "name": "Jatra II",
    "crossings": 18
   },
   {

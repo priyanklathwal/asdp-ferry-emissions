@@ -1,9 +1,9 @@
 imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9921520,Aceh Hebat 2,1186.0,6.0,850.0,gt_regression,distillate,True
 9926817,Aceh Hebat 3,1089.0,6.0,800.0,gt_regression,distillate,True
-8626628,Adhi Swadarma Iii,511.0,41.0,300.0,dimensions,distillate,True
+8626628,Adhi Swadarma III,511.0,41.0,300.0,dimensions,distillate,True
 9713789,Adinda Windu Karsa,9269.0,11.0,3900.0,dimensions,residual,True
-9772424,Agung Samudra Xviii,2319.0,12.0,1100.0,dimensions,residual,True
+9772424,Agung Samudra XVIII,2319.0,12.0,1100.0,dimensions,residual,True
 9819272,Als Elisa,7331.0,9.0,2850.0,dimensions,residual,True
 9807217,Als Elvina,7331.0,9.0,2850.0,dimensions,residual,True
 9031521,Amadea,6687.0,35.0,9950.0,dimensions,residual,True
@@ -30,16 +30,16 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9612301,Berkat Porosida,355.0,16.0,450.0,dimensions,distillate,True
 8708751,Bintang Balikpapan,627.0,39.0,700.0,dimensions,distillate,True
 8748103,Bnr,1685.0,16.0,1050.0,gt_regression,distillate,True
-8748098,Bnr Ii,910.0,17.0,750.0,gt_regression,distillate,True
+8748098,Bnr II,910.0,17.0,750.0,gt_regression,distillate,True
 8732312,Bobara,475.0,19.0,450.0,dimensions,distillate,True
-9085754,Bontang Ekspress Ii,2257.0,33.0,1000.0,dimensions,distillate,True
+9085754,Bontang Ekspress II,2257.0,33.0,1000.0,dimensions,distillate,True
 9210593,Bontoharu,1124.0,23.0,500.0,dimensions,distillate,True
 9549475,Brr,1181.0,17.0,750.0,dimensions,distillate,True
 7323308,Bsp I,5057.0,53.0,4650.0,dimensions,residual,True
 8735364,Bukit Patung,644.0,18.0,350.0,dimensions,distillate,True
 8602048,Caitlyn,2905.0,40.0,1500.0,dimensions,residual,True
 9836000,Caitlyn 7,8274.0,8.0,2150.0,dimensions,residual,True
-9613537,Cakalang Ii,693.0,16.0,350.0,gt_regression,distillate,True
+9613537,Cakalang II,693.0,16.0,350.0,gt_regression,distillate,True
 1034060,Calisha,10000.0,2.0,2500.0,dimensions,residual,True
 9901257,Cantika Lestari 99B,1310.0,7.0,900.0,gt_regression,distillate,True
 6804472,Citra Mandala Sakti,499.0,59.0,600.0,dimensions,distillate,True
@@ -55,13 +55,13 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9037941,Dharma Ferry VIII,2877.0,35.0,850.0,dimensions,residual,True
 8103975,Dharma Kartika,259.0,45.0,250.0,dimensions,distillate,True
 9125437,Dharma Kartika I,1305.0,31.0,750.0,dimensions,distillate,True
-9162162,Dharma Kartika Ii,9245.0,29.0,14800.0,dimensions,residual,True
-8815358,Dharma Kartika Iii,699.0,37.0,550.0,gt_regression,residual,True
+9162162,Dharma Kartika II,9245.0,29.0,14800.0,dimensions,residual,True
+8815358,Dharma Kartika III,699.0,37.0,550.0,gt_regression,residual,True
 9140023,Dharma Kartika IX,6801.0,30.0,10900.0,dimensions,residual,True
 9174751,Dharma Kartika VII,9950.0,27.0,4000.0,gt_regression,residual,True
 8904939,Dharma Kartika VIII,699.0,37.0,650.0,dimensions,distillate,True
-9040467,Dharma Kencana Ii,4144.0,34.0,1600.0,dimensions,residual,True
-8904226,Dharma Kencana Iii,2510.0,37.0,1250.0,dimensions,residual,True
+9040467,Dharma Kencana II,4144.0,34.0,1600.0,dimensions,residual,True
+8904226,Dharma Kencana III,2510.0,37.0,1250.0,dimensions,residual,True
 8815346,Dharma Kencana IX,2624.0,38.0,950.0,dimensions,residual,True
 9162124,Dharma Kencana V,11933.0,29.0,19100.0,dimensions,residual,True
 9035125,Dharma Kencana VII,12418.0,33.0,19850.0,dimensions,residual,True
@@ -81,13 +81,13 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9032719,Egon,4851.0,35.0,4900.0,dimensions,residual,True
 8736904,Egron,470.0,18.0,450.0,dimensions,distillate,True
 8131051,El Saddai,697.0,44.0,1000.0,dimensions,distillate,True
-7808970,Elsaddai Ii,2625.0,48.0,1250.0,dimensions,residual,True
+7808970,Elsaddai II,2625.0,48.0,1250.0,dimensions,residual,True
 9767285,Erana,1029.0,12.0,800.0,dimensions,distillate,True
 7116054,Farina Nusantara,4824.0,55.0,3200.0,dimensions,residual,True
 8702501,Ferrindo 5,3587.0,39.0,1250.0,dimensions,residual,True
 8668846,Gambolo,560.0,14.0,300.0,dimensions,distillate,True
 9837054,Garda Maritim I,695.0,9.0,600.0,dimensions,distillate,True
-9837028,Garda Maritim Ii,695.0,9.0,650.0,gt_regression,distillate,True
+9837028,Garda Maritim II,695.0,9.0,650.0,gt_regression,distillate,True
 8628602,Gerbang Samudra 2,1545.0,31.0,850.0,dimensions,distillate,True
 8903296,Gerbang Samudra 3,1380.0,37.0,1150.0,dimensions,distillate,True
 8359005,Gerbang Samudra 5,1375.0,24.0,800.0,dimensions,distillate,True
@@ -106,12 +106,12 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9768966,Ilelabalekan,895.0,11.0,800.0,dimensions,distillate,True
 8898166,Inelika,634.0,31.0,250.0,dimensions,distillate,True
 9080223,Inerie,175.0,33.0,300.0,dimensions,distillate,True
-9740196,Inerie Ii,1031.0,13.0,800.0,dimensions,distillate,True
+9740196,Inerie II,1031.0,13.0,800.0,dimensions,distillate,True
 8324074,Jagantara,5110.0,42.0,7150.0,dimensions,residual,True
 9838979,Jambo X,1346.0,9.0,950.0,dimensions,distillate,True
 8210015,Jambo XII,3869.0,43.0,3700.0,dimensions,residual,True
-9115066,Jambo Xiv,3664.0,31.0,1800.0,dimensions,residual,True
-7818638,Jatra Ii,3902.0,46.0,1750.0,dimensions,residual,True
+9115066,Jambo XIV,3664.0,31.0,1800.0,dimensions,residual,True
+7818638,Jatra II,3902.0,46.0,1750.0,dimensions,residual,True
 8349244,Jax,1136.0,24.0,850.0,gt_regression,distillate,True
 9004023,Jembatan Kapuas,404.0,36.0,350.0,dimensions,distillate,True
 8504703,Jemla Fajar,736.0,41.0,550.0,dimensions,distillate,True
@@ -123,15 +123,15 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9607849,Kalibodri,2129.0,16.0,900.0,dimensions,distillate,True
 8872382,Kambaniru,549.0,34.0,250.0,dimensions,distillate,True
 8652108,Karya Maritim I,687.0,16.0,800.0,dimensions,distillate,True
-8673580,Karya Maritim Iii,1100.0,15.0,800.0,gt_regression,distillate,True
+8673580,Karya Maritim III,1100.0,15.0,800.0,gt_regression,distillate,True
 9049566,Kasuari Pasifik I,745.0,21.0,400.0,dimensions,distillate,True
-8713017,Kerapu Ii,335.0,38.0,250.0,dimensions,distillate,True
-8713029,Kerapu Iii,327.0,38.0,250.0,dimensions,distillate,True
+8713017,Kerapu II,335.0,38.0,250.0,dimensions,distillate,True
+8713029,Kerapu III,327.0,38.0,250.0,dimensions,distillate,True
 9028419,Kie Raha I,745.0,22.0,400.0,dimensions,distillate,True
 8017671,Kirana,5299.0,46.0,2350.0,dimensions,residual,True
 8414350,Kirana I,2326.0,42.0,3700.0,dimensions,residual,True
-7320186,Kirana Ii,6292.0,53.0,5900.0,dimensions,residual,True
-7374539,Kirana Iii,2635.0,52.0,2450.0,dimensions,residual,True
+7320186,Kirana II,6292.0,53.0,5900.0,dimensions,residual,True
+7374539,Kirana III,2635.0,52.0,2450.0,dimensions,residual,True
 8220060,Kirana IX,9168.0,43.0,8150.0,dimensions,residual,True
 9950662,Kirana VII,1933.0,5.0,1150.0,gt_regression,distillate,True
 9000900,Kmp Mutiara Barat,19232.0,35.0,16700.0,dimensions,residual,True
@@ -160,7 +160,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8677055,Maming,598.0,15.0,550.0,dimensions,distillate,True
 8806307,Manggani,512.0,38.0,600.0,dimensions,residual,True
 9614646,Manta,627.0,16.0,200.0,dimensions,distillate,True
-9686041,Manta Ii,611.0,13.0,500.0,dimensions,distillate,True
+9686041,Manta II,611.0,13.0,500.0,dimensions,distillate,True
 9049401,Manusela,745.0,22.0,400.0,dimensions,distillate,True
 9034676,Marina Quinta,871.0,34.0,800.0,dimensions,distillate,True
 8920048,Marina Segunda,824.0,36.0,800.0,dimensions,distillate,True
@@ -177,18 +177,18 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8329488,Mujair,141.0,45.0,150.0,dimensions,distillate,True
 9856335,Munggiyango Hulalo,1633.0,7.0,1050.0,gt_regression,distillate,True
 9835991,Munic 9,7288.0,8.0,2900.0,dimensions,residual,True
-8210950,Munic Iii,1823.0,43.0,1050.0,dimensions,distillate,True
+8210950,Munic III,1823.0,43.0,1050.0,dimensions,distillate,True
 9828833,Munic V,936.0,10.0,800.0,dimensions,distillate,True
 9855939,Munic XI,1681.0,8.0,1050.0,gt_regression,distillate,True
 8998772,Muria,419.0,30.0,450.0,gt_regression,distillate,True
 9154074,Mutiara Ferindo 1,18460.0,30.0,17100.0,dimensions,residual,True
-8980488,Mutiara Ferindo Iii,994.0,24.0,400.0,dimensions,distillate,True
+8980488,Mutiara Ferindo III,994.0,24.0,400.0,dimensions,distillate,True
 9066784,Mutiara Ferindo VII,32645.0,32.0,25200.0,dimensions,residual,True
 8699613,Mutiara Indonesia,818.0,18.0,700.0,gt_regression,distillate,True
-9105176,Mutiara Persada Ii,3965.0,31.0,3750.0,dimensions,residual,True
-9004592,Mutiara Persada Iii,15380.0,35.0,14250.0,dimensions,residual,True
+9105176,Mutiara Persada II,3965.0,31.0,3750.0,dimensions,residual,True
+9004592,Mutiara Persada III,15380.0,35.0,14250.0,dimensions,residual,True
 8820808,Mutiara Pertiwi I,498.0,37.0,800.0,dimensions,distillate,True
-9162851,Mutiara Pertiwi Iii,303.0,29.0,400.0,dimensions,distillate,True
+9162851,Mutiara Pertiwi III,303.0,29.0,400.0,dimensions,distillate,True
 8873582,Mutis,445.0,34.0,250.0,dimensions,distillate,True
 8658762,Muyu,370.0,15.0,450.0,dimensions,distillate,True
 8998851,Namparnos,167.0,33.0,250.0,dimensions,distillate,True
@@ -210,7 +210,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8997479,Nusa Makmur,497.0,35.0,250.0,dimensions,distillate,True
 7041015,Nusa Mulia,5837.0,55.0,3200.0,dimensions,residual,True
 7020700,Nusa Sakti,676.0,57.0,500.0,dimensions,distillate,True
-8999817,Ocean Star Ii,109.0,31.0,150.0,gt_regression,distillate,True
+8999817,Ocean Star II,109.0,31.0,150.0,gt_regression,distillate,True
 9929089,Opudi,354.0,6.0,400.0,gt_regression,distillate,True
 9929077,Pangkilang,354.0,6.0,400.0,gt_regression,distillate,True
 7225350,Panorama Nusantara,8915.0,54.0,5850.0,dimensions,residual,True
@@ -225,7 +225,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9872729,Pora Pora,462.0,6.0,500.0,gt_regression,distillate,True
 9049255,Porodisa,961.0,21.0,450.0,dimensions,distillate,True
 7910917,Port Link,12619.0,45.0,8300.0,dimensions,residual,True
-8604333,Port Link Iii,9023.0,40.0,14450.0,dimensions,residual,True
+8604333,Port Link III,9023.0,40.0,14450.0,dimensions,residual,True
 8666147,Portlink V,3575.0,14.0,1400.0,dimensions,distillate,True
 9172791,Portlink VII,1998.0,29.0,1650.0,gt_regression,distillate,True
 9820099,Portlink VIII,2125.0,10.0,900.0,dimensions,residual,True
@@ -269,7 +269,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8662567,Sembilang,560.0,15.0,550.0,dimensions,distillate,True
 9068952,Semumu,408.0,30.0,200.0,dimensions,distillate,True
 8746478,Senangin,560.0,17.0,550.0,dimensions,distillate,True
-8716162,Serasi Iii,9500.0,38.0,5150.0,dimensions,residual,True
+8716162,Serasi III,9500.0,38.0,5150.0,dimensions,residual,True
 9157571,Sewindu,2533.0,29.0,4050.0,dimensions,residual,True
 9220366,Shiloh Sejati,9832.0,27.0,15750.0,dimensions,residual,True
 8661159,Siginjai,616.0,14.0,550.0,dimensions,distillate,True
@@ -284,7 +284,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 7214650,Star Belitung,2534.0,54.0,1400.0,dimensions,residual,True
 9066722,Suki 2,5008.0,33.0,5150.0,dimensions,residual,True
 8785307,Sulthan Murhum,378.0,19.0,300.0,dimensions,distillate,True
-9843613,Sumber Berkat Ii,1329.0,9.0,850.0,dimensions,distillate,True
+9843613,Sumber Berkat II,1329.0,9.0,850.0,dimensions,distillate,True
 9873503,Surya 777,1196.0,8.0,850.0,gt_regression,distillate,True
 9939711,Surya Ayla,2419.0,5.0,1300.0,gt_regression,distillate,True
 9931898,Surya Kayangan,2387.0,6.0,1300.0,gt_regression,distillate,True
@@ -301,7 +301,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8676192,Tarusi,596.0,14.0,200.0,dimensions,distillate,True
 9029152,Tasik Gemilang,776.0,21.0,300.0,dimensions,distillate,True
 8873661,Teluk Cenderawasih I,478.0,33.0,400.0,dimensions,distillate,True
-8873673,Teluk Cendrawasih Ii,478.0,33.0,400.0,dimensions,distillate,True
+8873673,Teluk Cendrawasih II,478.0,33.0,400.0,dimensions,distillate,True
 8731150,Teluk Sinabang,750.0,19.0,550.0,dimensions,distillate,True
 8673231,Teluk Singkil,595.0,22.0,550.0,gt_regression,distillate,True
 8677067,Teluk Tolo,514.0,14.0,350.0,gt_regression,distillate,True
@@ -310,14 +310,14 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8813556,Thalia,2987.0,37.0,4700.0,dimensions,residual,True
 8840860,Tiga Anugrah,299.0,38.0,450.0,dimensions,distillate,True
 8342519,Tranship 1,8410.0,10.0,2650.0,gt_regression,residual,True
-8348836,Tranship Ii,996.0,18.0,600.0,dimensions,distillate,True
+8348836,Tranship II,996.0,18.0,600.0,dimensions,distillate,True
 9482328,Tri Sakti Elfina,721.0,19.0,350.0,dimensions,distillate,True
 9003782,Trima Jaya 9,455.0,36.0,550.0,dimensions,distillate,True
 8663092,Trimas Ellisa,1392.0,28.0,850.0,dimensions,distillate,True
 9821249,Trimas Fhadila,7331.0,9.0,2850.0,dimensions,residual,True
 9016715,Trimas Kanaya,6547.0,36.0,5600.0,dimensions,residual,True
 8997493,Trisila Bhakti I,585.0,30.0,550.0,gt_regression,distillate,True
-8741973,Trisila Bhakti Ii,525.0,17.0,300.0,dimensions,distillate,True
+8741973,Trisila Bhakti II,525.0,17.0,300.0,dimensions,distillate,True
 8992821,Tuna,718.0,33.0,350.0,gt_regression,distillate,True
 8740668,Tuna Tomini,546.0,21.0,200.0,dimensions,distillate,True
 8694936,Tunu Pratama Jaya 2888,707.0,13.0,700.0,dimensions,distillate,True
@@ -326,7 +326,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 8774413,Watunapato,988.0,13.0,700.0,dimensions,distillate,True
 8670590,Wayangan,1029.0,13.0,800.0,dimensions,distillate,True
 7234179,Wicitra Dharma,589.0,54.0,600.0,dimensions,distillate,True
-8712233,Wicitra Dharma Ii,929.0,39.0,1000.0,dimensions,distillate,True
+8712233,Wicitra Dharma II,929.0,39.0,1000.0,dimensions,distillate,True
 8510350,Windu Karsa Pratama,3123.0,41.0,4050.0,dimensions,residual,True
 9821275,Wira Artha,7331.0,9.0,2850.0,dimensions,residual,True
 9875812,Wira Berlian,8800.0,7.0,3750.0,gt_regression,residual,True
@@ -344,11 +344,11 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 9208083,Mega 3,29637.0,25.0,40000.0,gt_regression,residual,True
 8822117,Mm Sejati,9759.0,37.0,8400.0,gt_regression,residual,True
 7703716,Mulya Sentosa,1665.0,48.0,850.0,gt_regression,distillate,True
-9291054,Mulya Sentosa Ii,3491.0,23.0,1100.0,gt_regression,residual,True
-8774554,Mutiara Alas Iii,376.0,20.0,450.0,gt_regression,distillate,True
+9291054,Mulya Sentosa II,3491.0,23.0,1100.0,gt_regression,residual,True
+8774554,Mutiara Alas III,376.0,20.0,450.0,gt_regression,distillate,True
 1134884,Pari 01,271.0,1.0,350.0,gt_regression,distillate,True
 9130315,Permata Lestari I,357.0,31.0,150.0,gt_regression,distillate,True
-9639139,Port Link Ii,649.0,15.0,650.0,gt_regression,distillate,True
+9639139,Port Link II,649.0,15.0,650.0,gt_regression,distillate,True
 9311232,Roro Sawitri,8652.0,22.0,4250.0,gt_regression,residual,True
 9664495,Samudera Indonesia,562.0,14.0,550.0,gt_regression,distillate,True
 9739616,Samudera Utama,1146.0,13.0,850.0,gt_regression,distillate,True
@@ -376,7 +376,7 @@ imo,name,gt,age,p_mcr_kw,power_method,fuel,in_inventory
 7916040,Layar Sentosa,1029.0,26.0,800.0,gt_regression,distillate,False
 8204432,Salvatore,3500.0,26.0,1600.0,gt_regression,residual,False
 8405206,Tribuana 1,3500.0,26.0,1600.0,gt_regression,residual,False
-8503694,Jatra Iii,3500.0,26.0,1600.0,gt_regression,residual,False
+8503694,Jatra III,3500.0,26.0,1600.0,gt_regression,residual,False
 8613580,Elysia,3500.0,26.0,1600.0,gt_regression,residual,False
 8679675,Raputra Jaya 888,3500.0,26.0,1600.0,gt_regression,residual,False
 8718562,Sms Mulawarman,3500.0,26.0,1600.0,gt_regression,residual,False
